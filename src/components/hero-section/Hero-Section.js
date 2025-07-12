@@ -8,6 +8,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { containerVariants, itemVariants } from "../motion/Motion";
 import BlurText from "../react-bits/blur-text/Blur-text";
 import ShinyText from "../react-bits/shiny-text/Shiny-Text";
+import DecryptedText from "../react-bits/decrypted-text/Decrypted-Text";
 
 const poppins = Poppins({
     weight: ["400", "500", "600", "700"],
@@ -66,22 +67,15 @@ export default function HeroSection() {
                     onAnimationComplete={() => console.log("Animation completed!")}
                     className="text-2xl md:text-4xl font-bold leading-snug md:leading-[1.3] mb-4 text-center md:text-left"
                 />
-                <Typography
-                    variant="body1"
-                    mt={2}
-                    mb={4}
-                    sx={{
-                        color: "#cbd5e1",
-                        maxWidth: 700,
-                        fontSize: "1.05rem",
-                        fontFamily: "Poppins, sans-serif",
-                        textAlign: { xs: "center", md: "left" },
-                    }}
-                >
-                    Discover a world of fashion-forward trends, curated collections, and
-                    timeless pieces that inspire. Unleash your inner fashionista and
-                    embark on a journey of confidence, elegance and impeccable style.
-                </Typography>
+                <DecryptedText
+                    text="Discover a world of fashion-forward trends, curated collections, and timeless pieces that inspire. Unleash your inner fashionista and embark on a journey of confidence, elegance and impeccable style."
+                    speed={100}
+                    maxIterations={20}
+                    characters="ABCD1234!?"
+                    className="revealed text-base text-slate-300 max-w-2xl text-center md:text-left mb-6"
+                    parentClassName="all-letters"
+                    encryptedClassName="encrypted"
+                />
                 <Button
                     variant="contained"
                     color="primary"

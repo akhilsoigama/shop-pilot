@@ -1,5 +1,4 @@
 'use client'
-import { useState } from 'react';
 import { motion } from 'framer-motion';
 import SearchIcon from '@mui/icons-material/Search';
 import {
@@ -8,16 +7,13 @@ import {
   IconButton,
   List,
   ListItem,
-  Menu,
-  MenuItem,
-  Typography,
   useTheme,
   Button
 } from "@mui/material";
-import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { Poppins } from 'next/font/google';
 import Image from 'next/image';
+import { SignInButton, UserButton, useUser } from '@clerk/nextjs';
 import { containerVariants, itemVariants, navItemVariants } from '../motion/Motion';
 
 // Configure Poppins font
@@ -28,25 +24,15 @@ const poppins = Poppins({
 });
 
 const Navbar = () => {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [userLogin, setUserLogin] = useState(false);
-  const open = Boolean(anchorEl);
   const theme = useTheme();
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleLogin = () => {
-    setUserLogin(true);
-  };
+  const { isSignedIn } = useUser()
 
   return (
     <motion.nav
       initial="hidden"
       animate="visible"
       variants={containerVariants}
-      className={`dark:bg-gray-950 dark:text-white rounded-[5rem] py-3 px-10 shadow-xl shadow-white/10 ${poppins.className}`}
+      className={`dark:bg-gray-950 dark:text-white  rounded-[5rem] py-3 px-10 shadow-xl shadow-white/10 ${poppins.className}`}
     >
       <Box
         sx={{
@@ -99,7 +85,6 @@ const Navbar = () => {
                     fontWeight: 500,
                     whiteSpace: 'nowrap',
                   }}
-                  onClick={item === 'Services' ? handleClick : undefined}
                   component={motion.li}
                   variants={navItemVariants}
                   whileHover="hover"
@@ -112,13 +97,8 @@ const Navbar = () => {
             </List>
           </Box>
         </motion.div>
-        {/* Search Bar */}
         <motion.div variants={itemVariants} whileHover={{ scale: 1.02 }}>
-          <Box sx={{
-            flex: '0 1 30%',
-            minWidth: '250px',
-            maxWidth: '400px'
-          }}>
+          <Box width='100%'>
             <Box
               sx={{
                 display: 'flex',
@@ -145,6 +125,7 @@ const Navbar = () => {
                 className={poppins.className}
                 style={{
                   flex: 1,
+                  width: '500px',
                   background: 'transparent',
                   border: 'none',
                   outline: 'none',
@@ -157,7 +138,6 @@ const Navbar = () => {
           </Box>
         </motion.div>
 
-        {/* User Actions */}
         <motion.div variants={itemVariants}>
           <Box sx={{
             flex: '0 0 auto',
@@ -165,7 +145,7 @@ const Navbar = () => {
             alignItems: 'center',
             gap: '1rem'
           }}>
-            {userLogin ? (
+            {isSignedIn ? (
               <>
                 <IconButton
                   aria-label="notifications"
@@ -198,35 +178,40 @@ const Navbar = () => {
                     component={motion.div}
                     whileHover={{ rotate: 10 }}
                   >
-                    <PermIdentityIcon />
+                    <UserButton />
                   </Box>
                 </IconButton>
               </>
             ) : (
-              <Button
-                variant="outlined"
-                onClick={handleLogin}
-                sx={{
-                  color: 'white',
-                  borderRadius: '50px',
-                  textTransform: 'none',
-                  fontWeight: 500,
-                  '&:hover': {
-                    backgroundColor: '#2563eb',
-                  }
-                }}
-                component={motion.button}
-                whileHover={{
-                  scale: 1.05,
-                  boxShadow: '0 4px 8px rgba(59, 130, 246, 0.4)'
-                }}
-                whileTap={{ scale: 0.95 }}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.2 }}
-              >
-                Sign Up
-              </Button>
+              <SignInButton>
+                <motion.div
+                  whileHover={{
+                    scale: 1.05,
+                    boxShadow: '0 4px 8px rgba(59, 130, 246, 0.4)',
+                    borderRadius: '50px'
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.2 }}
+                >
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      color: 'white',
+                      borderRadius: '50px',
+                      textTransform: 'none',
+                      fontWeight: 500,
+                      width: 100,
+                      '&:hover': {
+                        backgroundColor: '#2563eb',
+                      }
+                    }}
+                  >
+                    Log in
+                  </Button>
+                </motion.div>
+              </SignInButton>
             )}
           </Box>
         </motion.div>
