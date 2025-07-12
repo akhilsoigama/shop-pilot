@@ -68,7 +68,8 @@ const Navbar = () => {
           <Box sx={{
             flex: '1 1 auto',
             display: 'flex',
-            justifyContent: 'center'
+            justifyContent: 'center',
+            color: theme.palette.mode === 'dark' ? '#fff' : '#fff',
           }}>
             <List sx={{
               display: 'flex',
