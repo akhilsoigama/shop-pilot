@@ -1,5 +1,4 @@
 'use client'
-import { useState } from 'react';
 import { motion } from 'framer-motion';
 import SearchIcon from '@mui/icons-material/Search';
 import {
@@ -8,17 +7,14 @@ import {
   IconButton,
   List,
   ListItem,
-  Menu,
-  MenuItem,
-  Typography,
   useTheme,
   Button
 } from "@mui/material";
-import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { Poppins } from 'next/font/google';
 import Image from 'next/image';
-import { SignInButton, UserButton, UserProfile, useUser } from '@clerk/nextjs';
+import { SignInButton, UserButton, useUser } from '@clerk/nextjs';
+import { containerVariants, itemVariants, navItemVariants } from '../motion/Motion';
 
 // Configure Poppins font
 const poppins = Poppins({
@@ -27,70 +23,16 @@ const poppins = Poppins({
   display: 'swap',
 });
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.3
-    }
-  }
-};
-
-const itemVariants = {
-  hidden: { y: -20, opacity: 0 },
-  visible: {
-    y: 0,
-    opacity: 1,
-    transition: {
-      type: 'spring',
-      stiffness: 100,
-      damping: 10
-    }
-  },
-  hover: {
-    scale: 1.05,
-    transition: { type: 'spring', stiffness: 400, damping: 10 }
-  }
-};
-
-const navItemVariants = {
-  hidden: { opacity: 0, x: -20 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: {
-      type: 'spring',
-      stiffness: 100,
-      damping: 10
-    }
-  },
-  hover: {
-    scale: 1.1,
-    color: '#3b82f6',
-    transition: {
-      type: 'spring',
-      stiffness: 400,
-      damping: 10
-    }
-  },
-  tap: {
-    scale: 0.95
-  }
-};
-
 const Navbar = () => {
   const theme = useTheme();
-  const { user,isSignedIn } = useUser()
-
+  const { isSignedIn } = useUser()
 
   return (
     <motion.nav
       initial="hidden"
       animate="visible"
       variants={containerVariants}
-      className={`dark:bg-gray-950 dark:text-white rounded-[5rem] py-3 px-10 shadow-xl shadow-white/10 ${poppins.className}`}
+      className={`dark:bg-gray-950 dark:text-white  rounded-[5rem] py-3 px-10 shadow-xl shadow-white/10 ${poppins.className}`}
     >
       <Box
         sx={{
@@ -236,7 +178,7 @@ const Navbar = () => {
                     component={motion.div}
                     whileHover={{ rotate: 10 }}
                   >
-                    <UserButton/>
+                    <UserButton />
                   </Box>
                 </IconButton>
               </>
