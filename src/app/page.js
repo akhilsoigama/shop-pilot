@@ -1,3 +1,4 @@
+import CategorySection from "@/components/category-section/Category-Section";
 import HeroSection from "@/components/hero-section/Hero-Section";
 import MiddleSection from "@/components/middle-section/Middle-Section";
 import Navbaar from "@/components/navbaar/Navbaar";
@@ -16,6 +17,9 @@ export default function Home() {
         </section>
         <section>
           <MiddleSection />
+        </section>
+        <section>
+          <CategorySection />
         </section>
       </main>
     </div>
