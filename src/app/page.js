@@ -13,7 +13,6 @@ export default function Home() {
         <section>
           <HeroSection />
         </section>
-
       </main>
     </div>
   );
