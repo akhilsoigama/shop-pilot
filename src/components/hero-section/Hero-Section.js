@@ -1,14 +1,15 @@
 "use client";
 
-import { Box, Button, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Poppins } from "next/font/google";
 import { AnimatePresence, motion } from "framer-motion";
-import { containerVariants, itemVariants } from "../motion/Motion";
+import { containerVariants, } from "../motion/Motion";
 import BlurText from "../react-bits/blur-text/Blur-text";
 import ShinyText from "../react-bits/shiny-text/Shiny-Text";
 import DecryptedText from "../react-bits/decrypted-text/Decrypted-Text";
+import { InteractiveHoverButton } from "@/components/magicui/interactive-hover-button";
 
 const poppins = Poppins({
     weight: ["400", "500", "600", "700"],
@@ -51,7 +52,7 @@ export default function HeroSection() {
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ duration: 1.2, ease: "easeInOut" }}
                 style={{ flex: 4 }}
-                className="flex flex-col text-center md:text-left items-center md:items-start w-full"
+                className="flex flex-col text-center gap-1 md:text-left items-center md:items-start w-full"
             >
                 <ShinyText
                     text="Experience fashion like never before"
@@ -61,34 +62,27 @@ export default function HeroSection() {
                 />
                 <BlurText
                     text={`Elevate Your Style With Fashion Store:Where Fashion Meets Passion`}
-                    delay={100}
+                    delay={50}
                     animateBy="words"
                     direction="top"
                     onAnimationComplete={() => console.log("Animation completed!")}
                     className="text-2xl md:text-4xl font-bold leading-snug md:leading-[1.3] mb-4 text-center md:text-left"
                 />
-                <DecryptedText
-                    text="Discover a world of fashion-forward trends, curated collections, and timeless pieces that inspire. Unleash your inner fashionista and embark on a journey of confidence, elegance and impeccable style."
-                    speed={100}
-                    maxIterations={20}
-                    characters="ABCD1234!?"
-                    className="revealed text-base text-slate-300 max-w-2xl text-center md:text-left mb-6"
-                    parentClassName="all-letters"
-                    encryptedClassName="encrypted"
-                />
-                <Button
-                    variant="contained"
-                    color="primary"
-                    size="large"
-                    sx={{
-                        borderRadius: "999px",
-                        px: 4,
-                        py: 1.5,
-                        textTransform: "none",
-                    }}
-                >
-                    Start Shopping
-                </Button>
+                <div className="w-[48rem] max-w-full">
+                    <DecryptedText
+                        text="Discover a world of fashion-forward trends, curated collections, and timeless pieces that inspire. Unleash your inner fashionista and embark on a journey of confidence, elegance and impeccable style."
+                        speed={50}
+                        maxIterations={20}
+                        animateOn="view"
+                        characters="ABCDEFGHIJKLMNOPQRSTUVWXYZ1234!?"
+                        className="revealed text-sm sm:text-base text-slate-400 text-center md:text-left mb-8 leading-relaxed"
+                        parentClassName="all-letters"
+                        encryptedClassName="encrypted"
+                    />
+                </div>
+                <Box className="pt-4">
+                    <InteractiveHoverButton className="text-black">Start Shopping</InteractiveHoverButton>
+                </Box>
             </motion.div>
 
             {/* Right Content */}
