@@ -1,11 +1,11 @@
 "use client";
 
-import { Box, Button, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Poppins } from "next/font/google";
 import { AnimatePresence, motion } from "framer-motion";
-import { containerVariants, itemVariants } from "../motion/Motion";
+import { containerVariants, } from "../motion/Motion";
 import BlurText from "../react-bits/blur-text/Blur-text";
 import ShinyText from "../react-bits/shiny-text/Shiny-Text";
 import DecryptedText from "../react-bits/decrypted-text/Decrypted-Text";
