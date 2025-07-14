@@ -130,4 +130,6 @@ function CarouselDots() {
   );
 }
 
-export { Carousel, CarouselContent, CarouselItem, CarouselDots };
+
+
+export { Carousel, CarouselContent, CarouselItem, CarouselDots, useCarousel };
