@@ -1,3 +1,4 @@
+import BannerSection from "@/components/banner-section/Banner-Section";
 import CategorySection from "@/components/category-section/Category-Section";
 import FooterSection from "@/components/footer-section/Footer";
 import HeroSection from "@/components/hero-section/Hero-Section";
@@ -22,12 +23,15 @@ export default function Home() {
         </section>
         <section>
           <CategorySection />
-          </section>
+        </section>
         <section className="px-20">
           <ItemSection />
         </section>
+        <section className=" py-15">
+          <BannerSection />
+        </section>
         <section>
-          <FooterSection/>
+          <FooterSection />
         </section>
       </main>
     </div>
