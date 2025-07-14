@@ -234,7 +234,7 @@ export default function FooterSection() {
             >
                 <Box className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
                     <Typography sx={{ color: "#9CA3AF" }}>
-                        © {new Date().getFullYear()} Greelogik. All rights reserved.
+                        © {new Date().getFullYear()} ShopPilot. All rights reserved.
                     </Typography>
                     <Box className="flex flex-wrap gap-4 justify-center">
                         {["Privacy Policy", "Terms of Service", "Cookie Policy", "Sitemap"].map((item, i) => (
