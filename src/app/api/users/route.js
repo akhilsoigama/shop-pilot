@@ -1,7 +1,7 @@
 import { getAuth } from "@clerk/nextjs/server";
-import dbConnect from "@/lib/db";
 import fetchClerkUser from "@/utils/FetchClerkUser";
 import { User } from "@/model/User";
+import { dbConnect } from "@/lib/db";
 
 export const POST = async (req) => {
   const { userId } = getAuth(req);
@@ -24,9 +24,8 @@ export const POST = async (req) => {
           email:
             clerkUser.email_addresses?.[0]?.email_address ||
             "noemail@example.com",
-          fullName: `${clerkUser.first_name || ""} ${
-            clerkUser.last_name || ""
-          }`.trim(),
+          fullName: `${clerkUser.first_name || ""} ${clerkUser.last_name || ""
+            }`.trim(),
         },
       },
       { upsert: true }
