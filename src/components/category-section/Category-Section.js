@@ -10,41 +10,14 @@ import {
   CarouselItem,
   CarouselDots,
 } from "../ui/carousel";
+import { categories } from "@/lib/category";
+import { useProducts } from "@/hooks/useProduct";
 
 const poppins = Poppins({
   weight: ["400", "500", "600", "700"],
   subsets: ["latin"],
   display: "swap",
 });
-
-const categories = [
-  "Shirts",
-  "Shorts",
-  "Jackets",
-  "Hoodies",
-  "Trousers",
-  "Shoes",
-  "Accessories",
-];
-
-const productData = {
-  Shirts: [
-    { title: "Levis Dri-FIT", subtitle: "Men's T-shirt", img: "/images/shirts/shirt1.png" },
-    { title: "Levis Stripes", subtitle: "Men's T-shirt", img: "/images/shirts/shirt2.png" },
-    { title: "H&M Regular Fit", subtitle: "Men's T-shirt", img: "/images/shirts/shirt3.png" },
-    { title: "Jack & Jones", subtitle: "Men's T-shirt", img: "/images/shirts/shirt6.png" },
-    { title: "Zara Oversized", subtitle: "Men's T-shirt", img: "/images/shirts/tshirt4.png" },
-    { title: "Roadster Fit", subtitle: "Men's T-shirt", img: "/images/shirts/tshirt5.png" },
-    { title: "HRX Cotton Tee", subtitle: "Men's T-shirt", img: "/images/shirts/top7.png" },
-    { title: "Superdry Slim", subtitle: "Men's T-shirt", img: "/images/shirts/top8.png" },
-  ],
-  Shorts: [],
-  Jackets: [],
-  Hoodies: [],
-  Trousers: [],
-  Shoes: [],
-  Accessories: [],
-};
 
 const sectionVariants = {
   hidden: { opacity: 0, y: 100 },
@@ -56,10 +29,13 @@ const sectionVariants = {
 };
 
 export default function CategorySection() {
-  const [selectedCategory, setSelectedCategory] = useState("Shirts");
+  const [selectedCategory, setSelectedCategory] = useState(categories[0]);
+
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const products = productData[selectedCategory] || [];
+  const { products, isLoading } = useProducts(selectedCategory);
+
+  const discountedProducts = products.filter((item) => item.discount > 50);
 
   return (
     <Box
@@ -112,7 +88,11 @@ export default function CategorySection() {
         </Tabs>
       </Box>
 
-      {products.length > 0 ? (
+      {isLoading ? (
+        <Typography align="center" className="text-gray-400">
+          Loading products...
+        </Typography>
+      ) : discountedProducts.length > 0 ? (
         <Box
           component={motion.div}
           whileInView={{ opacity: 1, y: 0 }}
@@ -121,24 +101,50 @@ export default function CategorySection() {
         >
           <Carousel className="w-full cursor-grab">
             <CarouselContent>
-              {products.map((item, i) => (
+              {discountedProducts.map((item, i) => (
                 <CarouselItem key={i} className="md:basis-1/2 lg:basis-1/4">
-                  <Box className="rounded-2xl overflow-hidden border border-neutral-800 bg-[#1f1f1f] flex flex-col">
+                  <Box className="rounded-2xl overflow-hidden border border-neutral-800 bg-[#1f1f1f] flex flex-col hover:shadow-lg transition-shadow duration-300">
                     <Box className="relative w-full pt-[125%] overflow-hidden">
                       <Box
                         component="img"
-                        src={item.img}
-                        alt={item.title}
+                        src={item.productImage[0]}
+                        alt={item.productName}
                         className="absolute top-0 left-0 w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                       />
+                      {!item.inStock && (
+                        <Box className="absolute top-2 left-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">
+                          Out of Stock
+                        </Box>
+                      )}
+                      {Date.now() - new Date(item.createdAt).getTime() <
+                        7 * 24 * 60 * 60 * 1000 && (
+                        <Box className="absolute top-2 right-2 bg-green-600 text-white text-xs font-bold px-2 py-1 rounded">
+                          Sale
+                        </Box>
+                      )}
                     </Box>
-                    <Box className="p-4 flex-grow">
-                      <Typography className="font-semibold text-white text-base sm:text-lg">
-                        {item.title}
+                    <Box className="p-4 flex flex-col gap-1">
+                      <Typography className="font-semibold text-white text-base line-clamp-1">
+                        {item.productName}
                       </Typography>
-                      <Typography className="text-gray-400 text-sm sm:text-base">
-                        {item.subtitle}
+                      <Typography className="text-gray-400 text-sm">
+                        Brand: <span className="text-white">{item.brand}</span>
                       </Typography>
+                      <Box className="flex items-center gap-2 mt-1">
+                        <Typography className="text-white font-bold text-lg">
+                          ₹{item.discountPrice ?? item.price}
+                        </Typography>
+                        {item.discount > 0 && (
+                          <>
+                            <Typography className="line-through text-sm text-gray-500">
+                              ₹{item.price}
+                            </Typography>
+                            <Typography className="text-sm text-green-400 font-medium">
+                              {item.discount}% off
+                            </Typography>
+                          </>
+                        )}
+                      </Box>
                     </Box>
                   </Box>
                 </CarouselItem>
@@ -148,7 +154,7 @@ export default function CategorySection() {
           </Carousel>
         </Box>
       ) : (
-        <Typography align="center" className="text-gray-400">
+        <Typography align="center" className="text-gray-400 mt-8">
           No products available.
         </Typography>
       )}
