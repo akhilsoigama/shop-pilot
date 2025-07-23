@@ -181,7 +181,7 @@ export default function FooterSection() {
                                     <Typography sx={{ color: "#9CA3AF", mb: 3 }}>
                                         Follow us on social media for updates
                                     </Typography>
-                                    <Box className="flex gap-4">
+                                    <Box className="flex flex-wrap gap-4">
                                         {[
                                             { icon: <FaFacebookF />, color: "#4267B2" },
                                             { icon: <FaTwitter />, color: "#1DA1F2" },
