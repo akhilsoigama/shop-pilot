@@ -1,239 +1,75 @@
 'use client'
-import { motion } from 'framer-motion';
-import SearchIcon from '@mui/icons-material/Search';
-import {
-  Badge,
-  Box,
-  IconButton,
-  List,
-  ListItem,
-  useTheme,
-  Button
-} from "@mui/material";
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import { Poppins } from 'next/font/google';
-import Image from 'next/image';
-import { SignInButton, useAuth, UserButton, useUser } from '@clerk/nextjs';
-import { containerVariants, itemVariants, navItemVariants } from '../motion/Motion';
-import { useEffect } from 'react';
-import { useSyncUser } from '@/hooks/User';
+import { motion, useScroll, useMotionValueEvent } from 'framer-motion'
+import MenuIcon from '@mui/icons-material/Menu'
+import { useState } from 'react'
 
-// Configure Poppins font
-const poppins = Poppins({
-  weight: ['400', '500', '600', '700'],
-  subsets: ['latin'],
-  display: 'swap',
-});
+const categories = [
+  'Electronics',
+  'Fashion & Apparel',
+  'Home & Kitchen',
+  'Beauty & Personal Care',
+  'Health & Wellness',
+  'Sports & Outdoors',
+  'Automotive',
+  'Books & Stationery',
+  'Toys & Games',
+  'Baby Products',
+  'Groceries & Gourmet',
+  'Pet Supplies',
+  'Office Supplies',
+  'Jewelry & Accessories',
+  'Footwear',
+  'Tools & Hardware',
+  'Furniture & Decor',
+  'Mobile Phones & Accessories',
+  'Laptops & Computers',
+  'Watches & Wearables',
+]
 
-const Navbar = () => {
-  const theme = useTheme();
-  const { isSignedIn } = useUser()
-  const { getToken } = useAuth();
-  const { trigger } = useSyncUser();
+const Navbaar = () => {
+  const [isScrolled, setIsScrolled] = useState(false)
+  const { scrollY } = useScroll()
 
-  useEffect(() => {
-    const sync = async () => {
-      const token = await getToken();
-      if (token) {
-        trigger(token);
-      }
-    };
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    if (latest > 10) {
+      setIsScrolled(true)
+    } else {
+      setIsScrolled(false)
+    }
+  })
 
-    sync();
-  }, [getToken, trigger]);
-
-return (
-  <motion.nav
-    initial="hidden"
-    animate="visible"
-    variants={containerVariants}
-    className={`dark:bg-gray-950 dark:text-white  rounded-[5rem] py-3 px-10 shadow-xl shadow-white/10 ${poppins.className}`}
-  >
-    <Box
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        maxWidth: '100%',
-        margin: '0 auto',
-        gap: '2rem',
-      }}
-    >
-      <motion.div variants={itemVariants}>
-        <Box sx={{ flex: '0 0 auto' }}>
-          <motion.div
-            whileHover={{ scale: 1.1 }}
+  return (
+    <div className={`w-full bg-gray-800 shadow-sm scrollbar-hide fixed z-10 transition-all duration-300 ${isScrolled ? 'top-2' : 'top-20'}`}>
+      <div className="relative px-4 py-3">
+        <div className="flex items-center space-x-4 overflow-x-auto scrollbar-hide">
+          {/* All Categories Button */}
+          <motion.button
+            whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            style={{ display: 'inline-block' }}
+            className="flex items-center space-x-1 whitespace-nowrap px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white"
           >
-            <Image
-              src="/logo.png"
-              alt="Logo"
-              width={50}
-              height={30}
-              style={{
-                filter: 'invert(var(--logo-invert, 0))',
-                cursor: 'pointer'
-              }}
-            />
-          </motion.div>
-        </Box>
-      </motion.div>
-      <motion.div variants={itemVariants}>
-        <Box sx={{
-          flex: '1 1 auto',
-          display: 'flex',
-          justifyContent: 'center',
-          color: theme.palette.mode === 'dark' ? '#fff' : '#fff',
-        }}>
-          <List sx={{
-            display: 'flex',
-            gap: '2rem',
-            padding: 0,
-            margin: 0,
-          }}>
-            {['Home', 'Services', 'Blog', 'Help Center', 'About'].map((item, index) => (
-              <ListItem
-                key={item}
-                sx={{
-                  padding: 0,
-                  fontSize: '0.9rem',
-                  fontWeight: 500,
-                  whiteSpace: 'nowrap',
-                }}
-                component={motion.li}
-                variants={navItemVariants}
-                whileHover="hover"
-                whileTap="tap"
-                custom={index}
-              >
-                {item}
-              </ListItem>
-            ))}
-          </List>
-        </Box>
-      </motion.div>
-      <motion.div variants={itemVariants} whileHover={{ scale: 1.02 }}>
-        <Box width='100%'>
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              width: '100%',
-              backgroundColor: theme.palette.mode === 'dark' ? '#333' : '#f5f5f5',
-              borderRadius: '50px',
-              padding: '0.5rem 1rem',
-              transition: 'all 0.3s ease',
-              '&:hover': {
-                boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-              }
-            }}
-            component={motion.div}
-            whileFocus={{ boxShadow: '0 0 0 2px #3b82f6' }}
-          >
-            <SearchIcon sx={{
-              color: theme.palette.mode === 'dark' ? '#aaa' : '#666',
-              marginRight: '0.5rem'
-            }} />
-            <input
-              type="text"
-              placeholder="Search here..."
-              className={poppins.className}
-              style={{
-                flex: 1,
-                width: '500px',
-                background: 'transparent',
-                border: 'none',
-                outline: 'none',
-                color: theme.palette.mode === 'dark' ? '#fff' : '#000',
-                fontSize: '0.9rem',
-                fontWeight: 500
-              }}
-            />
-          </Box>
-        </Box>
-      </motion.div>
+            <MenuIcon fontSize="small" />
+            <span className="text-sm font-medium">All</span>
+          </motion.button>
 
-      <motion.div variants={itemVariants}>
-        <Box sx={{
-          flex: '0 0 auto',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '1rem'
-        }}>
-          {isSignedIn ? (
-            <>
-              <IconButton
-                aria-label="notifications"
-                component={motion.button}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                <Badge badgeContent={4} color="error">
-                  <NotificationsIcon sx={{ color: '#fff' }} />
-                </Badge>
-              </IconButton>
+          {/* Category List */}
+          {categories.map((category) => (
+            <motion.button
+              key={category}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-3 py-1 rounded-full text-sm font-medium whitespace-nowrap text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+            >
+              {category}
+            </motion.button>
+          ))}
+        </div>
 
-              <IconButton
-                aria-label="profile"
-                component={motion.button}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                <Box
-                  sx={{
-                    width: 30,
-                    height: 30,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderRadius: '50%',
-                    backgroundColor: theme.palette.mode === 'dark' ? '#333' : '#f5f5f5',
-                    color: theme.palette.mode === 'dark' ? '#fff' : '#000',
-                  }}
-                  component={motion.div}
-                  whileHover={{ rotate: 10 }}
-                >
-                  <UserButton />
-                </Box>
-              </IconButton>
-            </>
-          ) : (
-            <SignInButton>
-              <motion.div
-                whileHover={{
-                  scale: 1.05,
-                  boxShadow: '0 4px 8px rgba(59, 130, 246, 0.4)',
-                  borderRadius: '50px'
-                }}
-                whileTap={{ scale: 0.95 }}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.2 }}
-              >
-                <Button
-                  variant="outlined"
-                  sx={{
-                    color: 'white',
-                    borderRadius: '50px',
-                    textTransform: 'none',
-                    fontWeight: 500,
-                    width: 100,
-                    '&:hover': {
-                      backgroundColor: '#2563eb',
-                    }
-                  }}
-                >
-                  Log in
-                </Button>
-              </motion.div>
-            </SignInButton>
-          )}
-        </Box>
-      </motion.div>
-    </Box>
-  </motion.nav>
-);
-};
+        {/* Fade effect for scroll indication */}
+        <div className="absolute right-0 top-0 bottom-0 w-10 bg-gradient-to-l from-white dark:from-gray-800 to-transparent pointer-events-none" />
+      </div>
+    </div>
+  )
+}
 
-export default Navbar;
+export default Navbaar
