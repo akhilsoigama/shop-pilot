@@ -12,13 +12,14 @@ import {
 } from "../ui/carousel";
 import { categories } from "@/lib/category";
 import { useProducts } from "@/hooks/useProduct";
+import Image from "next/image";
 
 const poppins = Poppins({
   weight: ["400", "500", "600", "700"],
   subsets: ["latin"],
   display: "swap",
 });
- 
+
 const sectionVariants = {
   hidden: { opacity: 0, y: 100 },
   visible: {
@@ -28,14 +29,24 @@ const sectionVariants = {
   },
 };
 
+const CATEGORIES_WITH_MANY_ITEMS = [
+  // 'Electronics',
+  'Fashion & Apparel',
+  'Home & Kitchen',
+  'Mobile Phones & Accessories',
+  'Laptops & Computers'
+];
+
 export default function CategorySection() {
   const [selectedCategory, setSelectedCategory] = useState(categories[0]);
-
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const { products, isLoading } = useProducts(selectedCategory);
 
-  const discountedProducts = products.filter((item) => item.discount > 50);
+  const filteredProducts = CATEGORIES_WITH_MANY_ITEMS.includes(selectedCategory)
+    ? products.filter((item) => item.discount > 20) 
+    : products; 
+
   return (
     <Box
       ref={ref}
@@ -43,7 +54,7 @@ export default function CategorySection() {
       variants={sectionVariants}
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
-      className={`w-full text-white py-16 px-4 sm:px-6 lg:px-8 ${poppins.className}`}
+      className={`w-full dark:text-white py-16 px-4 sm:px-6 lg:px-8 ${poppins.className}`}
     >
       <Typography
         variant="h4"
@@ -67,6 +78,11 @@ export default function CategorySection() {
             "& .MuiTabs-scroller": {
               overflowX: "auto !important",
             },
+            "& .MuiTabs-indicator": {
+              backgroundColor: (theme) =>
+                theme.palette.mode === 'dark' ? '#cbd5e1' : '#6366f1', 
+              height: 3,
+            },
           }}
         >
           {categories.map((cat) => (
@@ -77,10 +93,20 @@ export default function CategorySection() {
               sx={{
                 textTransform: "none",
                 fontWeight: 500,
-                color: "white",
-                "&.Mui-selected": { color: "#cbd5e1" },
+                color: (theme) =>
+                  theme.palette.mode === 'dark' ? 'white' : '#4b5563', 
+                "&.Mui-selected": {
+                  color: (theme) =>
+                    theme.palette.mode === 'dark' ? '#cbd5e1' : '#6366f1', 
+                  fontWeight: 600,
+                },
                 px: { xs: 1.5, sm: 2 },
                 fontSize: { xs: "0.8rem", sm: "0.9rem" },
+                "&:hover": {
+                  color: (theme) =>
+                    theme.palette.mode === 'dark' ? '#e2e8f0' : '#4f46e5', 
+                  backgroundColor: 'transparent',
+                },
               }}
             />
           ))}
@@ -88,10 +114,10 @@ export default function CategorySection() {
       </Box>
 
       {isLoading ? (
-        <Typography align="center" className="text-gray-400">
+        <Typography align="center" className="dark:text-gray-400">
           Loading products...
         </Typography>
-      ) : discountedProducts.length > 0 ? (
+      ) : filteredProducts.length > 0 ? (
         <Box
           component={motion.div}
           whileInView={{ opacity: 1, y: 0 }}
@@ -100,14 +126,15 @@ export default function CategorySection() {
         >
           <Carousel className="w-full cursor-grab">
             <CarouselContent>
-              {discountedProducts.map((item, i) => (
+              {filteredProducts.map((item, i) => (
                 <CarouselItem key={i} className="md:basis-1/2 lg:basis-1/4">
-                  <Box className="rounded-2xl overflow-hidden border border-neutral-800 bg-[#1f1f1f] flex flex-col hover:shadow-lg transition-shadow duration-300">
-                    <Box className="relative w-full pt-[125%] overflow-hidden">
-                      <Box
-                        component="img"
+                  <Box className="rounded-2xl overflow-hidden border dark:border-neutral-800 bg-[#1f1f1f] flex flex-col shadow-md shadow-gray-700/25  hover:shadow-lg transition-shadow duration-300">
+                    <Box className="relative w-full p-3 pt-[125%] overflow-hidden">
+                      <Image
                         src={item.productImage[0]}
                         alt={item.productName}
+                        width={100}
+                        height={100}
                         className="absolute top-0 left-0 w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                       />
                       {!item.inStock && (
@@ -117,10 +144,10 @@ export default function CategorySection() {
                       )}
                       {Date.now() - new Date(item.createdAt).getTime() <
                         7 * 24 * 60 * 60 * 1000 && (
-                        <Box className="absolute top-2 right-2 bg-green-600 text-white text-xs font-bold px-2 py-1 rounded">
-                          Sale
-                        </Box>
-                      )}
+                          <Box className="absolute top-2 right-2 bg-green-600 text-white text-xs font-bold px-2 py-1 rounded">
+                            Sale
+                          </Box>
+                        )}
                     </Box>
                     <Box className="p-4 flex flex-col gap-1">
                       <Typography className="font-semibold text-white text-base line-clamp-1">
@@ -154,7 +181,9 @@ export default function CategorySection() {
         </Box>
       ) : (
         <Typography align="center" className="text-gray-400 mt-8">
-          No products available.
+          {CATEGORIES_WITH_MANY_ITEMS.includes(selectedCategory)
+            ? "No discounted products available."
+            : "No products available."}
         </Typography>
       )}
     </Box>

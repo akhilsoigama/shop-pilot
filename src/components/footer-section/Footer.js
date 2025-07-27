@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, TextField, InputAdornment, Divider, Typography, Link as MuiLink } from "@mui/material";
+import { Box, TextField, InputAdornment, Divider, Typography, Link as MuiLink, useTheme } from "@mui/material";
 import { motion, useAnimation } from "framer-motion";
 import { Search } from "@mui/icons-material";
 import { FaYoutube, FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from "react-icons/fa";
@@ -9,6 +9,7 @@ import { useInView } from "react-intersection-observer";
 import Image from "next/image";
 
 export default function FooterSection() {
+    const theme = useTheme();
     const controls = useAnimation();
     const [ref, inView] = useInView({
         triggerOnce: true,
@@ -21,10 +22,37 @@ export default function FooterSection() {
         }
     }, [controls, inView]);
 
+    // Colors for both modes
+    const colors = {
+        dark: {
+            bg: "bg-gray-950",
+            text: "text-white",
+            divider: "border-gray-700",
+            link: "text-gray-400 hover:text-white",
+            inputBg: "bg-gray-800",
+            inputText: "text-white",
+            inputPlaceholder: "placeholder-gray-500",
+            footerText: "text-gray-400",
+        },
+        light: {
+            bg: "bg-gray-50",
+            text: "text-gray-900",
+            divider: "border-gray-200",
+            link: "text-gray-600 hover:text-gray-900",
+            inputBg: "bg-white",
+            inputText: "text-gray-900",
+            inputPlaceholder: "placeholder-gray-400",
+            footerText: "text-gray-500",
+        }
+    };
+
+    const mode = theme.palette.mode;
+    const currentColors = colors[mode];
+
     return (
         <motion.footer
             ref={ref}
-            className="bg-[#0d1117] text-white px-4 md:px-20 py-12"
+            className={`${currentColors.bg} ${currentColors.text} px-4 md:px-20 py-12 shadow-md shadow-gray-500`}
             initial={{ opacity: 0, y: 80 }}
             animate={controls}
             transition={{
@@ -40,14 +68,11 @@ export default function FooterSection() {
                         style={{ display: 'inline-block' }}
                     >
                         <Image
-                            src="/logo.png"
+                            src= "/logo.png"
                             alt="Logo"
                             width={50}
                             height={30}
-                            style={{
-                                filter: 'invert(var(--logo-invert, 0))',
-                                cursor: 'pointer'
-                            }}
+                            className="cursor-pointer"
                         />
                     </motion.div>
                 </Box>
@@ -57,8 +82,8 @@ export default function FooterSection() {
                         placeholder="Enter your email..."
                         variant="outlined"
                         size="small"
+                        className={`${currentColors.inputBg} ${currentColors.inputText}`}
                         sx={{
-                            backgroundColor: "white",
                             borderTopLeftRadius: '10px',
                             borderBottomLeftRadius: '10px',
                             flexGrow: 1,
@@ -81,16 +106,16 @@ export default function FooterSection() {
                                 py: 0,
                                 px: 2,
                                 height: '100%',
-                                color: "#111827",
                                 fontSize: '0.875rem',
                                 "&::placeholder": {
-                                    color: "#6B7280",
+                                    opacity: 1,
+                                    color: currentColors.inputPlaceholder.replace('placeholder-', ''),
                                 },
                             },
                         }}
                         InputProps={{
                             startAdornment: (
-                                <InputAdornment position="start" sx={{ color: "#9CA3AF", mr: 0 }}>
+                                <InputAdornment position="start" sx={{ color: theme.palette.text.secondary, mr: 0 }}>
                                     <Search fontSize="small" />
                                 </InputAdornment>
                             ),
@@ -98,7 +123,7 @@ export default function FooterSection() {
                     />
 
                     <button
-                        className="px-3 h-10 min-w-fit text-[0.8125rem] font-semibold bg-blue-600 text-white hover:bg-blue-700 active:scale-98 transition-all duration-150 ease-in rounded-r-[10px] whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                        className={`px-3 h-10 min-w-fit text-[0.8125rem] font-semibold bg-blue-600 text-white hover:bg-blue-700 active:scale-98 transition-all duration-150 ease-in rounded-r-[10px] whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50`}
                         aria-label="Subscribe to newsletter"
                     >
                         Subscribe
@@ -106,9 +131,8 @@ export default function FooterSection() {
                 </Box>
             </Box>
 
-            <Divider sx={{ backgroundColor: "#374151", mb: 8 }} />
+            <Divider className={currentColors.divider} sx={{ mb: 8 }} />
 
-            {/* Columns - Added staggered animations */}
             <Box className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
                 {[
                     {
@@ -141,12 +165,7 @@ export default function FooterSection() {
                         <Box>
                             <Typography
                                 variant="subtitle1"
-                                sx={{
-                                    fontWeight: 600,
-                                    mb: 3,
-                                    color: "white",
-                                    fontSize: "1.1rem"
-                                }}
+                                className={`font-semibold mb-6 text-lg ${currentColors.text}`}
                             >
                                 {column.title}
                             </Typography>
@@ -160,15 +179,13 @@ export default function FooterSection() {
                                         >
                                             <MuiLink
                                                 href="#"
+                                                className={`${currentColors.link} transition-colors duration-200`}
                                                 sx={{
-                                                    color: "#9CA3AF",
+                                                    display: "inline-block",
+                                                    textDecoration: "none",
                                                     "&:hover": {
-                                                        color: "white",
                                                         textDecoration: "underline",
                                                     },
-                                                    transition: "color 0.2s ease",
-                                                    cursor: "pointer",
-                                                    display: "inline-block",
                                                 }}
                                             >
                                                 {link}
@@ -178,16 +195,16 @@ export default function FooterSection() {
                                 </ul>
                             ) : (
                                 <Box>
-                                    <Typography sx={{ color: "#9CA3AF", mb: 3 }}>
+                                    <Typography className={`${currentColors.link} mb-4`}>
                                         Follow us on social media for updates
                                     </Typography>
                                     <Box className="flex flex-wrap gap-4">
                                         {[
-                                            { icon: <FaFacebookF />, color: "#4267B2" },
-                                            { icon: <FaTwitter />, color: "#1DA1F2" },
-                                            { icon: <FaInstagram />, color: "#E1306C" },
-                                            { icon: <FaLinkedinIn />, color: "#0077B5" },
-                                            { icon: <FaYoutube />, color: "#FF0000" },
+                                            { icon: <FaFacebookF />,  },
+                                            { icon: <FaTwitter />,  },
+                                            { icon: <FaInstagram />,  },
+                                            { icon: <FaLinkedinIn />,},
+                                            { icon: <FaYoutube />,  },
                                         ].map((social, i) => (
                                             <motion.div
                                                 key={i}
@@ -197,18 +214,10 @@ export default function FooterSection() {
                                             >
                                                 <MuiLink
                                                     href="#"
+                                                    className="flex items-center justify-center rounded-full w-9 h-9 text-white"
                                                     sx={{
-                                                        color: "white",
                                                         backgroundColor: social.color,
-                                                        borderRadius: "50%",
-                                                        width: 36,
-                                                        height: 36,
-                                                        display: "flex",
-                                                        alignItems: "center",
-                                                        justifyContent: "center",
-                                                        "&:hover": {
-                                                            boxShadow: `0 4px 8px ${social.color}80`,
-                                                        },
+                                                        
                                                         transition: "all 0.2s ease",
                                                     }}
                                                 >
@@ -224,7 +233,7 @@ export default function FooterSection() {
                 ))}
             </Box>
 
-            <Divider sx={{ backgroundColor: "#374151", mb: 4 }} />
+            <Divider className={currentColors.divider} sx={{ mb: 4 }} />
 
             {/* Bottom Bar */}
             <motion.div
@@ -233,7 +242,7 @@ export default function FooterSection() {
                 transition={{ delay: 0.4 }}
             >
                 <Box className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
-                    <Typography sx={{ color: "#9CA3AF" }}>
+                    <Typography className={currentColors.footerText}>
                         © {new Date().getFullYear()} ShopPilot. All rights reserved.
                     </Typography>
                     <Box className="flex flex-wrap gap-4 justify-center">
@@ -241,13 +250,12 @@ export default function FooterSection() {
                             <MuiLink
                                 key={i}
                                 href="#"
+                                className={`${currentColors.link} transition-colors duration-200`}
                                 sx={{
-                                    color: "#9CA3AF",
+                                    textDecoration: "none",
                                     "&:hover": {
-                                        color: "white",
                                         textDecoration: "underline",
                                     },
-                                    transition: "color 0.2s ease",
                                 }}
                             >
                                 {item}
