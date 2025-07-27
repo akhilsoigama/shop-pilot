@@ -41,9 +41,9 @@ export const Subcategories = [
     {
         name: 'Fashion & Apparel',
         subcategories: [
-            'Men\'s Clothing',
-            'Women\'s Clothing',
-            'Kids\' Clothing',
+            "Men's Clothing",
+            "Women's Clothing",
+            "Kid's Clothing",
             'Shoes',
             'Bags',
             'Watches',
@@ -245,3 +245,85 @@ export const Subcategories = [
         ],
     },
 ]
+
+
+// Category for fashion page
+export const fashionCategories = [
+    {
+        name: "Men's Clothing",
+        slug: "mens-clothing",
+        image: "/images/fashion/men-fashion.png",
+    },
+    {
+        name: "Women's Clothing",
+        slug: "womens-clothing",
+        image: "/images/fashion/women-fashion.png",
+    },
+    {
+        name: "Kid's Clothing",
+        slug: "kids-clothing",
+        image: "/images/fashion/kid-fashion.png",
+    },
+    {
+        name: "Shoes",
+        slug: "shoes",
+        image: "/images/fashion/footware.png",
+    },
+    {
+        name: "Bags",
+        slug: "bags",
+        image: "/images/fashion/bags.png",
+    },
+    {
+        name: "Jewellery",
+        slug: "jewellery",
+        image: "/images/fashion/jewellery.png",
+    },
+    {
+        name: "Watches",
+        slug: "watches",
+        image: "/images/fashion/watch-fashion.png",
+    },
+    {
+        name: "Beauty",
+        slug: "beauty",
+        image: "/images/fashion/beauty.png",
+    },
+    {
+        name: "Handbags",
+        slug: "handbags",
+        image: "/images/fashion/handbags.png",
+    },
+    {
+        name: "Sunglasses",
+        slug: "sunglasses",
+        image: "/images/fashion/eyeware.png",
+    },
+];
+
+// Maps URL slugs to actual subcategory names in the database
+export const fashionSlugMap = {
+    "mens-clothing": "Men's Clothing",
+    "womens-clothing": "Women's Clothing",
+    "kids-clothing": "Kid's Clothing",
+    "kids-fashion": "Kids' Clothing", 
+    "shoes": "Shoes",
+    "bags": "Bags",
+    "jewellery": "Jewellery",
+    "watches": "Watches",
+    "beauty": "Beauty",
+    "handbags": "Handbags",
+    "sunglasses": "Sunglasses",
+};
+
+// Utility function to generate slugs
+export const slugify = (str) => {
+    return str
+        .toLowerCase()
+        .replace(/[^\w\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .trim();
+};
+
+
