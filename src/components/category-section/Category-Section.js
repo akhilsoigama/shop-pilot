@@ -12,7 +12,6 @@ import {
 } from "../ui/carousel";
 import { categories } from "@/lib/category";
 import { useProducts } from "@/hooks/useProduct";
-import Image from "next/image";
 
 const poppins = Poppins({
   weight: ["400", "500", "600", "700"],
@@ -129,12 +128,11 @@ export default function CategorySection() {
               {filteredProducts.map((item, i) => (
                 <CarouselItem key={i} className="md:basis-1/2 lg:basis-1/4">
                   <Box className="rounded-2xl overflow-hidden border dark:border-neutral-800 bg-[#1f1f1f] flex flex-col shadow-md shadow-gray-700/25  hover:shadow-lg transition-shadow duration-300">
-                    <Box className="relative w-full p-3 pt-[125%] overflow-hidden">
-                      <Image
+                    <Box className="relative w-full pt-[125%] overflow-hidden">
+                      <Box
+                        component="img"
                         src={item.productImage[0]}
                         alt={item.productName}
-                        width={100}
-                        height={100}
                         className="absolute top-0 left-0 w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                       />
                       {!item.inStock && (
