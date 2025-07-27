@@ -8,8 +8,7 @@ import MiddleSection from "@/components/middle-section/Middle-Section";
 
 export default function Home() {
   return (
-    <div className="flex gap-12 flex-col  bg-gray-950 h-full" suppressHydrationWarning>
-      
+    <div className="flex mt-16 gap-12 flex-col  dark:bg-gray-950 h-full" suppressHydrationWarning>  
       <main>
         <section>
           <HeroSection />

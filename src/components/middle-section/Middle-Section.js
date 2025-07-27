@@ -43,7 +43,7 @@ export default function MiddleSection() {
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, ease: "easeOut" }}
     >
-      <Box className="py-12 px-4 dark:bg-gray-950 text-white md:px-20">
+      <Box className="py-12 px-4 dark:bg-gray-950 dark:text-white md:px-20">
         <h2 className="text-2xl md:text-3xl font-semibold text-center mb-8">
           Explore Our Latest Collections For You
         </h2>
