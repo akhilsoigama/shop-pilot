@@ -1,282 +1,788 @@
-"use client";
-
-import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+'use client'
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Search,
-  ShoppingCart,
-  Close,
-  Person,
-  Language,
-  DarkMode,
-  LightMode,
-  Menu,
-} from "@mui/icons-material";
-import { itemVariants } from "../motion/Motion";
-import { Box } from "@mui/material";
-import Image from "next/image";
+  AppBar, Toolbar, Button, IconButton, Drawer, List,
+  ListItem, ListItemText, Box, Container, Typography,
+  Badge, InputBase, useTheme
+} from '@mui/material';
+import { alpha, styled } from '@mui/material/styles';
+import {
+  Menu, Close, ShoppingCart, Search,
+  Favorite, Person
+} from '@mui/icons-material';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { UserButton, useUser } from '@clerk/nextjs';
+import { useColorMode } from '@/hooks/DarkmodeProvider';
+import { MdDarkMode, MdLightMode } from "react-icons/md";
+import { categories, slugify, Subcategories } from '@/lib/category';
+import Image from 'next/image';
+
+const SearchContainer = styled('div')(({ theme }) => ({
+  position: 'relative',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(
+    theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black,
+    0.05
+  ),
+  '&:hover': {
+    backgroundColor: alpha(
+      theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black,
+      0.08
+    ),
+  },
+  marginRight: theme.spacing(2),
+  marginLeft: 0,
+  width: '100%',
+  [theme.breakpoints.up('sm')]: {
+    marginLeft: theme.spacing(3),
+    width: 'auto',
+  },
+}));
+
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: '100%',
+  position: 'absolute',
+  pointerEvents: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  color: theme.palette.mode === 'dark' ?
+    alpha(theme.palette.common.white, 0.7) :
+    alpha(theme.palette.common.black, 0.5),
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: 'inherit',
+  '& .MuiInputBase-input': {
+    padding: theme.spacing(1, 1, 1, 0),
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('md')]: {
+      width: '20ch',
+      '&:focus': {
+        width: '28ch',
+      },
+    },
+  },
+}));
+
+const CategoryItem = styled('a')(({ theme }) => ({
+  display: 'block',
+  padding: theme.spacing(0.5, 1),
+  fontSize: '0.875rem',
+  color: theme.palette.text.secondary,
+  textDecoration: 'none',
+  borderRadius: theme.shape.borderRadius,
+  transition: 'all 0.2s',
+  '&:hover': {
+    color: theme.palette.primary.main,
+    backgroundColor: alpha(theme.palette.primary.main, 0.05),
+  },
+}));
+
+const MegaMenuContainer = styled(motion.div)(({ theme }) => ({
+  position: 'fixed',
+  left: 0,
+  right: 0,
+  top: '64px',
+  backgroundColor: theme.palette.background.paper,
+  boxShadow: theme.shadows[6],
+  zIndex: theme.zIndex.modal,
+  borderTop: `1px solid ${theme.palette.divider}`,
+  padding: theme.spacing(4),
+  height: '400px',
+  overflowY: 'auto',
+}));
 
 const HeaderSection = () => {
-  const [isMobile, setIsMobile] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
-  const [currentLanguage, setCurrentLanguage] = useState("EN");
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
-  const searchInputRef = useRef(null);
+  const theme = useTheme();
+  const { isSignedIn } = useUser();
+  const { toggleColorMode, mode } = useColorMode();
+
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [hoveredCategory, setHoveredCategory] = useState(null);
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+  const categoryMap = {};
+  Subcategories.forEach(cat => {
+    categoryMap[cat.name] = cat.subcategories;
+  });
+
+  const mainCategories = categories.slice(0, 5);
+  const moreCategories = categories.slice(5);
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-      if (window.innerWidth >= 768) {
-        setIsDrawerOpen(false);
-      }
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
     };
-    handleResize();
-    window.addEventListener("resize", handleResize);
-
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
-    setDarkMode(prefersDark.matches);
-    prefersDark.addEventListener("change", (e) => setDarkMode(e.matches));
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  useEffect(() => {
-    if (isSearchBarVisible && searchInputRef.current) {
-      searchInputRef.current.focus();
-    }
-  }, [isSearchBarVisible]);
-
-  // const toggleDarkMode = () => {
-  //   setDarkMode(!darkMode);
-  //   document.documentElement.classList.add("animate-[pop_0.3s_ease]");
-  //   setTimeout(() => {
-  //     document.documentElement.classList.remove("animate-[pop_0.3s_ease]");
-  //   }, 300);
-  // };
-
-  const toggleLanguage = () => {
-    setCurrentLanguage(currentLanguage === "EN" ? "HI" : "EN");
-    const ripple = document.createElement("span");
-    ripple.classList.add("ripple-effect");
-    document.querySelector(".language-btn")?.appendChild(ripple);
-    setTimeout(() => ripple.remove(), 600);
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
   };
 
-  const cartItems = 3;
+  const renderMegaMenu = (category) => {
+    return (
+      <MegaMenuContainer
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 10 }}
+        transition={{ duration: 0.2 }}
+        onMouseEnter={() => setHoveredCategory(category)}
+        onMouseLeave={() => setHoveredCategory(null)}
+      >
+        <Container maxWidth="xl">
+          <Box sx={{
+            display: 'grid',
+            // gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+            gap: theme.spacing(3),
+          }}>
+            <Box >
+              <Typography
+                variant="h6"
+                sx={{
+                  fontWeight: 700,
+                  color: theme.palette.text.primary,
+                  mb: 2,
+                  px: 1,
+                  py: 0.5,
+                  borderRadius: 1,
+                  backgroundColor: alpha(theme.palette.primary.main, 0.1),
+                }}
+              >
+                {category}
+              </Typography>
+              <ul style={{ margin: 0, padding: 0, listStyle: 'none' }}>
+                {categoryMap[category]?.map((sub) => (
+                  <li key={sub}>
+                    <CategoryItem 
+                      href={`/${slugify(category)}/${slugify(sub)}`}
+                      sx={{ fontSize: '1rem', py: 1 }}
+                    >
+                      {sub}
+                    </CategoryItem>
+                  </li>
+                ))}
+              </ul>
+            </Box>
+            
+            {/* <Box sx={{ gridColumn: 'span 2' }}>
+              <Typography variant="h6" sx={{ mb: 2 }}>
+                Featured in {category}
+              </Typography>
+              <Box sx={{ display: 'flex', gap: 2 }}>
+                {[1, 2, 3].map((item) => (
+                  <Box key={item} sx={{
+                    width: 120,
+                    height: 120,
+                    backgroundColor: alpha(theme.palette.primary.main, 0.1),
+                    borderRadius: 1,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                    <Typography variant="caption">Product {item}</Typography>
+                  </Box>
+                ))}
+              </Box>
+            </Box> */}
+          </Box>
+        </Container>
+      </MegaMenuContainer>
+    );
+  };
+
+  const renderMoreMegaMenu = () => {
+    return (
+      <MegaMenuContainer
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 10 }}
+        transition={{ duration: 0.2 }}
+        onMouseEnter={() => setHoveredCategory('more')}
+        onMouseLeave={() => setHoveredCategory(null)}
+      >
+        <Container maxWidth="xl">
+          <Box sx={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+            gap: theme.spacing(3),
+            scrollbarWidth:'none',
+            msOverflowStyle:'none'
+          }}>
+            {moreCategories.map((category) => (
+              <Box key={category} sx={{scrollbarWidth:'none', msOverflowStyle:'none'}}>
+                <Typography
+                  variant="subtitle1"
+                  sx={{
+                    fontWeight: 700,
+                    color: theme.palette.text.primary,
+                    mb: 1,
+                    px: 1,
+                    py: 0.5,
+                    borderRadius: 1,
+                    backgroundColor: alpha(theme.palette.primary.main, 0.1),
+                  }}
+                >
+                  {category}
+                </Typography>
+                <ul style={{ margin: 0, padding: 0, listStyle: 'none' }}>
+                  {categoryMap[category]?.map((sub) => (
+                    <li key={sub}>
+                      <CategoryItem 
+                        href={`/${slugify(category)}/${slugify(sub)}`}
+                      >
+                        {sub}
+                      </CategoryItem>
+                    </li>
+                  ))}
+                </ul>
+              </Box>
+            ))}
+          </Box>
+        </Container>
+      </MegaMenuContainer>
+    );
+  };
 
   return (
     <>
-      <header
-        className={`w-full py-3 px-4 md:px-8 flex items-center justify-between shadow-md transition-all ${
-          darkMode ? "bg-[#111827] text-white" : "bg-white text-gray-900"
-        }`}
+      <AppBar
+        position="fixed"
+        sx={{
+          backgroundColor: isScrolled
+            ? alpha(theme.palette.background.default, 0.98)
+            : alpha(theme.palette.background.default, 0.95),
+          color: theme.palette.text.primary,
+          boxShadow: isScrolled ? theme.shadows[4] : 'none',
+          backdropFilter: 'blur(12px)',
+          transition: 'all 0.3s ease-in-out',
+          borderBottom: isScrolled ? 'none' : `1px solid ${theme.palette.divider}`,
+          zIndex: theme.zIndex.drawer + 1,
+        }}
+        elevation={0}
       >
-        <div className="flex items-center space-x-3">
-          {isMobile && (
-            <motion.button
-              whileTap={{ scale: 0.9 }}
-              onClick={() => setIsDrawerOpen(true)}
+        <Container maxWidth="xl" sx={{ px: { xs: 2, sm: 3, md: 4 } }}>
+          <Toolbar disableGutters sx={{ minHeight: { xs: 56, sm: 64 } }}>
+            {isMobile && (
+              <IconButton
+                color="inherit"
+                edge="start"
+                onClick={handleDrawerToggle}
+                sx={{ mr: 1, display: { md: 'none' } }}
+              >
+                <Menu />
+              </IconButton>
+            )}
+
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+              style={{ display: 'flex', alignItems: 'center' }}
             >
-              <Menu />
-            </motion.button>
-          )}
-          <motion.div variants={itemVariants}>
-            <Box sx={{ flex: '0 0 auto' }}>
+              <Image src='/logo.png' width={40} height={40} alt='logo'/>
+            </motion.div>
+
+            {!isMobile && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2 }}
+                style={{ display: 'flex', alignItems: 'center', marginLeft: 32 }}
+              >
+                <SearchContainer>
+                  <SearchIconWrapper>
+                    <Search />
+                  </SearchIconWrapper>
+                  <StyledInputBase
+                    placeholder="Search products..."
+                    inputProps={{ 'aria-label': 'search' }}
+                  />
+                </SearchContainer>
+
+                <Box sx={{ display: 'flex', gap: 1 }}>
+                  {mainCategories.map((category) => (
+                    <Box key={category} sx={{ position: 'relative' }}>
+                      <Button
+                        color="inherit"
+                        sx={{
+                          fontWeight: 600,
+                          textTransform: 'none',
+                          fontSize: '0.9375rem',
+                          '&:hover': {
+                            color: theme.palette.primary.main,
+                            backgroundColor: 'transparent',
+                          }
+                        }}
+                        onMouseEnter={() => setHoveredCategory(category)}
+                        onMouseLeave={() => setHoveredCategory(null)}
+                      >
+                        {category.split(' ')[0]}
+                      </Button>
+
+                      <AnimatePresence>
+                        {hoveredCategory === category && renderMegaMenu(category)}
+                      </AnimatePresence>
+                    </Box>
+                  ))}
+
+                  <Box sx={{ position: 'relative' }}>
+                    <Button
+                      color="inherit"
+                      sx={{
+                        fontWeight: 600,
+                        textTransform: 'none',
+                        fontSize: '0.9375rem',
+                        '&:hover': {
+                          color: theme.palette.primary.main,
+                          backgroundColor: 'transparent',
+                        }
+                      }}
+                      onMouseEnter={() => setHoveredCategory('more')}
+                      onMouseLeave={() => setHoveredCategory(null)}
+                    >
+                      More
+                    </Button>
+
+                    <AnimatePresence>
+                      {hoveredCategory === 'more' && renderMoreMegaMenu()}
+                    </AnimatePresence>
+                  </Box>
+                </Box>
+              </motion.div>
+            )}
+
+            <Box sx={{ flexGrow: 1 }} />
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+              style={{ display: 'flex', alignItems: 'center' }}
+            >
+              
+
+              <IconButton
+                color="inherit"
+                sx={{
+                  p: 1,
+                  position: 'relative',
+                  '&:hover': {
+                    backgroundColor: alpha(theme.palette.primary.main, 0.1),
+                  }
+                }}
+              >
+                <Badge
+                  badgeContent={3}
+                  color="error"
+                  sx={{
+                    '& .MuiBadge-badge': {
+                      right: 4,
+                      top: 4,
+                      border: `2px solid ${theme.palette.background.paper}`,
+                      padding: '0 4px',
+                    }
+                  }}
+                >
+                  <ShoppingCart />
+                </Badge>
+              </IconButton>
+
               <motion.div
                 whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                style={{ display: 'inline-block' }}
+                whileTap={{ scale: 0.9 }}
+                style={{
+                  marginLeft: '8px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+                onClick={toggleColorMode}
               >
-                <Image
-                  src="/logo.png"
-                  alt="Logo"
-                  width={50}
-                  height={30}
-                  style={{
-                    filter: 'invert(var(--logo-invert, 0))',
-                    cursor: 'pointer'
+                <Box sx={{
+                  p: 1,
+                  borderRadius: '50%',
+                  backgroundColor: alpha(theme.palette.primary.main, 0.1),
+                }}>
+                  <AnimatePresence mode="wait" initial={false}>
+                    {mode === 'dark' ? (
+                      <motion.div
+                        key="light"
+                        initial={{ opacity: 0, rotate: -30 }}
+                        animate={{ opacity: 1, rotate: 0 }}
+                        exit={{ opacity: 0, rotate: 30 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <MdLightMode style={{
+                          fontSize: '20px',
+                          color: theme.palette.primary.main
+                        }} />
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        key="dark"
+                        initial={{ opacity: 0, rotate: 30 }}
+                        animate={{ opacity: 1, rotate: 0 }}
+                        exit={{ opacity: 0, rotate: -30 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <MdDarkMode style={{
+                          fontSize: '20px',
+                          color: theme.palette.primary.main
+                        }} />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </Box>
+                
+              </motion.div>
+{!isMobile && (
+                <>
+                  
+                  {/* <IconButton
+                    color="inherit"
+                    sx={{
+                      p: 1,
+                      '&:hover': {
+                        backgroundColor: alpha(theme.palette.primary.main, 0.1),
+                      }
+                    }}
+                  >
+                    <Favorite />
+                  </IconButton> */}
+                  <IconButton
+                    color="inherit"
+                    sx={{
+                      p: 1,
+                      '&:hover': {
+                        backgroundColor: alpha(theme.palette.primary.main, 0.1),
+                      }
+                    }}
+                  >
+                    {isSignedIn ? (
+                      <UserButton
+                        afterSignOutUrl="/"
+                        appearance={{
+                          elements: {
+                            userButtonAvatarBox: {
+                              width: 32,
+                              height: 32,
+                            }
+                          }
+                        }}
+                      />
+                    ) : (
+                      <Person />
+                    )}
+                  </IconButton>
+                </>
+              )}
+              {!isMobile && !isSignedIn && (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  sx={{
+                    ml: 2,
+                    px: 3,
+                    py: 1,
+                    fontWeight: 600,
+                    textTransform: 'none',
+                    borderRadius: 2,
+                    boxShadow: 'none',
+                    '&:hover': {
+                      boxShadow: theme.shadows[4],
+                    }
+                  }}
+                  href="/sign-in"
+                >
+                  Sign In
+                </Button>
+              )}
+            </motion.div>
+          </Toolbar>
+        </Container>
+      </AppBar>
+
+      <Drawer
+        variant="temporary"
+        open={mobileOpen}
+        onClose={handleDrawerToggle}
+        ModalProps={{
+          keepMounted: true,
+        }}
+        sx={{
+          '& .MuiDrawer-paper': {
+            boxSizing: 'border-box',
+            width: '90%',
+            maxWidth: 350,
+            borderTopRightRadius: 12,
+            borderBottomRightRadius: 12,
+            backgroundColor: theme.palette.background.paper,
+            color: theme.palette.text.primary,
+          },
+        }}
+      >
+        <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+          <Box sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            p: 2,
+            borderBottom: `1px solid ${theme.palette.divider}`,
+            backgroundColor: theme.palette.background.default,
+          }}>
+            <Image src='/logo.png' width={40} height={40} alt='shop-pilot'/>
+            <Box display="flex" alignItems="center">
+              <motion.div
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                style={{ cursor: 'pointer' }}
+                onClick={toggleColorMode}
+              >
+                <Box sx={{
+                  p: 1,
+                  borderRadius: '50%',
+                  backgroundColor: alpha(theme.palette.primary.main, 0.1),
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <AnimatePresence mode="wait" initial={false}>
+                    {mode === 'dark' ? (
+                      <motion.div
+                        key="light-mobile"
+                        initial={{ opacity: 0, rotate: -30 }}
+                        animate={{ opacity: 1, rotate: 0 }}
+                        exit={{ opacity: 0, rotate: 30 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <MdLightMode style={{
+                          fontSize: '20px',
+                          color: theme.palette.primary.main
+                        }} />
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        key="dark-mobile"
+                        initial={{ opacity: 0, rotate: 30 }}
+                        animate={{ opacity: 1, rotate: 0 }}
+                        exit={{ opacity: 0, rotate: -30 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <MdDarkMode style={{
+                          fontSize: '20px',
+                          color: theme.palette.primary.main
+                        }} />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </Box>
+              </motion.div>
+              <IconButton onClick={handleDrawerToggle}>
+                <Close />
+              </IconButton>
+            </Box>
+          </Box>
+
+          <Box sx={{ p: 2, borderBottom: `1px solid ${theme.palette.divider}` }}>
+            <SearchContainer>
+              <SearchIconWrapper>
+                <Search />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="Search products..."
+                inputProps={{ 'aria-label': 'search' }}
+              />
+            </SearchContainer>
+          </Box>
+
+          <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>
+            <List disablePadding>
+              <ListItem
+                component="button"
+                sx={{
+                  px: 3,
+                  py: 1.5,
+                  display: 'block',
+                  width: '100%',
+                  textAlign: 'left',
+                  '&:hover': {
+                    backgroundColor: alpha(theme.palette.primary.main, 0.1),
+                  }
+                }}
+              >
+                <ListItemText
+                  primary="Home"
+                  primaryTypographyProps={{ fontWeight: 600 }}
+                />
+              </ListItem>
+
+              <ListItem className='scrollbar-hide'
+                component="button"
+                sx={{
+                  px: 3,
+                  py: 1.5,
+                  display: 'block',
+                  width: '100%',
+                  textAlign: 'left',
+                  '&:hover': {
+                    backgroundColor: alpha(theme.palette.primary.main, 0.1),
+                  }
+                }}
+                onClick={() => setHoveredCategory(hoveredCategory === 'mobile-categories' ? null : 'mobile-categories')}
+              >
+                <ListItemText
+                  primary="Categories"
+                  primaryTypographyProps={{ fontWeight: 600 }}
+                />
+              </ListItem>
+
+              {hoveredCategory === 'mobile-categories' && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  style={{ overflow: 'hidden' }}
+                  className='scrollbar-hide'
+                >
+                  {categories.map((category) => (
+                    <div key={category} style={{ paddingLeft: 32, paddingRight: 16 }}>
+                      <Typography
+                        variant="subtitle2"
+                        sx={{
+                          fontWeight: 600,
+                          mt: 1,
+                          px: 2,
+                          py: 1,
+                          borderRadius: 1,
+                          backgroundColor: alpha(theme.palette.primary.main, 0.1),
+                        }}
+                      >
+                        {category}
+                      </Typography>
+                      <ul style={{ margin: 0, padding: 0, listStyle: 'none' }}>
+                        {categoryMap[category]?.map((sub) => (
+                          <li key={sub}>
+                            <CategoryItem 
+                              href={`/category/${slugify(category)}/${slugify(sub)}`}
+                            >
+                              {sub}
+                            </CategoryItem>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </motion.div>
+              )}
+
+              <ListItem
+                component="button"
+                sx={{
+                  px: 3,
+                  py: 1.5,
+                  display: 'block',
+                  width: '100%',
+                  textAlign: 'left',
+                  '&:hover': {
+                    backgroundColor: alpha(theme.palette.primary.main, 0.1),
+                  }
+                }}
+              >
+                <ListItemText
+                  primary="New Arrivals"
+                  primaryTypographyProps={{ fontWeight: 600 }}
+                />
+              </ListItem>
+              <ListItem
+                component="button"
+                sx={{
+                  px: 3,
+                  py: 1.5,
+                  display: 'block',
+                  width: '100%',
+                  textAlign: 'left',
+                  '&:hover': {
+                    backgroundColor: alpha(theme.palette.primary.main, 0.1),
+                  }
+                }}
+              >
+                <ListItemText
+                  primary="Deals"
+                  primaryTypographyProps={{ fontWeight: 600 }}
+                />
+              </ListItem>
+              <ListItem
+                component="button"
+                sx={{
+                  px: 3,
+                  py: 1.5,
+                  display: 'block',
+                  width: '100%',
+                  textAlign: 'left',
+                  '&:hover': {
+                    backgroundColor: alpha(theme.palette.primary.main, 0.1),
+                  }
+                }}
+              >
+                <ListItemText
+                  primary="About"
+                  primaryTypographyProps={{ fontWeight: 600 }}
+                />
+              </ListItem>
+            </List>
+          </Box>
+
+          <Box sx={{ p: 3, borderTop: `1px solid ${theme.palette.divider}` }}>
+            {isSignedIn ? (
+              <Box sx={{
+                textAlign: 'center',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: 2
+              }}>
+                <UserButton
+                  afterSignOutUrl="/"
+                  appearance={{
+                    elements: {
+                      userButtonAvatarBox: {
+                        width: 64,
+                        height: 64,
+                      }
+                    }
                   }}
                 />
-              </motion.div>
-            </Box>
-          </motion.div>
-        </div>
-
-        {isMobile ? (
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            onClick={() => setIsSearchBarVisible(!isSearchBarVisible)}
-          >
-            <Search />
-          </motion.button>
-        ) : (
-          <motion.div
-            initial={{ scale: 0.95 }}
-            animate={{ scale: 1 }}
-            transition={{ type: "spring", stiffness: 300 }}
-            className="w-full max-w-md relative"
-          >
-            <input
-              type="text"
-              placeholder="Search products..."
-              className={`w-full pl-10 pr-4 py-2 rounded-full shadow-sm transition-all ${
-                darkMode
-                  ? "bg-gray-800 text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500"
-                  : "bg-gray-100 text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-500"
-              }`}
-            />
-            <motion.div
-              whileHover={{ scale: 1.1 }}
-              className="absolute left-3 top-2.5 text-gray-400"
-            >
-              <Search />
-            </motion.div>
-          </motion.div>
-        )}
-
-        <div className="flex items-center space-x-4">
-          {!isMobile && (
-            <motion.button
-              className="language-btn relative overflow-hidden"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={toggleLanguage}
-            >
-              <Language />
-              <motion.span
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                className="absolute -bottom-1 right-0 text-xs"
-              >
-                {currentLanguage}
-              </motion.span>
-            </motion.button>
-          )}
-          <motion.button
-            whileHover={{ scale: 1.1, rotate: 15 }}
-            whileTap={{ scale: 0.9 }}
-          >
-            {darkMode ? <LightMode className="text-yellow-300" /> : <DarkMode />}
-          </motion.button>
-          {!isMobile && (
-            <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-              <Person />
-            </motion.button>
-          )}
-          <motion.div
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            className="relative cursor-pointer"
-          >
-            <ShoppingCart />
-            <motion.span
-              key={cartItems}
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              className="absolute -top-1 -right-2 bg-purple-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full"
-            >
-              {cartItems}
-            </motion.span>
-          </motion.div>
-        </div>
-      </header>
-
-      <AnimatePresence>
-        {isMobile && isSearchBarVisible && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className={`w-full p-3 ${
-              darkMode ? "bg-[#1f2937]" : "bg-white"
-            }`}
-          >
-            <div className="relative">
-              <input
-                ref={searchInputRef}
-                type="text"
-                placeholder="Search..."
-                autoFocus
-                className={`w-full py-2 pl-10 pr-10 rounded-full ${
-                  darkMode
-                    ? "bg-gray-700 text-white placeholder-gray-400"
-                    : "bg-gray-100 text-gray-900 placeholder-gray-500"
-                }`}
-              />
-              <Search className="absolute left-3 top-2.5 text-gray-400" />
-              <button
-                onClick={() => setIsSearchBarVisible(false)}
-                className="absolute right-3 top-2.5 text-gray-400"
-              >
-                <Close />
-              </button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {isMobile && isDrawerOpen && (
-          <motion.div
-            initial={{ x: "-100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "-100%" }}
-            transition={{ duration: 0.3 }}
-            className={`w-64 h-full ${
-              darkMode ? "bg-gray-800 text-white" : "bg-white text-gray-800"
-            }`}
-          >
-            <div className="p-4 flex justify-between items-center border-b">
-              <span className="text-lg font-semibold">Menu</span>
-              <Close className="cursor-pointer" onClick={() => setIsDrawerOpen(false)} />
-            </div>
-            <div className="p-4 space-y-4">
-              <button className="flex items-center gap-2">
-                <Person />
-                Account
-              </button>
-              <button className="flex items-center gap-2" onClick={toggleLanguage}>
-                <Language />
-                Language ({currentLanguage})
-              </button>
-              <button className="flex items-center gap-2" >
-                {darkMode ? <LightMode className="text-yellow-300" /> : <DarkMode />}
-                {darkMode ? "Light Mode" : "Dark Mode"}
-              </button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <style jsx global>{`
-        @keyframes pop {
-          0% { transform: scale(1); }
-          50% { transform: scale(1.02); }
-          100% { transform: scale(1); }
-        }
-        .ripple-effect {
-          position: absolute;
-          border-radius: 50%;
-          background-color: rgba(255, 255, 255, 0.4);
-          transform: scale(0);
-          animation: ripple 0.6s linear;
-          pointer-events: none;
-          width: 40px;
-          height: 40px;
-          top: -10px;
-          left: -10px;
-        }
-        @keyframes ripple {
-          to {
-            transform: scale(2.5);
-            opacity: 0;
-          }
-        }
-      `}</style>
+              </Box>
+            ) : (
+              <>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  sx={{
+                    mb: 2,
+                    py: 1.5,
+                    fontWeight: 600,
+                    borderRadius: 2,
+                  }}
+                  href="/sign-in"
+                >
+                  Sign In
+                </Button>
+              </>
+            )}
+          </Box>
+        </Box>
+      </Drawer>
     </>
   );
 };
