@@ -18,7 +18,7 @@ const poppins = Poppins({
   subsets: ["latin"],
   display: "swap",
 });
-
+ 
 const sectionVariants = {
   hidden: { opacity: 0, y: 100 },
   visible: {
@@ -36,7 +36,6 @@ export default function CategorySection() {
   const { products, isLoading } = useProducts(selectedCategory);
 
   const discountedProducts = products.filter((item) => item.discount > 50);
-
   return (
     <Box
       ref={ref}
