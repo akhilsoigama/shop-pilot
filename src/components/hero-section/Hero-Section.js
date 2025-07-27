@@ -43,7 +43,7 @@ export default function HeroSection() {
       initial="hidden"
       animate="visible"
       variants={containerVariants}
-      className={`text-white h-full overflow-hidden flex flex-col-reverse md:flex-row items-center justify-between px-6 pt-0 pb-20 gap-10 ${poppins.className}`}
+      className={`dark:text-white h-full overflow-hidden flex flex-col-reverse md:flex-row items-center justify-between px-6 pt-0 pb-20 gap-10 ${poppins.className}`}
     >
       {/* Left Content */}
       <motion.div
@@ -56,7 +56,7 @@ export default function HeroSection() {
           text="Experience fashion like never before"
           disabled={false}
           speed={3}
-          className="text-sm text-slate-400 mb-2"
+          className="text-sm text-blue-500 dark:text-slate-400 mb-2"
         />
         <BlurText
           text="Elevate Your Style With Fashion Store:Where Fashion Meets Passion"
@@ -72,7 +72,7 @@ export default function HeroSection() {
             maxIterations={20}
             animateOn="view"
             characters="ABCDEFGHIJKLMNOPQRSTUVWXYZ1234!?"
-            className="revealed text-sm sm:text-base text-slate-400 mb-8 leading-relaxed"
+            className="revealed text-sm sm:text-base dark:text-slate-400 mb-8 leading-relaxed"
             parentClassName="all-letters"
             encryptedClassName="encrypted"
           />
