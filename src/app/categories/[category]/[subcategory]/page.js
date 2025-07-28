@@ -16,13 +16,15 @@ export default function ProductsPage() {
 
   const { products, isLoading, isError } = useProducts(decodedCategory, decodedSubcategory)
 
-  if (isLoading) return <div className="p-4">Loading...</div>
+  if (isLoading) return <div className="p-4 text-gray-900 dark:text-white">Loading...</div>
   if (isError) return <div className="p-4 text-red-500">Error loading products</div>
-  if (!products.length) return <div className="p-4">No products found</div>
+  if (!products.length) return <div className="p-4 text-gray-900 dark:text-white">No products found</div>
 
   return (
     <section className="p-4">
-      <h1 className="text-2xl font-bold mb-6">{decodedSubcategory}</h1>
+      <h1 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">
+        {decodedSubcategory}
+      </h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {products.map((product) => (
@@ -32,7 +34,7 @@ export default function ProductsPage() {
             transition={{ duration: 0.3 }}
             className="w-full"
           >
-            <Card className="rounded-2xl shadow-md overflow-hidden h-full flex flex-col">
+            <Card className="rounded-2xl shadow-md overflow-hidden h-full flex flex-col bg-white dark:bg-[#131226] text-gray-900 dark:text-gray-100">
               <div className="relative w-full h-56">
                 <Image
                   src={product.productImage?.[0]}
@@ -45,28 +47,28 @@ export default function ProductsPage() {
 
               <CardContent className="p-4 flex flex-col gap-2 grow">
                 <h2 className="text-base font-semibold line-clamp-2">{product.productName}</h2>
-                <p className="text-xs text-muted-foreground">{product.brand}</p>
+                <p className="text-xs text-muted-foreground dark:text-gray-400">{product.brand}</p>
 
                 <div className="flex items-center gap-2 text-sm">
                   <p className="font-bold text-primary">₹{product.discountPrice}</p>
-                  <p className="line-through text-gray-500">₹{product.price}</p>
+                  <p className="line-through text-gray-500 dark:text-gray-400">₹{product.price}</p>
                   <Badge variant="destructive" className="ml-auto">{product.discount}% OFF</Badge>
                 </div>
 
                 <div className="flex items-center gap-1 mt-1">
                   {product.inStock ? (
-                    <Badge variant="success" className="bg-green-100 text-green-800 flex items-center gap-1">
+                    <Badge variant="success" className="bg-green-100 text-green-800 flex items-center gap-1 dark:bg-green-900 dark:text-green-300">
                       <CheckCircle size={14} /> In Stock
                     </Badge>
                   ) : (
-                    <Badge variant="secondary" className="bg-red-100 text-red-700 flex items-center gap-1">
+                    <Badge variant="secondary" className="bg-red-100 text-red-700 flex items-center gap-1 dark:bg-red-900 dark:text-red-300">
                       <XCircle size={14} /> Out of Stock
                     </Badge>
                   )}
                 </div>
 
                 <div
-                  className="text-xs text-muted-foreground mt-2 line-clamp-3"
+                  className="text-xs text-muted-foreground mt-2 line-clamp-3 dark:text-gray-400"
                   dangerouslySetInnerHTML={{ __html: product.productDescription }}
                 />
 
