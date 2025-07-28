@@ -1,8 +1,8 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
-import { CustomThemeProvider } from "@/hooks/DarkmodeProvider";
 import HeaderSection from "@/components/header-section/HeaderSeaction";
+import { CustomThemeProvider } from "@/hooks/DarkmodeProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,16 +22,16 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
-      <CustomThemeProvider>
-        <html lang="en" suppressHydrationWarning>
-          <body className={`${geistSans.variable} ${geistMono.variable} antialiased`} suppressHydrationWarning>
+      <html lang="en" suppressHydrationWarning>
+        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`} suppressHydrationWarning>
+          <CustomThemeProvider>
             {children}
             <header className="w-full">
               <HeaderSection />
             </header>
-          </body>
-        </html>
-      </CustomThemeProvider>
+          </CustomThemeProvider>
+        </body>
+      </html>
     </ClerkProvider>
   );
 }
