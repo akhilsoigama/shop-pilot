@@ -9,7 +9,7 @@ import {
 import { alpha, styled } from '@mui/material/styles';
 import {
   Menu, Close, ShoppingCart, Search,
-  Favorite, Person
+  Person
 } from '@mui/icons-material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { UserButton, useUser } from '@clerk/nextjs';
@@ -127,6 +127,10 @@ const HeaderSection = () => {
     setMobileOpen(!mobileOpen);
   };
 
+  const getCategoryUrl = (category, subcategory) => {
+    return `/categories/${encodeURIComponent(category)}/${encodeURIComponent(subcategory)}`;
+  };
+
   const renderMegaMenu = (category) => {
     return (
       <MegaMenuContainer
@@ -140,10 +144,9 @@ const HeaderSection = () => {
         <Container maxWidth="xl">
           <Box sx={{
             display: 'grid',
-            // gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
             gap: theme.spacing(3),
           }}>
-            <Box >
+            <Box>
               <Typography
                 variant="h6"
                 sx={{
@@ -162,7 +165,7 @@ const HeaderSection = () => {
                 {categoryMap[category]?.map((sub) => (
                   <li key={sub}>
                     <CategoryItem 
-                      href={`/${slugify(category)}/${slugify(sub)}`}
+                      href={getCategoryUrl(category, sub)}
                       sx={{ fontSize: '1rem', py: 1 }}
                     >
                       {sub}
@@ -171,27 +174,6 @@ const HeaderSection = () => {
                 ))}
               </ul>
             </Box>
-            
-            {/* <Box sx={{ gridColumn: 'span 2' }}>
-              <Typography variant="h6" sx={{ mb: 2 }}>
-                Featured in {category}
-              </Typography>
-              <Box sx={{ display: 'flex', gap: 2 }}>
-                {[1, 2, 3].map((item) => (
-                  <Box key={item} sx={{
-                    width: 120,
-                    height: 120,
-                    backgroundColor: alpha(theme.palette.primary.main, 0.1),
-                    borderRadius: 1,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
-                    <Typography variant="caption">Product {item}</Typography>
-                  </Box>
-                ))}
-              </Box>
-            </Box> */}
           </Box>
         </Container>
       </MegaMenuContainer>
@@ -236,7 +218,7 @@ const HeaderSection = () => {
                   {categoryMap[category]?.map((sub) => (
                     <li key={sub}>
                       <CategoryItem 
-                        href={`/${slugify(category)}/${slugify(sub)}`}
+                        href={getCategoryUrl(category, sub)}
                       >
                         {sub}
                       </CategoryItem>
@@ -367,8 +349,6 @@ const HeaderSection = () => {
               transition={{ delay: 0.4 }}
               style={{ display: 'flex', alignItems: 'center' }}
             >
-              
-
               <IconButton
                 color="inherit"
                 sx={{
@@ -442,22 +422,9 @@ const HeaderSection = () => {
                     )}
                   </AnimatePresence>
                 </Box>
-                
               </motion.div>
-{!isMobile && (
+              {!isMobile && (
                 <>
-                  
-                  {/* <IconButton
-                    color="inherit"
-                    sx={{
-                      p: 1,
-                      '&:hover': {
-                        backgroundColor: alpha(theme.palette.primary.main, 0.1),
-                      }
-                    }}
-                  >
-                    <Favorite />
-                  </IconButton> */}
                   <IconButton
                     color="inherit"
                     sx={{
@@ -672,7 +639,7 @@ const HeaderSection = () => {
                         {categoryMap[category]?.map((sub) => (
                           <li key={sub}>
                             <CategoryItem 
-                              href={`/category/${slugify(category)}/${slugify(sub)}`}
+                              href={getCategoryUrl(category, sub)}
                             >
                               {sub}
                             </CategoryItem>
