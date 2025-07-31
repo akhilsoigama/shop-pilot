@@ -28,13 +28,13 @@ const sectionVariants = {
   },
 };
 
-const CATEGORIES_WITH_MANY_ITEMS = [
-  // 'Electronics',
-  'Fashion & Apparel',
-  'Home & Kitchen',
-  'Mobile Phones & Accessories',
-  'Laptops & Computers'
-];
+// const CATEGORIES_WITH_MANY_ITEMS = [
+//   // 'Electronics',
+//   'Fashion & Apparel',
+//   'Home & Kitchen',
+//   'Mobile Phones & Accessories',
+//   'Laptops & Computers'
+// ];
 
 export default function CategorySection() {
   const [selectedCategory, setSelectedCategory] = useState(categories[0]);
@@ -42,8 +42,8 @@ export default function CategorySection() {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const { products, isLoading } = useProducts(selectedCategory);
 
-  const filteredProducts = CATEGORIES_WITH_MANY_ITEMS.includes(selectedCategory)
-    ? products.filter((item) => item.discount > 20) 
+  const filteredProducts = categories.includes(selectedCategory)
+    ? products.filter((item) => item.discount > 52) 
     : products; 
 
   return (
@@ -179,7 +179,7 @@ export default function CategorySection() {
         </Box>
       ) : (
         <Typography align="center" className="text-gray-400 mt-8">
-          {CATEGORIES_WITH_MANY_ITEMS.includes(selectedCategory)
+          {categories.includes(selectedCategory)
             ? "No discounted products available."
             : "No products available."}
         </Typography>

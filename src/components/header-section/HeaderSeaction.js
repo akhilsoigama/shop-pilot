@@ -9,7 +9,7 @@ import {
 import { alpha, styled } from '@mui/material/styles';
 import {
   Menu, Close, ShoppingCart, Search,
-  Person
+  Person, Add, Remove, Delete
 } from '@mui/icons-material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { UserButton, useUser } from '@clerk/nextjs';
@@ -17,6 +17,7 @@ import { useColorMode } from '@/hooks/DarkmodeProvider';
 import { MdDarkMode, MdLightMode } from "react-icons/md";
 import { categories, Subcategories } from '@/lib/category';
 import Image from 'next/image';
+import { useCart } from '@/context/cartContext';
 import Link from 'next/link';
 
 const SearchContainer = styled('div')(({ theme }) => ({
@@ -98,24 +99,151 @@ const MegaMenuContainer = styled(motion.div)(({ theme }) => ({
   overflowY: 'auto',
 }));
 
+const CartDrawerContent = ({ closeCart }) => {
+  const theme = useTheme();
+  const { 
+    cart, 
+    removeFromCart, 
+    updateQuantity, 
+    getTotalPrice 
+  } = useCart();
+
+  return (
+    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', p: 2 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+        <Typography variant="h6" sx={{ fontWeight: 700 }}>Your Cart</Typography>
+        <IconButton onClick={closeCart}>
+          <Close />
+        </IconButton>
+      </Box>
+
+      {cart.length === 0 ? (
+        <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Typography>Your cart is empty</Typography>
+        </Box>
+      ) : (
+        <>
+          <Box sx={{ flex: 1, overflowY: 'auto', mb: 2 }}>
+            {cart.map((item) => (
+              <Box 
+                key={item._id}
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 2,
+                  mb: 2,
+                  p: 1,
+                  borderRadius: 1,
+                  backgroundColor: alpha(theme.palette.primary.main, 0.05)
+                }}
+              >
+                <Box sx={{ 
+                  position: 'relative', 
+                  minWidth: 60, 
+                  height: 60,
+                  borderRadius: 1,
+                  overflow: 'hidden'
+                }}>
+                  <Image
+                    src={item.productImage?.[0] || '/placeholder.jpg'}
+                    alt={item.productName}
+                    fill
+                    style={{ objectFit: 'cover' }}
+                  />
+                </Box>
+                
+                <Box sx={{ flexGrow: 1 }}>
+                  <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                    {item.productName}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: theme.palette.primary.main }}>
+                    ₹{item.discountPrice}
+                  </Typography>
+                </Box>
+                
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <IconButton 
+                    size="small"
+                    onClick={() => updateQuantity(item._id, item.quantity - 1)}
+                  >
+                    <Remove fontSize="small" />
+                  </IconButton>
+                  
+                  <Typography>{item.quantity}</Typography>
+                  
+                  <IconButton 
+                    size="small"
+                    onClick={() => updateQuantity(item._id, item.quantity + 1)}
+                  >
+                    <Add fontSize="small" />
+                  </IconButton>
+                  
+                  <IconButton 
+                    size="small"
+                    onClick={() => removeFromCart(item._id)}
+                    sx={{ color: theme.palette.error.main }}
+                  >
+                    <Delete fontSize="small" />
+                  </IconButton>
+                </Box>
+              </Box>
+            ))}
+          </Box>
+
+          <Box sx={{ borderTop: `1px solid ${theme.palette.divider}`, pt: 2 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+              <Typography variant="body1">Total:</Typography>
+              <Typography variant="h6">₹{getTotalPrice()}</Typography>
+            </Box>
+            <Button 
+              fullWidth 
+              variant="contained"
+              color="primary"
+              sx={{ mb: 1 }}
+            >
+              Proceed to Checkout
+            </Button>
+            <Button 
+              fullWidth 
+              variant="outlined"
+              onClick={closeCart}
+            >
+              Continue Shopping
+            </Button>
+          </Box>
+        </>
+      )}
+    </Box>
+  );
+};
+
 const HeaderSection = () => {
   const theme = useTheme();
   const { isSignedIn } = useUser();
   const { toggleColorMode, mode } = useColorMode();
+  const { 
+    getTotalItems, 
+    isCartOpen, 
+    toggleCart, 
+    closeCart 
+  } = useCart();
 
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [hoveredCategory, setHoveredCategory] = useState(null);
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
+  // Create category map that handles both string and object subcategories
   const categoryMap = {};
   Subcategories.forEach(cat => {
-    categoryMap[cat.name] = cat.subcategories;
+    categoryMap[cat.name] = cat.subcategories.map(sub => 
+      typeof sub === 'string' ? { name: sub, imageUrl: '' } : sub
+    );
   });
 
   const mainCategories = categories.slice(0, 4);
   const moreCategories = categories.slice(5);
-  console.log(mainCategories)
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
@@ -129,12 +257,15 @@ const HeaderSection = () => {
   };
 
   const getCategoryUrl = (category, subcategory) => {
-    return `/categories/${encodeURIComponent(category)}/${encodeURIComponent(subcategory)}`;
+    const subName = typeof subcategory === 'string' ? subcategory : subcategory.name;
+    return `/categories/${encodeURIComponent(category)}/${encodeURIComponent(subName)}`;
   };
+
   const handleLinkClick = () => {
     setHoveredCategory(null);
     setMobileOpen(false);
   };
+
   const renderMegaMenu = (category) => {
     return (
       <MegaMenuContainer
@@ -146,10 +277,7 @@ const HeaderSection = () => {
         onMouseLeave={() => setHoveredCategory(null)}
       >
         <Container maxWidth="xl">
-          <Box sx={{
-            display: 'grid',
-            gap: theme.spacing(3),
-          }}>
+          <Box sx={{ display: 'grid', gap: theme.spacing(3) }}>
             <Box>
               <Typography
                 variant="h6"
@@ -166,15 +294,36 @@ const HeaderSection = () => {
                 {category}
               </Typography>
               <ul className='m-0 p-0 list-none'>
-                {categoryMap[category]?.map((sub) => (
-                  <li key={sub}>
-                    <Link
-                      href={getCategoryUrl(category, sub)} onClick={handleLinkClick}
-                      className=' font-medium text-[12px] hover:bg-gray-300 dark:hover:bg-gray-300/10 flex flex-col gap-2 p-2 '>
-                      {sub}
-                    </Link>
-                  </li>
-                ))}
+                {categoryMap[category]?.map((sub) => {
+                  const subItem = typeof sub === 'string' ? { name: sub } : sub;
+                  return (
+                    <li key={subItem.name}>
+                      <Link
+                        href={getCategoryUrl(category, subItem)}
+                        onClick={handleLinkClick}
+                        className='font-medium text-[12px] hover:bg-gray-300 dark:hover:bg-gray-300/10 flex items-center gap-2 p-2'
+                      >
+                        {subItem.imageUrl && (
+                          <Box sx={{ 
+                            position: 'relative', 
+                            width: 24, 
+                            height: 24,
+                            borderRadius: '4px',
+                            overflow: 'hidden'
+                          }}>
+                            <Image
+                              src={subItem.imageUrl}
+                              alt={subItem.name}
+                              fill
+                              style={{ objectFit: 'cover' }}
+                            />
+                          </Box>
+                        )}
+                        {subItem.name}
+                      </Link>
+                    </li>
+                  );
+                })}
               </ul>
             </Box>
           </Box>
@@ -220,16 +369,36 @@ const HeaderSection = () => {
                   {category}
                 </Typography>
                 <ul style={{ margin: 0, padding: 0, listStyle: 'none' }}>
-                  {categoryMap[category]?.map((sub) => (
-                    <li key={sub}>
-                      <Link
-                        href={getCategoryUrl(category, sub)} onClick={handleLinkClick}
-                        className='font-medium hover:bg-gray-300 dark:hover:bg-gray-300/10 p-2 flex flex-col gap-2'
-                      >
-                        {sub}
-                      </Link>
-                    </li>
-                  ))}
+                  {categoryMap[category]?.map((sub) => {
+                    const subItem = typeof sub === 'string' ? { name: sub } : sub;
+                    return (
+                      <li key={subItem.name}>
+                        <Link
+                          href={getCategoryUrl(category, subItem)}
+                          onClick={handleLinkClick}
+                          className='font-medium hover:bg-gray-300 dark:hover:bg-gray-300/10 p-2 flex items-center gap-2'
+                        >
+                          {subItem.imageUrl && (
+                            <Box sx={{ 
+                              position: 'relative', 
+                              width: 24, 
+                              height: 24,
+                              borderRadius: '4px',
+                              overflow: 'hidden'
+                            }}>
+                              <Image
+                                src={subItem.imageUrl}
+                                alt={subItem.name}
+                                fill
+                                style={{ objectFit: 'cover' }}
+                              />
+                            </Box>
+                          )}
+                          {subItem.name}
+                        </Link>
+                      </li>
+                    );
+                  })}
                 </ul>
               </Box>
             ))}
@@ -275,7 +444,9 @@ const HeaderSection = () => {
               transition={{ duration: 0.5 }}
               style={{ display: 'flex', alignItems: 'center' }}
             >
-              <Image src='/logo.png' width={40} height={40} alt='logo' />
+              <Link href="/">
+                <Image src='/logo.png' width={40} height={40} alt='logo' />
+              </Link>
             </motion.div>
 
             {!isMobile && (
@@ -296,7 +467,6 @@ const HeaderSection = () => {
                 </SearchContainer>
 
                 <Box sx={{ display: 'flex', gap: 1 }}>
-                  {/* Add Home link before categories */}
                   <Button
                     color="inherit"
                     sx={{
@@ -330,7 +500,7 @@ const HeaderSection = () => {
                         onMouseEnter={() => setHoveredCategory(category)}
                         onMouseLeave={() => setHoveredCategory(null)}
                       >
-                        {category.split(' ')}
+                        {category}
                       </Button>
 
                       <AnimatePresence>
@@ -375,6 +545,7 @@ const HeaderSection = () => {
             >
               <IconButton
                 color="inherit"
+                onClick={toggleCart}
                 sx={{
                   p: 1,
                   position: 'relative',
@@ -384,7 +555,7 @@ const HeaderSection = () => {
                 }}
               >
                 <Badge
-                  badgeContent={3}
+                  badgeContent={getTotalItems()}
                   color="error"
                   sx={{
                     '& .MuiBadge-badge': {
@@ -502,6 +673,22 @@ const HeaderSection = () => {
         </Container>
       </AppBar>
 
+      {/* Cart Drawer */}
+      <Drawer
+        anchor="right"
+        open={isCartOpen}
+        onClose={closeCart}
+        sx={{
+          '& .MuiDrawer-paper': {
+            width: { xs: '100%', sm: 400 },
+            backgroundColor: theme.palette.background.paper,
+          },
+        }}
+      >
+        <CartDrawerContent closeCart={closeCart} />
+      </Drawer>
+
+      {/* Mobile Menu Drawer */}
       <Drawer
         variant="temporary"
         open={mobileOpen}
@@ -530,7 +717,9 @@ const HeaderSection = () => {
             borderBottom: `1px solid ${theme.palette.divider}`,
             backgroundColor: theme.palette.background.default,
           }}>
-            <Image src='/logo.png' width={40} height={40} alt='shop-pilot' />
+            <Link href="/">
+              <Image src='/logo.png' width={40} height={40} alt='shop-pilot' />
+            </Link>
             <Box display="flex" alignItems="center">
               <motion.div
                 whileHover={{ scale: 1.1 }}
@@ -598,7 +787,8 @@ const HeaderSection = () => {
           <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>
             <List disablePadding>
               <ListItem
-                component="button"
+                component={Link}
+                href="/"
                 sx={{
                   px: 3,
                   py: 1.5,
@@ -609,6 +799,7 @@ const HeaderSection = () => {
                     backgroundColor: alpha(theme.palette.primary.main, 0.1),
                   }
                 }}
+                onClick={handleLinkClick}
               >
                 <ListItemText
                   primary="Home"
@@ -661,15 +852,36 @@ const HeaderSection = () => {
                         {category}
                       </Typography>
                       <ul style={{ margin: 0, padding: 0, listStyle: 'none' }}>
-                        {categoryMap[category]?.map((sub) => (
-                          <li key={sub}>
-                            <CategoryItem
-                              href={getCategoryUrl(category, sub)}
-                            >
-                              {sub}
-                            </CategoryItem>
-                          </li>
-                        ))}
+                        {categoryMap[category]?.map((sub) => {
+                          const subItem = typeof sub === 'string' ? { name: sub } : sub;
+                          return (
+                            <li key={subItem.name}>
+                              <Link
+                                href={getCategoryUrl(category, subItem)}
+                                onClick={handleLinkClick}
+                                className='font-medium hover:bg-gray-300 dark:hover:bg-gray-300/10 p-2 flex items-center gap-2'
+                              >
+                                {subItem.imageUrl && (
+                                  <Box sx={{ 
+                                    position: 'relative', 
+                                    width: 24, 
+                                    height: 24,
+                                    borderRadius: '4px',
+                                    overflow: 'hidden'
+                                  }}>
+                                    <Image
+                                      src={subItem.imageUrl}
+                                      alt={subItem.name}
+                                      fill
+                                      style={{ objectFit: 'cover' }}
+                                    />
+                                  </Box>
+                                )}
+                                {subItem.name}
+                              </Link>
+                            </li>
+                          );
+                        })}
                       </ul>
                     </div>
                   ))}
@@ -677,7 +889,8 @@ const HeaderSection = () => {
               )}
 
               <ListItem
-                component="button"
+                component={Link}
+                href="/new-arrivals"
                 sx={{
                   px: 3,
                   py: 1.5,
@@ -688,6 +901,7 @@ const HeaderSection = () => {
                     backgroundColor: alpha(theme.palette.primary.main, 0.1),
                   }
                 }}
+                onClick={handleLinkClick}
               >
                 <ListItemText
                   primary="New Arrivals"
@@ -695,7 +909,8 @@ const HeaderSection = () => {
                 />
               </ListItem>
               <ListItem
-                component="button"
+                component={Link}
+                href="/deals"
                 sx={{
                   px: 3,
                   py: 1.5,
@@ -706,6 +921,7 @@ const HeaderSection = () => {
                     backgroundColor: alpha(theme.palette.primary.main, 0.1),
                   }
                 }}
+                onClick={handleLinkClick}
               >
                 <ListItemText
                   primary="Deals"
@@ -713,7 +929,8 @@ const HeaderSection = () => {
                 />
               </ListItem>
               <ListItem
-                component="button"
+                component={Link}
+                href="/about"
                 sx={{
                   px: 3,
                   py: 1.5,
@@ -724,6 +941,7 @@ const HeaderSection = () => {
                     backgroundColor: alpha(theme.palette.primary.main, 0.1),
                   }
                 }}
+                onClick={handleLinkClick}
               >
                 <ListItemText
                   primary="About"

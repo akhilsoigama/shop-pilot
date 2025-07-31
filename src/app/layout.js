@@ -3,6 +3,7 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import HeaderSection from "@/components/header-section/HeaderSeaction";
 import { CustomThemeProvider } from "@/hooks/DarkmodeProvider";
+import { CartProvider } from "@/context/cartContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,14 +24,16 @@ export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
-        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`} suppressHydrationWarning>
-          <CustomThemeProvider>
-            {children}
-            <header className="w-full">
-              <HeaderSection />
-            </header>
-          </CustomThemeProvider>
-        </body>
+        <CartProvider>
+          <body className={`${geistSans.variable} ${geistMono.variable} antialiased`} suppressHydrationWarning>
+            <CustomThemeProvider>
+              {children}
+              <header className="w-full">
+                <HeaderSection />
+              </header>
+            </CustomThemeProvider>
+          </body>
+        </CartProvider>
       </html>
     </ClerkProvider>
   );
