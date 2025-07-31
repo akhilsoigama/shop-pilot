@@ -9,13 +9,25 @@ import { motion } from "framer-motion"
 import Image from "next/image"
 import { CheckCircle, Heart, XCircle } from "lucide-react"
 import { Skeleton } from "@mui/material"
+import { useCart } from "@/context/cartContext"
+import { useState } from "react"
+import ProductPage from "@/app/view-product-page/[productId]/page"
 
 export default function Subcategory() {
     const { category, subcategory } = useParams()
     const decodedCategory = decodeURIComponent(category)
     const decodedSubcategory = decodeURIComponent(subcategory)
+    const { addToCart } = useCart()
+
+    const [selectedProduct, setSelectedProduct] = useState(null)
+    const [isDialogOpen, setIsDialogOpen] = useState(false)
 
     const { products, isLoading, isError } = useProducts(decodedCategory, decodedSubcategory)
+
+    const handleViewProduct = (product) => {
+        setSelectedProduct(product)
+        setIsDialogOpen(true)
+    }
 
     if (isLoading) return (
         <div className="p-4 md:p-6 lg:p-8 bg-white dark:bg-gray-950">
@@ -92,7 +104,7 @@ export default function Subcategory() {
                                         src={product.productImage?.[0]}
                                         alt={product.productName}
                                         fill
-                                        className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-110"
+                                        className="object-contain w-full h-full transition-transform duration-300 group-hover:scale-110"
                                         sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
                                         style={{
                                             objectPosition: 'center center'
@@ -181,6 +193,7 @@ export default function Subcategory() {
                                     <Button
                                         size="sm"
                                         className="ml-auto text-xs px-3 py-1 h-7 hover:scale-105 transition-transform bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary dark:text-white dark:from-gray-800 dark:to-gray-700 dark:hover:to-gray-900"
+                                        onClick={() => handleViewProduct(product)}
                                     >
                                         <span className="truncate">View Details</span>
                                     </Button>
@@ -204,6 +217,13 @@ export default function Subcategory() {
                     </motion.div>
                 ))}
             </div>
+
+            <ProductPage
+                product={selectedProduct}
+                onAddToCart={addToCart}
+                isOpen={isDialogOpen}
+                onClose={() => setIsDialogOpen(false)}
+            />
         </section>
     )
 }

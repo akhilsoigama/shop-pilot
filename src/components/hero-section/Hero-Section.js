@@ -78,7 +78,7 @@ export default function HeroSection() {
           />
         </div>
         <Box className="pt-4">
-          <InteractiveHoverButton >
+          <InteractiveHoverButton className="text-black dark:bg-white">
             Start Shopping
           </InteractiveHoverButton>
         </Box>

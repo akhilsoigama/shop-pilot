@@ -11,7 +11,6 @@ export const CustomThemeProvider = ({ children }) => {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    // On mount, check localStorage for theme
     const savedMode = localStorage.getItem('theme-mode');
     if (savedMode === 'dark' || savedMode === 'light') {
       setMode(savedMode);
@@ -24,7 +23,6 @@ export const CustomThemeProvider = ({ children }) => {
 
     localStorage.setItem('theme-mode', mode);
 
-    // Set Tailwind class on html element
     const root = window.document.documentElement;
     if (mode === 'dark') {
       root.classList.add('dark');
@@ -60,7 +58,6 @@ export const CustomThemeProvider = ({ children }) => {
     }),
   [mode]);
 
-  // Prevent hydration mismatch by rendering only after mount
   if (!isMounted) return null;
 
   return (
