@@ -23,7 +23,6 @@ export default function ProductGrid({ products }) {
                 'rounded-2xl overflow-hidden bg-white dark:bg-zinc-900 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col h-full'
               )}
             >
-              {/* Product Image */}
               <div className="relative w-full aspect-[4/3] bg-white dark:bg-black">
                 {product.productImage?.[0] && (
                   <Image
@@ -36,9 +35,7 @@ export default function ProductGrid({ products }) {
                 )}
               </div>
 
-              {/* Product Content */}
               <CardContent className="p-3 sm:p-4 flex flex-col gap-1 flex-1 justify-between">
-                {/* Product Name */}
                 <Typography
                   variant="subtitle2"
                   className="font-medium text-sm sm:text-base text-zinc-900 dark:text-white line-clamp-2"
@@ -46,7 +43,6 @@ export default function ProductGrid({ products }) {
                   {product.productName}
                 </Typography>
 
-                {/* Price Section */}
                 <Box className="flex items-center gap-2 flex-wrap">
                   <Typography
                     variant="body2"
