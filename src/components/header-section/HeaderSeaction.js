@@ -9,7 +9,7 @@ import {
 import { alpha, styled } from '@mui/material/styles';
 import {
   Menu, Close, ShoppingCart, Search,
-  Person
+  Person, Add, Remove, Delete
 } from '@mui/icons-material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { UserButton, useUser } from '@clerk/nextjs';
@@ -17,6 +17,7 @@ import { useColorMode } from '@/hooks/DarkmodeProvider';
 import { MdDarkMode, MdLightMode } from "react-icons/md";
 import { categories, slugify, Subcategories } from '@/lib/category';
 import Image from 'next/image';
+import { useCart } from '@/context/cartContext';
 
 const SearchContainer = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -97,19 +98,146 @@ const MegaMenuContainer = styled(motion.div)(({ theme }) => ({
   overflowY: 'auto',
 }));
 
+const CartDrawerContent = ({ closeCart }) => {
+  const theme = useTheme();
+  const { 
+    cart, 
+    removeFromCart, 
+    updateQuantity, 
+    getTotalPrice 
+  } = useCart();
+
+  return (
+    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', p: 2 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+        <Typography variant="h6" sx={{ fontWeight: 700 }}>Your Cart</Typography>
+        <IconButton onClick={closeCart}>
+          <Close />
+        </IconButton>
+      </Box>
+
+      {cart.length === 0 ? (
+        <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Typography>Your cart is empty</Typography>
+        </Box>
+      ) : (
+        <>
+          <Box sx={{ flex: 1, overflowY: 'auto', mb: 2 }}>
+            {cart.map((item) => (
+              <Box 
+                key={item._id}
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 2,
+                  mb: 2,
+                  p: 1,
+                  borderRadius: 1,
+                  backgroundColor: alpha(theme.palette.primary.main, 0.05)
+                }}
+              >
+                <Box sx={{ 
+                  position: 'relative', 
+                  minWidth: 60, 
+                  height: 60,
+                  borderRadius: 1,
+                  overflow: 'hidden'
+                }}>
+                  <Image
+                    src={item.productImage?.[0] || '/placeholder.jpg'}
+                    alt={item.productName}
+                    fill
+                    style={{ objectFit: 'cover' }}
+                  />
+                </Box>
+                
+                <Box sx={{ flexGrow: 1 }}>
+                  <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                    {item.productName}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: theme.palette.primary.main }}>
+                    ₹{item.discountPrice}
+                  </Typography>
+                </Box>
+                
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <IconButton 
+                    size="small"
+                    onClick={() => updateQuantity(item._id, item.quantity - 1)}
+                  >
+                    <Remove fontSize="small" />
+                  </IconButton>
+                  
+                  <Typography>{item.quantity}</Typography>
+                  
+                  <IconButton 
+                    size="small"
+                    onClick={() => updateQuantity(item._id, item.quantity + 1)}
+                  >
+                    <Add fontSize="small" />
+                  </IconButton>
+                  
+                  <IconButton 
+                    size="small"
+                    onClick={() => removeFromCart(item._id)}
+                    sx={{ color: theme.palette.error.main }}
+                  >
+                    <Delete fontSize="small" />
+                  </IconButton>
+                </Box>
+              </Box>
+            ))}
+          </Box>
+
+          <Box sx={{ borderTop: `1px solid ${theme.palette.divider}`, pt: 2 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+              <Typography variant="body1">Total:</Typography>
+              <Typography variant="h6">₹{getTotalPrice()}</Typography>
+            </Box>
+            <Button 
+              fullWidth 
+              variant="contained"
+              color="primary"
+              sx={{ mb: 1 }}
+            >
+              Proceed to Checkout
+            </Button>
+            <Button 
+              fullWidth 
+              variant="outlined"
+              onClick={closeCart}
+            >
+              Continue Shopping
+            </Button>
+          </Box>
+        </>
+      )}
+    </Box>
+  );
+};
+
 const HeaderSection = () => {
   const theme = useTheme();
   const { isSignedIn } = useUser();
   const { toggleColorMode, mode } = useColorMode();
+  const { 
+    getTotalItems, 
+    isCartOpen, 
+    toggleCart, 
+    closeCart 
+  } = useCart();
 
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [hoveredCategory, setHoveredCategory] = useState(null);
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
+  // Create category map that handles both string and object subcategories
   const categoryMap = {};
   Subcategories.forEach(cat => {
-    categoryMap[cat.name] = cat.subcategories;
+    categoryMap[cat.name] = cat.subcategories.map(sub => 
+      typeof sub === 'string' ? { name: sub, imageUrl: '' } : sub
+    );
   });
 
   const mainCategories = categories.slice(0, 5);
@@ -128,7 +256,8 @@ const HeaderSection = () => {
   };
 
   const getCategoryUrl = (category, subcategory) => {
-    return `/categories/${encodeURIComponent(category)}/${encodeURIComponent(subcategory)}`;
+    const subName = typeof subcategory === 'string' ? subcategory : subcategory.name;
+    return `/categories/${encodeURIComponent(category)}/${encodeURIComponent(subName)}`;
   };
 
   const renderMegaMenu = (category) => {
@@ -142,10 +271,7 @@ const HeaderSection = () => {
         onMouseLeave={() => setHoveredCategory(null)}
       >
         <Container maxWidth="xl">
-          <Box sx={{
-            display: 'grid',
-            gap: theme.spacing(3),
-          }}>
+          <Box sx={{ display: 'grid', gap: theme.spacing(3) }}>
             <Box>
               <Typography
                 variant="h6"
@@ -163,12 +289,30 @@ const HeaderSection = () => {
               </Typography>
               <ul style={{ margin: 0, padding: 0, listStyle: 'none' }}>
                 {categoryMap[category]?.map((sub) => (
-                  <li key={sub}>
+                  <li key={sub.name}>
                     <CategoryItem 
                       href={getCategoryUrl(category, sub)}
                       sx={{ fontSize: '1rem', py: 1 }}
                     >
-                      {sub}
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                        {sub.imageUrl && (
+                          <Box sx={{ 
+                            position: 'relative', 
+                            width: 24, 
+                            height: 24,
+                            borderRadius: '4px',
+                            overflow: 'hidden'
+                          }}>
+                            <Image
+                              src={sub.imageUrl}
+                              alt={sub.name}
+                              fill
+                              style={{ objectFit: 'cover' }}
+                            />
+                          </Box>
+                        )}
+                        {sub.name}
+                      </Box>
                     </CategoryItem>
                   </li>
                 ))}
@@ -216,11 +360,29 @@ const HeaderSection = () => {
                 </Typography>
                 <ul style={{ margin: 0, padding: 0, listStyle: 'none' }}>
                   {categoryMap[category]?.map((sub) => (
-                    <li key={sub}>
+                    <li key={sub.name}>
                       <CategoryItem 
                         href={getCategoryUrl(category, sub)}
                       >
-                        {sub}
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                          {sub.imageUrl && (
+                            <Box sx={{ 
+                              position: 'relative', 
+                              width: 24, 
+                              height: 24,
+                              borderRadius: '4px',
+                              overflow: 'hidden'
+                            }}>
+                              <Image
+                                src={sub.imageUrl}
+                                alt={sub.name}
+                                fill
+                                style={{ objectFit: 'cover' }}
+                              />
+                            </Box>
+                          )}
+                          {sub.name}
+                        </Box>
                       </CategoryItem>
                     </li>
                   ))}
@@ -351,6 +513,7 @@ const HeaderSection = () => {
             >
               <IconButton
                 color="inherit"
+                onClick={toggleCart}
                 sx={{
                   p: 1,
                   position: 'relative',
@@ -360,7 +523,7 @@ const HeaderSection = () => {
                 }}
               >
                 <Badge
-                  badgeContent={3}
+                  badgeContent={getTotalItems()}
                   color="error"
                   sx={{
                     '& .MuiBadge-badge': {
@@ -478,6 +641,22 @@ const HeaderSection = () => {
         </Container>
       </AppBar>
 
+      {/* Cart Drawer */}
+      <Drawer
+        anchor="right"
+        open={isCartOpen}
+        onClose={closeCart}
+        sx={{
+          '& .MuiDrawer-paper': {
+            width: { xs: '100%', sm: 400 },
+            backgroundColor: theme.palette.background.paper,
+          },
+        }}
+      >
+        <CartDrawerContent closeCart={closeCart} />
+      </Drawer>
+
+      {/* Mobile Menu Drawer */}
       <Drawer
         variant="temporary"
         open={mobileOpen}
@@ -637,11 +816,29 @@ const HeaderSection = () => {
                       </Typography>
                       <ul style={{ margin: 0, padding: 0, listStyle: 'none' }}>
                         {categoryMap[category]?.map((sub) => (
-                          <li key={sub}>
+                          <li key={sub.name}>
                             <CategoryItem 
                               href={getCategoryUrl(category, sub)}
                             >
-                              {sub}
+                              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                                {sub.imageUrl && (
+                                  <Box sx={{ 
+                                    position: 'relative', 
+                                    width: 24, 
+                                    height: 24,
+                                    borderRadius: '4px',
+                                    overflow: 'hidden'
+                                  }}>
+                                    <Image
+                                      src={sub.imageUrl}
+                                      alt={sub.name}
+                                      fill
+                                      style={{ objectFit: 'cover' }}
+                                    />
+                                  </Box>
+                                )}
+                                {sub.name}
+                              </Box>
                             </CategoryItem>
                           </li>
                         ))}
