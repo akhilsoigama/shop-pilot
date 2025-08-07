@@ -5,13 +5,14 @@ import { useParams } from "next/navigation"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
-import { CheckCircle, Heart, XCircle } from "lucide-react"
-import { Skeleton } from "@mui/material"
+import { CheckCircle, Heart, XCircle, Star, Zap,Search } from "lucide-react"
+import { Skeleton } from "@/components/ui/skeleton"
 import { useCart } from "@/context/cartContext"
 import { useState } from "react"
-import ProductPage from "@/app/view-product-page/[productId]/page"
+import { cn } from "@/lib/utils"
+import ProductPage from "../productPage/Product-page"
 
 export default function Subcategory() {
     const { category, subcategory } = useParams()
@@ -21,8 +22,15 @@ export default function Subcategory() {
 
     const [selectedProduct, setSelectedProduct] = useState(null)
     const [isDialogOpen, setIsDialogOpen] = useState(false)
+    const [hoveredProduct, setHoveredProduct] = useState(null)
+    const [searchQuery, setSearchQuery] = useState("")
 
     const { products, isLoading, isError } = useProducts(decodedCategory, decodedSubcategory)
+
+    const filteredProducts = products.filter(product => 
+        product.productName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        product.brand.toLowerCase().includes(searchQuery.toLowerCase())
+    )
 
     const handleViewProduct = (product) => {
         setSelectedProduct(product)
@@ -30,200 +38,270 @@ export default function Subcategory() {
     }
 
     if (isLoading) return (
-        <div className="p-4 md:p-6 lg:p-8 bg-white dark:bg-gray-950">
-            <Skeleton className="h-8 w-64 mb-6 bg-gray-200 dark:bg-gray-800" />
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-                {[...Array(8)].map((_, i) => (
-                    <Card key={i} className="rounded-xl overflow-hidden bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800">
-                        <Skeleton className="w-full h-40 bg-gray-100 dark:bg-gray-800" />
-                        <CardContent className="p-4 space-y-3">
-                            <Skeleton className="h-5 w-3/4 bg-gray-200 dark:bg-gray-800" />
-                            <Skeleton className="h-4 w-1/2 bg-gray-200 dark:bg-gray-800" />
-                            <Skeleton className="h-4 w-full bg-gray-200 dark:bg-gray-800" />
-                            <Skeleton className="h-10 w-full mt-4 bg-gray-200 dark:bg-gray-800" />
-                        </CardContent>
-                    </Card>
-                ))}
+        <div className="p-4 md:p-6 lg:p-8 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-950 min-h-screen">
+            <div className="max-w-7xl mx-auto">
+                <Skeleton className="h-8 w-64 mx-auto mb-8 bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700 rounded-full" />
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                    {[...Array(10)].map((_, i) => (
+                        <motion.div
+                            key={i}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: i * 0.05 }}
+                        >
+                            <Card className="rounded-2xl overflow-hidden bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow-sm h-[380px]">
+                                <Skeleton className="w-full h-48 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700" />
+                                <CardContent className="p-4 space-y-3">
+                                    <Skeleton className="h-5 w-3/4 bg-gray-100 dark:bg-gray-800 rounded-full" />
+                                    <Skeleton className="h-4 w-1/2 bg-gray-100 dark:bg-gray-800 rounded-full" />
+                                    <div className="flex justify-between items-center pt-2">
+                                        <Skeleton className="h-6 w-16 bg-gray-100 dark:bg-gray-800 rounded-full" />
+                                        <Skeleton className="h-9 w-24 bg-gray-100 dark:bg-gray-800 rounded-lg" />
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        </motion.div>
+                    ))}
+                </div>
             </div>
         </div>
     )
 
     if (isError) return (
-        <div className="flex flex-col items-center justify-center min-h-[50vh] p-4 text-center">
-            <XCircle className="h-12 w-12 text-red-500 mb-4" />
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex flex-col items-center justify-center min-h-[60vh] p-6 text-center bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-950"
+        >
+            <div className="relative mb-6">
+                <XCircle className="h-16 w-16 text-red-500/90 mx-auto" />
+                <motion.div
+                    animate={{ scale: [1, 1.1, 1] }}
+                    transition={{ repeat: Infinity, duration: 2 }}
+                    className="absolute inset-0 rounded-full bg-red-100/30 dark:bg-red-900/20"
+                />
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
                 Error loading products
             </h2>
-            <p className="text-gray-600 dark:text-gray-400">
-                Failed to load products. Please try again later.
+            <p className="text-gray-600 dark:text-gray-400 max-w-md">
+                We encountered an issue while loading products. Please refresh the page or try again later.
             </p>
-        </div>
+            <Button
+                variant="outline"
+                className="mt-4 px-6 py-2 rounded-full border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800"
+                onClick={() => window.location.reload()}
+            >
+                Retry
+            </Button>
+        </motion.div>
     )
 
-    if (!products.length) return (
-        <div className="flex flex-col items-center justify-center min-h-[50vh] p-4 text-center">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+    if (!filteredProducts.length) return (
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex flex-col items-center justify-center min-h-[100vh] text-center bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-950"
+        >
+            <div className="relative mb-6">
+                <div className="w-24 h-24 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+                    <Search className="h-12 w-12 text-gray-400" />
+                </div>
+                <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                    className="absolute inset-0 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-full"
+                />
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
                 No products found
             </h2>
-            <p className="text-gray-600 dark:text-gray-400">
-                We couldn't find any products in this category.
+            <p className="text-gray-600 dark:text-gray-400 max-w-md mb-6">
+                We couldn't find any products matching "{searchQuery || decodedSubcategory}". Try browsing other categories.
             </p>
-        </div>
+            <Button
+                variant="default"
+                className="px-6 py-2 rounded-full bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary"
+            >
+                Browse Categories
+            </Button>
+        </motion.div>
     )
 
     return (
-        <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 lg:py-10">
-            <div className="mb-6 md:mb-8 lg:mb-10">
-                <h1 className="text-2xl text-center sm:text-3xl font-bold text-gray-900 dark:text-white">
-                    {decodedSubcategory}
-                </h1>
-            </div>
+        <motion.section
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-950 min-h-screen"
+        >
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 lg:py-16">
+                <motion.div
+                    initial={{ y: -20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.1 }}
+                    className="mb-8 md:mb-12 lg:mb-16 text-center"
+                >
+                    <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-2">
+                        {decodedSubcategory}
+                    </h1>
+                    <p className="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
+                        Discover our premium collection of {decodedSubcategory.toLowerCase()} products
+                    </p>
+                </motion.div>
 
-            <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-5 md:gap-6">
-                {products.map((product) => (
-                    <motion.div
-                        key={product._id}
-                        whileHover={{
-                            y: -8,
-                            transition: { type: "spring", stiffness: 300, damping: 15 }
-                        }}
-                        whileTap={{ scale: 0.98 }}
-                        transition={{ duration: 0.3 }}
-                        className="w-full h-96"
-                    >
-                        <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary/10 to-secondary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="mb-12 max-w-2xl mx-auto"
+                >
+                    <div className="relative">
+                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <Search className="h-5 w-5 text-gray-400" />
+                        </div>
+                        <input
+                            type="text"
+                            placeholder={`Search ${decodedSubcategory.toLowerCase()}...`}
+                            className="block w-full pl-12 pr-4 py-3 border-0 rounded-full bg-white dark:bg-gray-800 shadow-md text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-primary/50 focus:outline-none transition-all duration-300"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                    </div>
+                </motion.div>
 
-                        <Card className="relative rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden h-full flex flex-col bg-white dark:bg-gray-900 border border-gray-200/70 dark:border-gray-700/50 group hover:border-primary/30 dark:hover:border-primary/50">
-                            <div className="relative w-full h-48 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 overflow-hidden">
-                                <motion.div
-                                    className="absolute inset-0 flex items-center justify-center p-4"
-                                    whileHover={{ scale: 1.05 }}
-                                    transition={{ type: "spring", stiffness: 400 }}
-                                >
-                                    <Image
-                                        src={product.productImage?.[0]}
-                                        alt={product.productName}
-                                        fill
-                                        className="object-contain w-full h-full transition-transform duration-300 group-hover:scale-110"
-                                        sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
-                                        style={{
-                                            objectPosition: 'center center'
-                                        }}
-                                    />
-                                </motion.div>
-
-                                {product.discount > 20 && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                    {filteredProducts.map((product) => (
+                        <motion.div
+                            key={product._id}
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.4 }}
+                            whileHover={{ 
+                                y: -5,
+                                transition: { type: "spring", stiffness: 300, damping: 15 }
+                            }}
+                            className="relative"
+                        >
+                            <Card className="relative rounded-2xl overflow-hidden h-full flex flex-col bg-white dark:bg-gray-900 border border-gray-200/50 dark:border-gray-800/50 shadow-md hover:shadow-lg transition-all duration-300 group ">
+                                <div className="relative w-full h-48 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800/30 dark:to-gray-900/50 overflow-hidden">
                                     <motion.div
-                                        className="absolute top-3 right-3 z-10"
-                                        initial={{ scale: 0.8, rotate: -15 }}
-                                        animate={{ scale: 1, rotate: 12 }}
-                                        transition={{ type: 'spring', stiffness: 500 }}
+                                        className="absolute inset-0 flex items-center justify-center p-4"
+                                        whileHover={{ scale: 1.03 }}
                                     >
-                                        <Badge variant="destructive" className="px-2 py-1 text-xs font-bold shadow-lg animate-pulse">
-                                            {product.discount > 40 ? 'MEGA DEAL' : 'HOT DEAL'}
-                                        </Badge>
+                                        <Image
+                                            src={product.productImage?.[0] || '/placeholder-product.jpg'}
+                                            alt={product.productName}
+                                            fill
+                                            className="object-contain w-full h-full transition-transform duration-300 group-hover:scale-105"
+                                            sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
+                                            priority={filteredProducts.indexOf(product) < 8}
+                                        />
                                     </motion.div>
-                                )}
 
-                                {product.rating >= 4 && (
-                                    <div className="absolute bottom-2 left-2 z-10">
-                                        <Badge className="bg-amber-500/90 text-white flex items-center gap-1 text-xs px-2 py-0.5 backdrop-blur-sm">
-                                            ⭐ {product.rating.toFixed(1)}
-                                        </Badge>
-                                    </div>
-                                )}
-
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-black/0 to-black/0" />
-                            </div>
-
-                            <CardContent className="p-4 flex flex-col gap-2 h-48">
-                                <div className="space-y-1 flex-grow">
-                                    <h2 className="font-semibold line-clamp-2 text-sm md:text-base leading-tight tracking-tight group-hover:text-primary transition-colors">
-                                        {product.productName}
-                                    </h2>
-                                    <p className="text-xs text-muted-foreground dark:text-gray-400 font-medium">
-                                        {product.brand}
-                                    </p>
-
-                                    <div className="flex flex-wrap gap-1 mt-1">
-                                        {product.tags?.slice(0, 2).map(tag => (
-                                            <Badge
-                                                key={tag}
-                                                variant="outline"
-                                                className="text-[10px] py-0 px-1.5 h-5 font-normal opacity-80"
+                                    {product.discount > 20 && (
+                                        <motion.div
+                                            className="absolute top-3 right-3 z-10"
+                                            initial={{ scale: 0.8, rotate: -15 }}
+                                            animate={{ scale: 1, rotate: 12 }}
+                                            transition={{ type: 'spring', stiffness: 500 }}
+                                        >
+                                            <Badge 
+                                                variant="destructive" 
+                                                className="px-2.5 py-1 text-[8px] font-bold shadow-md"
                                             >
-                                                {tag}
+                                                {product.discount > 40 ? (
+                                                    <div className="flex items-center gap-1">
+                                                        <Zap className="h-3 w-3 fill-current" />
+                                                        <span>MEGA DEAL</span>
+                                                    </div>
+                                                ) : 'HOT DEAL'}
                                             </Badge>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                <div className="flex items-center gap-2 mt-auto">
-                                    <div className="flex items-baseline gap-1">
-                                        <p className="font-bold text-primary text-lg">
-                                            ₹{product.discountPrice}
-                                        </p>
-                                        <p className="line-through text-gray-500 dark:text-gray-400 text-xs">
-                                            ₹{product.price}
-                                        </p>
-                                    </div>
-                                    <Badge
-                                        variant="destructive"
-                                        className="ml-auto text-xs px-2 py-0.5 font-bold bg-primary/90 hover:bg-primary"
-                                    >
-                                        {product.discount}% OFF
-                                    </Badge>
-                                </div>
-
-                                <div className="flex justify-between items-center mt-2">
-                                    {product.inStock ? (
-                                        <Badge variant="success" className="bg-green-100/90 text-green-800 flex items-center gap-1 dark:bg-green-900/80 dark:text-green-200 text-xs px-2 py-0.5">
-                                            <CheckCircle size={12} className="shrink-0" />
-                                            <span>In Stock</span>
-                                            {product.fastDelivery && (
-                                                <span className="ml-1">• 🚚 Fast</span>
-                                            )}
-                                        </Badge>
-                                    ) : (
-                                        <Badge variant="secondary" className="bg-red-100/90 text-red-800 flex items-center gap-1 dark:bg-red-900/80 dark:text-red-200 text-xs px-2 py-0.5">
-                                            <XCircle size={12} className="shrink-0" />
-                                            <span>Out of Stock</span>
-                                        </Badge>
+                                        </motion.div>
                                     )}
-                                    <Button
-                                        size="sm"
-                                        className="ml-auto text-xs px-3 py-1 h-7 hover:scale-105 transition-transform bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary dark:text-white dark:from-gray-800 dark:to-gray-700 dark:hover:to-gray-900"
-                                        onClick={() => handleViewProduct(product)}
-                                    >
-                                        <span className="truncate">View Details</span>
-                                    </Button>
+
+                                    {product.rating >= 4 && (
+                                        <div className="absolute bottom-3 left-3 z-10">
+                                            <Badge className="bg-amber-500/90 text-white flex items-center gap-1 text-xs px-2.5 py-1 backdrop-blur-sm">
+                                                <Star className="h-3 w-3 fill-current" />
+                                                <span>{product.rating.toFixed(1)}</span>
+                                            </Badge>
+                                        </div>
+                                    )}
+
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-black/0 to-black/0" />
                                 </div>
-                            </CardContent>
 
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-
-                            {product.isNew && (
-                                <div className="absolute top-0 left-0 w-24 h-6 overflow-hidden">
-                                    <div className="absolute -left-8 top-1 w-32 bg-primary rotate-45 text-center text-[10px] text-white font-bold py-0.5">
-                                        NEW
+                                <CardContent className="p-4 flex flex-col gap-2 flex-grow">
+                                    <div className="space-y-1">
+                                        <h2 className="font-semibold text-base leading-tight line-clamp-2 text-gray-900 dark:text-white group-hover:text-primary transition-colors">
+                                            {product.productName}
+                                        </h2>
+                                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                                            {product.brand}
+                                        </p>
                                     </div>
-                                </div>
-                            )}
 
-                            <button className="absolute top-2 left-2 z-10 p-2 rounded-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border border-gray-200 dark:border-gray-600 shadow-sm hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors">
-                                <Heart className="w-4 h-4 text-gray-400 hover:text-red-500" />
-                            </button>
-                        </Card>
-                    </motion.div>
-                ))}
+                                    <div className="mt-auto pt-2">
+                                        <div className="flex items-center justify-between mb-2">
+                                            <div className="flex items-baseline gap-1">
+                                                <p className="font-bold text-primary">
+                                                    ₹{product.discountPrice.toLocaleString()}
+                                                </p>
+                                                <p className="line-through text-gray-500 dark:text-gray-400 text-xs">
+                                                    ₹{product.price.toLocaleString()}
+                                                </p>
+                                            </div>
+                                            <Badge className="text-xs px-2 py-0.5 bg-primary/90">
+                                                {product.discount}% OFF
+                                            </Badge>
+                                        </div>
+
+                                        <Button
+                                            size="sm"
+                                            className="w-full py-2 text-sm bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary"
+                                            onClick={() => handleViewProduct(product)}
+                                        >
+                                            View Details
+                                        </Button>
+                                    </div>
+                                </CardContent>
+
+                                {product.isNew && (
+                                    <div className="absolute top-0 left-0 w-28 h-7 overflow-hidden">
+                                        <div className="absolute -left-8 top-1 w-36 bg-gradient-to-r from-primary to-primary/80 rotate-45 text-center text-[10px] text-white font-bold py-1">
+                                            NEW ARRIVAL
+                                        </div>
+                                    </div>
+                                )}
+
+                                <motion.button 
+                                    className="absolute top-3 left-3 z-10 p-2 rounded-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border border-gray-200 dark:border-gray-600 shadow-sm hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"
+                                    whileHover={{ scale: 1.1 }}
+                                    whileTap={{ scale: 0.9 }}
+                                >
+                                    <Heart 
+                                        className={cn(
+                                            "w-4 h-4 transition-colors",
+                                            hoveredProduct === product._id ? "text-red-500 fill-red-500" : "text-gray-400 hover:text-red-500"
+                                        )} 
+                                    />
+                                </motion.button>
+                            </Card>
+                        </motion.div>
+                    ))}
+                </div>
             </div>
 
-            <ProductPage
-                product={selectedProduct}
-                onAddToCart={addToCart}
-                isOpen={isDialogOpen}
-                onClose={() => setIsDialogOpen(false)}
-            />
-        </section>
+            <AnimatePresence>
+                {isDialogOpen && (
+                    <ProductPage
+                        product={selectedProduct}
+                        onAddToCart={addToCart}
+                        isOpen={isDialogOpen}
+                        onClose={() => setIsDialogOpen(false)}
+                    />
+                )}
+            </AnimatePresence>
+        </motion.section>
     )
 }
