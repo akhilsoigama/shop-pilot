@@ -41,7 +41,7 @@ export default function CategorySection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const { products, isLoading } = useProducts(selectedCategory);
-
+  console.log(products)
   const filteredProducts = categories.includes(selectedCategory)
     ? products.filter((item) => item.discount > 52) 
     : products; 
