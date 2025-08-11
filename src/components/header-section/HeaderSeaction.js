@@ -242,7 +242,7 @@ const HeaderSection = () => {
   });
 
   const mainCategories = categories.slice(0, 4);
-  const moreCategories = categories.slice(5);
+  const moreCategories = categories.slice(4);
 
   useEffect(() => {
     const handleScroll = () => {
