@@ -1,5 +1,6 @@
 'use client'
 import { createContext, useContext, useState, useEffect } from 'react'
+import { toast } from 'sonner'
 
 const CartContext = createContext()
 
@@ -22,10 +23,11 @@ export function CartProvider({ children }) {
       if (existing) {
         return prev.map(item => 
           item._id === product._id 
-            ? { ...item, quantity: item.quantity + 1 } 
-            : item
+          ? { ...item, quantity: item.quantity + 1 } 
+          : item
         )
       }
+      toast.success("Add to cart successfully");
       return [...prev, { ...product, quantity: 1 }]
     })
   }

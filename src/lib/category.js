@@ -31,16 +31,14 @@ export const Subcategories = [
             { name: 'Smart Watches', imageUrl: '/subcategory/electronics/smart-watches.png' },
             { name: 'Gaming Consoles', imageUrl: '/subcategory/electronics/gaming-consoles.png' },
             { name: 'Televisions', imageUrl: '/subcategory/electronics/televisions.png' },
-            { name: 'Accessories', imageUrl: '/subcategory/electronics/accessories.png' },
-            // ----------------
-            { name: 'Computer Accessories', imageUrl: '/subcategory/electronics/audio-video.png' },
-            { name: 'Printers', imageUrl: '/subcategory/electronics/audio-video.png' },
-            { name: 'Monitors', imageUrl: '/subcategory/electronics/audio-video.png' },
-            { name: 'Storage Devices', imageUrl: '/subcategory/electronics/audio-video.png' },
-            { name: 'Fitness Bands', imageUrl: '/subcategory/electronics/audio-video.png' },
-            { name: 'Washing Machines', imageUrl: '/subcategory/electronics/audio-video.png' },
-            { name: 'Air Conditioners', imageUrl: '/subcategory/electronics/audio-video.png' },
-            { name: 'Audio Systems', imageUrl: '/subcategory/electronics/audio-video.png' },
+            { name: 'Computer Accessories', imageUrl: '/subcategory/electronics/accessories.png' },
+            { name: 'Printers', imageUrl: '/subcategory/electronics/printers.png' },
+            { name: 'Monitors', imageUrl: '/subcategory/electronics/monitors.png' },
+            { name: 'Storage Devices', imageUrl: '/subcategory/electronics/storage.png' },
+            { name: 'Fitness Bands', imageUrl: '/subcategory/electronics/fitness.png' },
+            { name: 'Washing Machines', imageUrl: '/subcategory/electronics/washing.png' },
+            { name: 'Air Conditioners', imageUrl: '/subcategory/electronics/ac.png' },
+            { name: 'Audio Systems', imageUrl: '/subcategory/electronics/audio.png' },
         ],
     },
     {
@@ -53,19 +51,18 @@ export const Subcategories = [
             { name: 'Traditional Watches', imageUrl: '/subcategory/fashion/watches.png' },
             { name: 'Sunglasses', imageUrl: '/subcategory/fashion/sunglasses.png' },
             { name: 'Fashion Accessories', imageUrl: '/subcategory/fashion/accessories.png' },
-            // -------------
-            { name: 'Belts & Wallets', imageUrl: '/subcategory/fashion/accessories.png' },
-            { name: 'Scarves & Shawls', imageUrl: '/subcategory/fashion/accessories.png' },
-            { name: 'Hats & Caps', imageUrl: '/subcategory/fashion/accessories.png' },
+            { name: 'Belts & Wallets', imageUrl: '/subcategory/fashion/belts.png' },
+            { name: 'Scarves & Shawls', imageUrl: '/subcategory/fashion/scarves.png' },
+            { name: 'Hats & Caps', imageUrl: '/subcategory/fashion/hats.png' },
         ],
     },
     {
         name: 'Home & Kitchen',
         subcategories: [
             { name: 'Living Room Furniture', imageUrl: '/subcategory/home&kitchen/furniture.png' },
-            { name: 'Bedroom Furniture', imageUrl: '/subcategory/home&kitchen/furniture.png' },//-----------------
-            { name: 'Kitchen & Dining Furniture', imageUrl: '/subcategory/home&kitchen/furniture.png' },//-----------------
-            { name: 'Gardening & Outdoor', imageUrl: '/subcategory/home&kitchen/furniture.png' },//-----------------
+            { name: 'Bedroom Furniture', imageUrl: '/subcategory/home&kitchen/bedroom.png' },
+            { name: 'Kitchen & Dining Furniture', imageUrl: '/subcategory/home&kitchen/kitchen.png' },
+            { name: 'Gardening & Outdoor', imageUrl: '/subcategory/home&kitchen/garden.png' },
             { name: 'Cookware & Bakeware', imageUrl: '/subcategory/home&kitchen/cookware.png' },
             { name: 'Kitchen Appliances', imageUrl: '/subcategory/home&kitchen/appliances.png' },
             { name: 'Lighting', imageUrl: '/subcategory/home&kitchen/lighting.png' },
@@ -85,7 +82,7 @@ export const Subcategories = [
             { name: 'Grooming Tools', imageUrl: '/subcategory/beauty/grooming.png' },
             { name: 'Bath & Body', imageUrl: '/subcategory/beauty/bath-body.png' },
             { name: 'Oral Care', imageUrl: '/subcategory/beauty/oral-care.png' },
-            { name: "Men's Grooming", imageUrl: '/subcategory/beauty/oral-care.png' },//=================
+            { name: "Men's Grooming", imageUrl: '/subcategory/beauty/mensgrooming.png' },
         ],
     },
     {
@@ -97,9 +94,9 @@ export const Subcategories = [
             { name: 'Wellness Devices', imageUrl: '/subcategory/health/devices.png' },
             { name: 'First Aid', imageUrl: '/subcategory/health/first-aid.png' },
             { name: 'Health Monitors', imageUrl: '/subcategory/health/monitors.png' },
-            { name: 'Yoga & Meditation', imageUrl: '/subcategory/health/monitors.png' },//=================
-            { name: 'Vitamins & Minerals', imageUrl: '/subcategory/health/vitamins.png' },//=================
-            { name: 'Herbal Products', imageUrl: '/subcategory/health/herbal.png' },//=================
+            { name: 'Yoga & Meditation', imageUrl: '/subcategory/health/yoga.png' },
+            { name: 'Vitamins & Minerals', imageUrl: '/subcategory/health/vitamins.png' },
+            { name: 'Herbal Products', imageUrl: '/subcategory/health/herbal.png' },
         ],
     },
     {
@@ -110,8 +107,8 @@ export const Subcategories = [
             { name: 'Camping Gear', imageUrl: '/subcategory/sports/camping.png' },
             { name: 'Cycling', imageUrl: '/subcategory/sports/cycling.png' },
             { name: 'Team Sports', imageUrl: '/subcategory/sports/team-sports.png' },
-            { name: 'Water Sports', imageUrl: '/subcategory/sports/water-sports.png' },//=================
-            { name: 'Hiking & Trekking', imageUrl: '/subcategory/sports/water-sports.png' },//=================
+            { name: 'Water Sports', imageUrl: '/subcategory/sports/water-sports.png' },
+            { name: 'Hiking & Trekking', imageUrl: '/subcategory/sports/hiking.png' },
         ],
     },
     {
@@ -122,9 +119,9 @@ export const Subcategories = [
             { name: 'Oils & Fluids', imageUrl: '/subcategory/automotive/oils.png' },
             { name: 'Tools & Equipment', imageUrl: '/subcategory/automotive/tools.png' },
             { name: 'Car Electronics', imageUrl: '/subcategory/automotive/car-electronics.png' },
-            { name: 'Car Care', imageUrl: '/subcategory/automotive/car-electronics.png' },//=================
-            { name: 'Motorbike Gear', imageUrl: '/subcategory/automotive/motorbike-gear.png' },//=================
-            { name: 'Tires & Wheels', imageUrl: '/subcategory/automotive/tires-wheels.png' },//=================
+            { name: 'Car Care', imageUrl: '/subcategory/automotive/car-care.png' },
+            { name: 'Motorbike Gear', imageUrl: '/subcategory/automotive/motorbike-gear.png' },
+            { name: 'Tires & Wheels', imageUrl: '/subcategory/automotive/tires-wheels.png' },
         ],
     },
     {
@@ -136,9 +133,9 @@ export const Subcategories = [
             { name: "Children's Books", imageUrl: '/subcategory/books&stationery/children.png' },
             { name: 'Notebooks & Journals', imageUrl: '/subcategory/books&stationery/notebooks.png' },
             { name: 'Art Supplies', imageUrl: '/subcategory/books&stationery/art.png' },
-            { name: 'Office Stationery', imageUrl: '/subcategory/books&stationery/stationery.png' },
-            { name: 'Pens & Writing', imageUrl: '/subcategory/books&stationery/stationery.png' },//=================
-            { name: 'Calendars & Planners', imageUrl: '/subcategory/books&stationery/calendars.png' },//=================
+            { name: 'Office Stationery', imageUrl: '/subcategory/books&stationery/office-stationery.png' },
+            { name: 'Pens & Writing', imageUrl: '/subcategory/books&stationery/stationery.png' },
+            { name: 'Calendars & Planners', imageUrl: '/subcategory/books&stationery/calendars.png' },
         ],
     },
     {
@@ -150,7 +147,7 @@ export const Subcategories = [
             { name: 'Puzzles', imageUrl: '/subcategory/toys/puzzles.png' },
             { name: 'Remote Control Toys', imageUrl: '/subcategory/toys/rc-toys.png' },
             { name: 'Outdoor Play', imageUrl: '/subcategory/toys/outdoor.png' },
-            { name: 'Dolls & Playsets', imageUrl: '/subcategory/toys/outdoor.png' },//=================
+            { name: 'Dolls & Playsets', imageUrl: '/subcategory/toys/dolls.png' },
         ],
     },
     {
@@ -162,7 +159,7 @@ export const Subcategories = [
             { name: 'Baby Clothing', imageUrl: '/subcategory/baby/clothing.png' },
             { name: 'Baby Toys', imageUrl: '/subcategory/baby/toys.png' },
             { name: 'Health & Safety', imageUrl: '/subcategory/baby/health.png' },
-            { name: 'Baby Care', imageUrl: '/subcategory/baby/health.png' },//=================
+            { name: 'Baby Care', imageUrl: '/subcategory/baby/baby-care.png' },
         ],
     },
     {
@@ -174,9 +171,9 @@ export const Subcategories = [
             { name: 'Organic Foods', imageUrl: '/subcategory/groceries/organic.png' },
             { name: 'Baking Essentials', imageUrl: '/subcategory/groceries/baking.png' },
             { name: 'Packaged Foods', imageUrl: '/subcategory/groceries/packaged.png' },
-            { name: 'International Cuisine', imageUrl: '/subcategory/groceries/packaged.png' },//=================
-            { name: 'Bakery Items', imageUrl: '/subcategory/groceries/condiments.png' },//=================
-            { name: 'Dairy Products', imageUrl: '/subcategory/groceries/condiments.png' },//=================
+            { name: 'International Cuisine', imageUrl: '/subcategory/groceries/cuisine.png' },
+            { name: 'Bakery Items', imageUrl: '/subcategory/groceries/bakery.png' },
+            { name: 'Dairy Products', imageUrl: '/subcategory/groceries/dairy.png' },
         ],
     },
     {
@@ -187,8 +184,8 @@ export const Subcategories = [
             { name: 'Pet Toys', imageUrl: '/subcategory/pets/toys.png' },
             { name: 'Health & Grooming', imageUrl: '/subcategory/pets/grooming.png' },
             { name: 'Pet Accessories', imageUrl: '/subcategory/pets/accessories.png' },
-            { name: 'Aquarium Supplies', imageUrl: '/subcategory/pets/accessories.png' },//=================
-            { name: 'Bird Supplies', imageUrl: '/subcategory/pets/bird-supplies.png' },//=================
+            { name: 'Aquarium Supplies', imageUrl: '/subcategory/pets/aquarium.png' },
+            { name: 'Bird Supplies', imageUrl: '/subcategory/pets/bird-supplies.png' },
         ],
     },
     {
@@ -198,7 +195,7 @@ export const Subcategories = [
             { name: 'Office Furniture', imageUrl: '/subcategory/office/furniture.png' },
             { name: 'Filing Products', imageUrl: '/subcategory/office/filing.png' },
             { name: 'Organizers', imageUrl: '/subcategory/office/organizers.png' },
-            { name: 'Presentation Supplies', imageUrl: '/subcategory/office/organizers.png' },//=================
+            { name: 'Presentation Supplies', imageUrl: '/subcategory/office/presentation.png' },
         ],
     },
     {
@@ -209,8 +206,8 @@ export const Subcategories = [
             { name: 'Bracelets', imageUrl: '/subcategory/jewelry/bracelets.png' },
             { name: 'Rings', imageUrl: '/subcategory/jewelry/rings.png' },
             { name: 'Hair Accessories', imageUrl: '/subcategory/jewelry/hair.png' },
-            { name: 'Brooches & Pins', imageUrl: '/subcategory/jewelry/hair.png' },//=================
-            { name: 'Premium Watches', imageUrl: '/subcategory/jewelry/hair.png' },//=================
+            { name: 'Brooches & Pins', imageUrl: '/subcategory/jewelry/brooches.png' },
+            { name: 'Premium Watches', imageUrl: '/subcategory/jewelry/premium-watch.png' },
         ],
     },
     {
@@ -221,7 +218,7 @@ export const Subcategories = [
             { name: "Kids' Footwear", imageUrl: '/subcategory/footwear/kids.png' },
             { name: 'Sports Shoes', imageUrl: '/subcategory/footwear/sports.png' },
             { name: 'Sandals & Flip Flops', imageUrl: '/subcategory/footwear/sandals.png' },
-            { name: 'Formal Shoes', imageUrl: '/subcategory/footwear/sandals.png' },//=================
+            { name: 'Formal Shoes', imageUrl: '/subcategory/footwear/formal-shoes.png' },
         ],
     },
     {
@@ -232,7 +229,7 @@ export const Subcategories = [
             { name: 'Safety Equipment', imageUrl: '/subcategory/tools&hardware/safety.png' },
             { name: 'Plumbing', imageUrl: '/subcategory/tools&hardware/plumbing.png' },
             { name: 'Electrical Supplies', imageUrl: '/subcategory/tools&hardware/electrical.png' },
-            { name: 'Building Materials', imageUrl: '/subcategory/tools&hardware/electrical.png' },//=================
+            { name: 'Building Materials', imageUrl: '/subcategory/tools&hardware/building.png' },
         ],
     }
 ];
