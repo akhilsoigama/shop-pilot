@@ -43,7 +43,7 @@ export default function ProductPage({ product, onAddToCart, isOpen, onClose }) {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}
         transition={{ duration: 0.3 }}
-        className=" bg-white dark:bg-gray-950 scrollbar-hide overflow-y-auto shadow-2xl"
+        className="fixed top-20 inset-0 z-30 bg-white dark:bg-gray-950 scrollbar-hide overflow-y-auto shadow-2xl"
       >
         {/* Close Button */}
         <button
