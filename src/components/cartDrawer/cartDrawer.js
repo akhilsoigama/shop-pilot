@@ -444,7 +444,7 @@ export default function CartDrawer() {
                       maxWidth: 300,
                       fontSize: isMobile ? '0.8rem' : '0.875rem'
                     }}>
-                      Looks like you haven't added anything to your cart yet
+                      Looks like you have not added anything to your cart yet
                     </Typography>
                     <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
                       <Button
