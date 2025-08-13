@@ -4,25 +4,25 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   AppBar, Toolbar, Button, IconButton, Drawer, List,
   ListItem, ListItemText, Box, Container, Typography,
-  Badge, InputBase, useTheme
+  Badge, InputBase, useTheme, Avatar
 } from '@mui/material';
 import { alpha, styled } from '@mui/material/styles';
 import {
   Menu, Close, ShoppingCart, Search,
-  Person, Add, Remove, Delete
+  Person, Favorite
 } from '@mui/icons-material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { UserButton, useUser } from '@clerk/nextjs';
 import { useColorMode } from '@/hooks/DarkmodeProvider';
 import { MdDarkMode, MdLightMode } from "react-icons/md";
-import { categories, Subcategories } from '@/lib/category';
 import Image from 'next/image';
 import { useCart } from '@/context/cartContext';
 import Link from 'next/link';
+import CartDrawer from '@/components/cartDrawer/cartDrawer';
 
 const SearchContainer = styled('div')(({ theme }) => ({
   position: 'relative',
-  borderRadius: theme.shape.borderRadius,
+  borderRadius: 20,
   backgroundColor: alpha(
     theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black,
     0.05
@@ -36,6 +36,9 @@ const SearchContainer = styled('div')(({ theme }) => ({
   marginRight: theme.spacing(2),
   marginLeft: 0,
   width: '100%',
+  transition: theme.transitions.create(['width', 'background-color'], {
+    duration: theme.transitions.duration.standard,
+  }),
   [theme.breakpoints.up('sm')]: {
     marginLeft: theme.spacing(3),
     width: 'auto',
@@ -63,186 +66,46 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     transition: theme.transitions.create('width'),
     width: '100%',
     [theme.breakpoints.up('md')]: {
-      width: '20ch',
+      width: '16ch',
       '&:focus': {
-        width: '28ch',
+        width: '38ch',
       },
     },
   },
 }));
 
-const CategoryItem = styled('a')(({ theme }) => ({
-  display: 'block',
-  padding: theme.spacing(0.5, 1),
-  fontSize: '0.875rem',
-  color: theme.palette.text.secondary,
-  textDecoration: 'none',
-  borderRadius: theme.shape.borderRadius,
-  transition: 'all 0.2s',
+const NavButton = styled(Button)(({ theme }) => ({
+  textTransform: 'none',
+  fontWeight: 600,
+  letterSpacing: 0.5,
+  borderRadius: 12,
+  padding: '8px 16px',
+  transition: theme.transitions.create(['background-color', 'transform'], {
+    duration: theme.transitions.duration.short,
+  }),
   '&:hover': {
-    color: theme.palette.primary.main,
-    backgroundColor: alpha(theme.palette.primary.main, 0.05),
+    transform: 'translateY(-2px)',
   },
 }));
 
-const MegaMenuContainer = styled(motion.div)(({ theme }) => ({
-  position: 'fixed',
-  left: 0,
-  right: 0,
-  top: '64px',
-  backgroundColor: theme.palette.background.paper,
-  boxShadow: theme.shadows[6],
-  zIndex: theme.zIndex.modal,
-  borderTop: `1px solid ${theme.palette.divider}`,
-  padding: theme.spacing(4),
-  height: '400px',
-  overflowY: 'auto',
-}));
-
-const CartDrawerContent = ({ closeCart }) => {
-  const theme = useTheme();
-  const { 
-    cart, 
-    removeFromCart, 
-    updateQuantity, 
-    getTotalPrice 
-  } = useCart();
-
-  return (
-    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', p: 2 }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-        <Typography variant="h6" sx={{ fontWeight: 700 }}>Your Cart</Typography>
-        <IconButton onClick={closeCart}>
-          <Close />
-        </IconButton>
-      </Box>
-
-      {cart.length === 0 ? (
-        <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <Typography>Your cart is empty</Typography>
-        </Box>
-      ) : (
-        <>
-          <Box sx={{ flex: 1, overflowY: 'auto', mb: 2 }}>
-            {cart.map((item) => (
-              <Box 
-                key={item._id}
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 2,
-                  mb: 2,
-                  p: 1,
-                  borderRadius: 1,
-                  backgroundColor: alpha(theme.palette.primary.main, 0.05)
-                }}
-              >
-                <Box sx={{ 
-                  position: 'relative', 
-                  minWidth: 60, 
-                  height: 60,
-                  borderRadius: 1,
-                  overflow: 'hidden'
-                }}>
-                  <Image
-                    src={item.productImage?.[0] || '/placeholder.jpg'}
-                    alt={item.productName}
-                    fill
-                    style={{ objectFit: 'cover' }}
-                  />
-                </Box>
-                
-                <Box sx={{ flexGrow: 1 }}>
-                  <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                    {item.productName}
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: theme.palette.primary.main }}>
-                    ₹{item.discountPrice}
-                  </Typography>
-                </Box>
-                
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <IconButton 
-                    size="small"
-                    onClick={() => updateQuantity(item._id, item.quantity - 1)}
-                  >
-                    <Remove fontSize="small" />
-                  </IconButton>
-                  
-                  <Typography>{item.quantity}</Typography>
-                  
-                  <IconButton 
-                    size="small"
-                    onClick={() => updateQuantity(item._id, item.quantity + 1)}
-                  >
-                    <Add fontSize="small" />
-                  </IconButton>
-                  
-                  <IconButton 
-                    size="small"
-                    onClick={() => removeFromCart(item._id)}
-                    sx={{ color: theme.palette.error.main }}
-                  >
-                    <Delete fontSize="small" />
-                  </IconButton>
-                </Box>
-              </Box>
-            ))}
-          </Box>
-
-          <Box sx={{ borderTop: `1px solid ${theme.palette.divider}`, pt: 2 }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-              <Typography variant="body1">Total:</Typography>
-              <Typography variant="h6">₹{getTotalPrice()}</Typography>
-            </Box>
-            <Button 
-              fullWidth 
-              variant="contained"
-              color="primary"
-              sx={{ mb: 1 }}
-            >
-              Proceed to Checkout
-            </Button>
-            <Button 
-              fullWidth 
-              variant="outlined"
-              onClick={closeCart}
-            >
-              Continue Shopping
-            </Button>
-          </Box>
-        </>
-      )}
-    </Box>
-  );
-};
-
 const HeaderSection = () => {
   const theme = useTheme();
-  const { isSignedIn } = useUser();
+  const { isSignedIn, user } = useUser();
   const { toggleColorMode, mode } = useColorMode();
-  const { 
-    getTotalItems, 
-    isCartOpen, 
-    toggleCart, 
-    closeCart 
+  const {
+    getTotalItems,
+    isCartOpen,
+    toggleCart,
+    closeCart
   } = useCart();
 
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [hoveredCategory, setHoveredCategory] = useState(null);
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
-  // Create category map that handles both string and object subcategories
-  const categoryMap = {};
-  Subcategories.forEach(cat => {
-    categoryMap[cat.name] = cat.subcategories.map(sub => 
-      typeof sub === 'string' ? { name: sub, imageUrl: '' } : sub
-    );
-  });
-
-  const mainCategories = categories.slice(0, 4);
-  const moreCategories = categories.slice(5);
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -252,176 +115,23 @@ const HeaderSection = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
-
-  const getCategoryUrl = (category, subcategory) => {
-    const subName = typeof subcategory === 'string' ? subcategory : subcategory.name;
-    return `/categories/${encodeURIComponent(category)}/${encodeURIComponent(subName)}`;
-  };
-
-  const handleLinkClick = () => {
-    setHoveredCategory(null);
-    setMobileOpen(false);
-  };
-
-  const renderMegaMenu = (category) => {
-    return (
-      <MegaMenuContainer
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: 10 }}
-        transition={{ duration: 0.2 }}
-        onMouseEnter={() => setHoveredCategory(category)}
-        onMouseLeave={() => setHoveredCategory(null)}
-      >
-        <Container maxWidth="xl">
-          <Box sx={{ display: 'grid', gap: theme.spacing(3) }}>
-            <Box>
-              <Typography
-                variant="h6"
-                sx={{
-                  fontWeight: 700,
-                  color: theme.palette.text.primary,
-                  mb: 2,
-                  px: 1,
-                  py: 0.5,
-                  borderRadius: 1,
-                  backgroundColor: alpha(theme.palette.primary.main, 0.1),
-                }}
-              >
-                {category}
-              </Typography>
-              <ul className='m-0 p-0 list-none'>
-                {categoryMap[category]?.map((sub) => {
-                  const subItem = typeof sub === 'string' ? { name: sub } : sub;
-                  return (
-                    <li key={subItem.name}>
-                      <Link
-                        href={getCategoryUrl(category, subItem)}
-                        onClick={handleLinkClick}
-                        className='font-medium text-[12px] hover:bg-gray-300 dark:hover:bg-gray-300/10 flex items-center gap-2 p-2'
-                      >
-                        {subItem.imageUrl && (
-                          <Box sx={{ 
-                            position: 'relative', 
-                            width: 24, 
-                            height: 24,
-                            borderRadius: '4px',
-                            overflow: 'hidden'
-                          }}>
-                            <Image
-                              src={subItem.imageUrl}
-                              alt={subItem.name}
-                              fill
-                              style={{ objectFit: 'cover' }}
-                            />
-                          </Box>
-                        )}
-                        {subItem.name}
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
-            </Box>
-          </Box>
-        </Container>
-      </MegaMenuContainer>
-    );
-  };
-
-  const renderMoreMegaMenu = () => {
-    return (
-      <MegaMenuContainer
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: 10 }}
-        transition={{ duration: 0.2 }}
-        className='text-[12px]'
-        onMouseEnter={() => setHoveredCategory('more')}
-        onMouseLeave={() => setHoveredCategory(null)}
-      >
-        <Container maxWidth="xl">
-          <Box sx={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-            gap: theme.spacing(3),
-            scrollbarWidth: 'none',
-            msOverflowStyle: 'none'
-          }}>
-            {moreCategories.map((category) => (
-              <Box key={category} sx={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-                <Typography
-                  variant="subtitle1"
-                  sx={{
-                    fontWeight: 700,
-                    color: theme.palette.text.primary,
-                    mb: 1,
-                    fontSize: '12px',
-                    px: 1,
-                    py: 0.5,
-                    borderRadius: 1,
-                    backgroundColor: alpha(theme.palette.primary.main, 0.1),
-                  }}
-                >
-                  {category}
-                </Typography>
-                <ul style={{ margin: 0, padding: 0, listStyle: 'none' }}>
-                  {categoryMap[category]?.map((sub) => {
-                    const subItem = typeof sub === 'string' ? { name: sub } : sub;
-                    return (
-                      <li key={subItem.name}>
-                        <Link
-                          href={getCategoryUrl(category, subItem)}
-                          onClick={handleLinkClick}
-                          className='font-medium hover:bg-gray-300 dark:hover:bg-gray-300/10 p-2 flex items-center gap-2'
-                        >
-                          {subItem.imageUrl && (
-                            <Box sx={{ 
-                              position: 'relative', 
-                              width: 24, 
-                              height: 24,
-                              borderRadius: '4px',
-                              overflow: 'hidden'
-                            }}>
-                              <Image
-                                src={subItem.imageUrl}
-                                alt={subItem.name}
-                                fill
-                                style={{ objectFit: 'cover' }}
-                              />
-                            </Box>
-                          )}
-                          {subItem.name}
-                        </Link>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </Box>
-            ))}
-          </Box>
-        </Container>
-      </MegaMenuContainer>
-    );
-  };
-
   return (
     <>
       <AppBar
-        position="fixed"
+        position="sticky"
         sx={{
           backgroundColor: isScrolled
             ? alpha(theme.palette.background.default, 0.98)
-            : alpha(theme.palette.background.default, 0.95),
+            : 'transparent',
           color: theme.palette.text.primary,
-          boxShadow: isScrolled ? theme.shadows[4] : 'none',
-          backdropFilter: 'blur(12px)',
+          // boxShadow: isScrolled ? theme.shadows[4] : 'none',
+          backdropFilter: isScrolled ? 'blur(12px)' : 'none',
           transition: 'all 0.3s ease-in-out',
-          borderBottom: isScrolled ? 'none' : `1px solid ${theme.palette.divider}`,
-          zIndex: theme.zIndex.drawer + 1,
+          // borderBottom: isScrolled 
+          //   ? `1px solid ${alpha(theme.palette.divider, 0.1)}` 
+          //   : 'none',
+          zIndex: theme.zIndex.appBar + 1,
+          backgroundImage: 'none',
         }}
         elevation={0}
       >
@@ -432,7 +142,13 @@ const HeaderSection = () => {
                 color="inherit"
                 edge="start"
                 onClick={handleDrawerToggle}
-                sx={{ mr: 1, display: { md: 'none' } }}
+                sx={{
+                  mr: 1,
+                  display: { md: 'none' },
+                  '&:hover': {
+                    backgroundColor: alpha(theme.palette.primary.main, 0.1),
+                  }
+                }}
               >
                 <Menu />
               </IconButton>
@@ -444,8 +160,44 @@ const HeaderSection = () => {
               transition={{ duration: 0.5 }}
               style={{ display: 'flex', alignItems: 'center' }}
             >
-              <Link href="/">
-                <Image src='/logo.png' width={40} height={40} alt='logo' />
+              <Link href="/" passHref>
+                <Box sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  cursor: 'pointer',
+                  '&:hover': {
+                    '& img': {
+                      transform: 'rotate(-10deg) scale(1.1)'
+                    }
+                  }
+                }}
+
+                >
+                  <motion.div
+                    whileHover={{ rotate: -10 }}
+                    whileTap={{ scale: 0.9 }}
+                  >
+                    <Image
+                      src='/logo.png'
+                      width={40}
+                      height={40}
+                      alt='logo'
+                      style={{
+                        transition: 'transform 0.3s ease',
+                      }}
+                    />
+                  </motion.div>
+                  <Typography variant="h6" sx={{
+                    ml: 1,
+                    fontWeight: 800,
+                    background: `linear-gradient(45deg, ${theme.palette.primary.main} 30%, ${theme.palette.secondary.main} 90%)`,
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    display: { xs: 'none', sm: 'block' }
+                  }}>
+                    ShopPilot
+                  </Typography>
+                </Box>
               </Link>
             </motion.div>
 
@@ -454,84 +206,23 @@ const HeaderSection = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
-                style={{ display: 'flex', alignItems: 'center', marginLeft: 32 }}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  marginLeft: 32,
+                  flexGrow: 1,
+                  maxWidth: 600
+                }}
               >
                 <SearchContainer>
                   <SearchIconWrapper>
                     <Search />
                   </SearchIconWrapper>
-                  <StyledInputBase
-                    placeholder="Search products..."
+                  <StyledInputBase className='truncate'
+                    placeholder="Search for products, brands and more..."
                     inputProps={{ 'aria-label': 'search' }}
                   />
                 </SearchContainer>
-
-                <Box sx={{ display: 'flex', gap: 1 }}>
-                  <Button
-                    color="inherit"
-                    sx={{
-                      fontWeight: 600,
-                      textTransform: 'none',
-                      fontSize: '12px',
-                      '&:hover': {
-                        color: theme.palette.primary.main,
-                        backgroundColor: 'transparent',
-                      }
-                    }}
-                    component={Link}
-                    href="/"
-                  >
-                    Home
-                  </Button>
-
-                  {mainCategories.map((category) => (
-                    <Box key={category} sx={{ position: 'relative' }}>
-                      <Button
-                        color="inherit"
-                        sx={{
-                          fontWeight: 600,
-                          textTransform: 'none',
-                          fontSize: '12px',
-                          '&:hover': {
-                            color: theme.palette.primary.main,
-                            backgroundColor: 'transparent',
-                          }
-                        }}
-                        onMouseEnter={() => setHoveredCategory(category)}
-                        onMouseLeave={() => setHoveredCategory(null)}
-                      >
-                        {category}
-                      </Button>
-
-                      <AnimatePresence>
-                        {hoveredCategory === category && renderMegaMenu(category)}
-                      </AnimatePresence>
-                    </Box>
-                  ))}
-
-                  <Box sx={{ position: 'relative' }}>
-                    <Button
-                      color="inherit"
-                      sx={{
-                        fontWeight: 600,
-                        textTransform: 'none',
-                        fontSize: '12px',
-                        '&:hover': {
-                          color: theme.palette.primary.main,
-                          backgroundColor: 'transparent',
-                        }
-                      }}
-                      onMouseEnter={() => setHoveredCategory('more')}
-                      onMouseLeave={() => setHoveredCategory(null)}
-                    >
-                      More
-                    </Button>
-
-                    <AnimatePresence>
-                      {hoveredCategory === 'more' && renderMoreMegaMenu()}
-                    </AnimatePresence>
-                  </Box>
-                </Box>
               </motion.div>
             )}
 
@@ -541,8 +232,40 @@ const HeaderSection = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
-              style={{ display: 'flex', alignItems: 'center' }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: theme.spacing(1)
+              }}
             >
+              {!isMobile && (
+                <>
+                  <Link href="/orders" passHref>
+                    <NavButton
+                      color="inherit"
+                      startIcon={<Favorite />}
+                      sx={{
+                        '&:hover': {
+                          color: theme.palette.error.main,
+                          backgroundColor: alpha(theme.palette.error.main, 0.1),
+                        }
+                      }}
+                    >
+                      Wishlist
+                    </NavButton>
+                  </Link>
+
+                  <Link href="/account" passHref >
+                    <NavButton
+                      color="inherit"
+                      startIcon={<Person />}
+                    >
+                      Account
+                    </NavButton>
+                  </Link>
+                </>
+              )}
+
               <IconButton
                 color="inherit"
                 onClick={toggleCart}
@@ -563,6 +286,7 @@ const HeaderSection = () => {
                       top: 4,
                       border: `2px solid ${theme.palette.background.paper}`,
                       padding: '0 4px',
+                      fontWeight: 600
                     }
                   }}
                 >
@@ -574,7 +298,6 @@ const HeaderSection = () => {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 style={{
-                  marginLeft: '8px',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
@@ -586,6 +309,9 @@ const HeaderSection = () => {
                   p: 1,
                   borderRadius: '50%',
                   backgroundColor: alpha(theme.palette.primary.main, 0.1),
+                  '&:hover': {
+                    backgroundColor: alpha(theme.palette.primary.main, 0.2),
+                  }
                 }}>
                   <AnimatePresence mode="wait" initial={false}>
                     {mode === 'dark' ? (
@@ -618,77 +344,52 @@ const HeaderSection = () => {
                   </AnimatePresence>
                 </Box>
               </motion.div>
-              {!isMobile && (
-                <>
-                  <IconButton
-                    color="inherit"
-                    sx={{
-                      p: 1,
-                      '&:hover': {
-                        backgroundColor: alpha(theme.palette.primary.main, 0.1),
+
+              {!isMobile && isSignedIn ? (
+                <Box sx={{ ml: 1 }}>
+                  <UserButton
+                    afterSignOutUrl="/"
+                    appearance={{
+                      elements: {
+                        userButtonAvatarBox: {
+                          width: 36,
+                          height: 36,
+                          border: `2px solid ${alpha(theme.palette.primary.main, 0.3)}`,
+                          transition: 'all 0.3s',
+                          '&:hover': {
+                            borderColor: theme.palette.primary.main
+                          }
+                        }
                       }
                     }}
-                  >
-                    {isSignedIn ? (
-                      <UserButton
-                        afterSignOutUrl="/"
-                        appearance={{
-                          elements: {
-                            userButtonAvatarBox: {
-                              width: 32,
-                              height: 32,
-                            }
-                          }
-                        }}
-                      />
-                    ) : (
-                      <Person />
-                    )}
-                  </IconButton>
-                </>
-              )}
-              {!isMobile && !isSignedIn && (
-                <Button
+                  />
+                </Box>
+              ) : !isMobile && (
+                <NavButton
                   variant="contained"
                   color="primary"
+                  href="/sign-in"
                   sx={{
-                    ml: 2,
+                    ml: 1,
                     px: 3,
-                    py: 1,
                     fontWeight: 600,
-                    textTransform: 'none',
-                    borderRadius: 2,
-                    boxShadow: 'none',
+                    boxShadow: theme.shadows[2],
                     '&:hover': {
                       boxShadow: theme.shadows[4],
+                      transform: 'translateY(-2px)'
                     }
                   }}
-                  href="/sign-in"
                 >
                   Sign In
-                </Button>
+                </NavButton>
               )}
             </motion.div>
           </Toolbar>
         </Container>
       </AppBar>
 
-      {/* Cart Drawer */}
-      <Drawer
-        anchor="right"
-        open={isCartOpen}
-        onClose={closeCart}
-        sx={{
-          '& .MuiDrawer-paper': {
-            width: { xs: '100%', sm: 400 },
-            backgroundColor: theme.palette.background.paper,
-          },
-        }}
-      >
-        <CartDrawerContent closeCart={closeCart} />
-      </Drawer>
+      <CartDrawer open={isCartOpen} onClose={closeCart} />
 
-      {/* Mobile Menu Drawer */}
       <Drawer
         variant="temporary"
         open={mobileOpen}
@@ -701,26 +402,45 @@ const HeaderSection = () => {
             boxSizing: 'border-box',
             width: '90%',
             maxWidth: 350,
-            borderTopRightRadius: 12,
-            borderBottomRightRadius: 12,
+            borderTopRightRadius: 16,
+            borderBottomRightRadius: 16,
             backgroundColor: theme.palette.background.paper,
             color: theme.palette.text.primary,
+            boxShadow: theme.shadows[16],
+            zIndex: theme.zIndex.drawer + 2, // Higher than app bar
           },
         }}
       >
-        <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+        <Box sx={{
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          background: `linear-gradient(to bottom, ${alpha(theme.palette.primary.light, 0.05)}, transparent)`
+        }}>
           <Box sx={{
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
             p: 2,
-            borderBottom: `1px solid ${theme.palette.divider}`,
-            backgroundColor: theme.palette.background.default,
+            borderBottom: `1px solid ${alpha(theme.palette.divider, 0.1)}`,
+            backgroundColor: alpha(theme.palette.background.default, 0.8),
+            backdropFilter: 'blur(10px)',
           }}>
-            <Link href="/">
-              <Image src='/logo.png' width={40} height={40} alt='shop-pilot' />
+            <Link href="/" passHref>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Image src='/logo.png' width={32} height={32} alt='shop-pilot' />
+                <Typography variant="h6" sx={{
+                  ml: 1,
+                  fontWeight: 800,
+                  background: `linear-gradient(45deg, ${theme.palette.primary.main} 30%, ${theme.palette.secondary.main} 90%)`,
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                }}>
+                  ShopPilot
+                </Typography>
+              </Box>
             </Link>
-            <Box display="flex" alignItems="center">
+            <Box display="flex" alignItems="center" gap={1}>
               <motion.div
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
@@ -766,13 +486,26 @@ const HeaderSection = () => {
                   </AnimatePresence>
                 </Box>
               </motion.div>
-              <IconButton onClick={handleDrawerToggle}>
+              <IconButton
+                onClick={handleDrawerToggle}
+                sx={{
+                  '&:hover': {
+                    backgroundColor: alpha(theme.palette.error.main, 0.1),
+                    color: theme.palette.error.main
+                  }
+                }}
+              >
                 <Close />
               </IconButton>
             </Box>
           </Box>
 
-          <Box sx={{ p: 2, borderBottom: `1px solid ${theme.palette.divider}` }}>
+          <Box sx={{
+            p: 2,
+            borderBottom: `1px solid ${alpha(theme.palette.divider, 0.1)}`,
+            backgroundColor: alpha(theme.palette.background.default, 0.8),
+            backdropFilter: 'blur(10px)',
+          }}>
             <SearchContainer>
               <SearchIconWrapper>
                 <Search />
@@ -784,174 +517,70 @@ const HeaderSection = () => {
             </SearchContainer>
           </Box>
 
-          <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>
-            <List disablePadding>
+          <Box sx={{
+            flex: 1,
+            overflowY: 'auto',
+            p: 2,
+            '&::-webkit-scrollbar': {
+              width: '6px',
+            },
+            '&::-webkit-scrollbar-thumb': {
+              backgroundColor: alpha(theme.palette.primary.main, 0.3),
+              borderRadius: '3px',
+            },
+          }}>
+
+            <List>
               <ListItem
                 component={Link}
-                href="/"
+                href="/orders"
                 sx={{
-                  px: 3,
-                  py: 1.5,
-                  display: 'block',
-                  width: '100%',
-                  textAlign: 'left',
+                  borderRadius: 1,
+                  mb: 0.5,
                   '&:hover': {
                     backgroundColor: alpha(theme.palette.primary.main, 0.1),
                   }
                 }}
-                onClick={handleLinkClick}
               >
-                <ListItemText
-                  primary="Home"
-                  primaryTypographyProps={{ fontWeight: 600 }}
-                />
+                <ListItemText primary="Orders" />
               </ListItem>
-
-              <ListItem className='scrollbar-hide'
-                component="button"
-                sx={{
-                  px: 3,
-                  py: 1.5,
-                  display: 'block',
-                  width: '100%',
-                  fontSize: '12px',
-                  textAlign: 'left',
-                  '&:hover': {
-                    backgroundColor: alpha(theme.palette.primary.main, 0.1),
-                  }
-                }}
-                onClick={() => setHoveredCategory(hoveredCategory === 'mobile-categories' ? null : 'mobile-categories')}
-              >
-                <ListItemText
-                  primary="Categories"
-                  primaryTypographyProps={{ fontWeight: 600 }}
-                />
-              </ListItem>
-
-              {hoveredCategory === 'mobile-categories' && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  style={{ overflow: 'hidden' }}
-                  className='scrollbar-hide'
-                >
-                  {categories.map((category) => (
-                    <div key={category} style={{ paddingLeft: 32, paddingRight: 16 }}>
-                      <Typography
-                        variant="subtitle2"
-                        sx={{
-                          fontWeight: 600,
-                          mt: 1,
-                          px: 2,
-                          py: 1,
-                          borderRadius: 1,
-                          backgroundColor: alpha(theme.palette.primary.main, 0.1),
-                        }}
-                      >
-                        {category}
-                      </Typography>
-                      <ul style={{ margin: 0, padding: 0, listStyle: 'none' }}>
-                        {categoryMap[category]?.map((sub) => {
-                          const subItem = typeof sub === 'string' ? { name: sub } : sub;
-                          return (
-                            <li key={subItem.name}>
-                              <Link
-                                href={getCategoryUrl(category, subItem)}
-                                onClick={handleLinkClick}
-                                className='font-medium hover:bg-gray-300 dark:hover:bg-gray-300/10 p-2 flex items-center gap-2'
-                              >
-                                {subItem.imageUrl && (
-                                  <Box sx={{ 
-                                    position: 'relative', 
-                                    width: 24, 
-                                    height: 24,
-                                    borderRadius: '4px',
-                                    overflow: 'hidden'
-                                  }}>
-                                    <Image
-                                      src={subItem.imageUrl}
-                                      alt={subItem.name}
-                                      fill
-                                      style={{ objectFit: 'cover' }}
-                                    />
-                                  </Box>
-                                )}
-                                {subItem.name}
-                              </Link>
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    </div>
-                  ))}
-                </motion.div>
-              )}
 
               <ListItem
                 component={Link}
-                href="/new-arrivals"
+                href="/wishlist"
                 sx={{
-                  px: 3,
-                  py: 1.5,
-                  display: 'block',
-                  width: '100%',
-                  textAlign: 'left',
+                  borderRadius: 1,
+                  mb: 0.5,
                   '&:hover': {
                     backgroundColor: alpha(theme.palette.primary.main, 0.1),
                   }
                 }}
-                onClick={handleLinkClick}
               >
-                <ListItemText
-                  primary="New Arrivals"
-                  primaryTypographyProps={{ fontWeight: 600 }}
-                />
+                <ListItemText primary="Wishlist" />
               </ListItem>
+
               <ListItem
                 component={Link}
-                href="/deals"
+                href="/notifications"
                 sx={{
-                  px: 3,
-                  py: 1.5,
-                  display: 'block',
-                  width: '100%',
-                  textAlign: 'left',
+                  borderRadius: 1,
+                  mb: 0.5,
                   '&:hover': {
                     backgroundColor: alpha(theme.palette.primary.main, 0.1),
                   }
                 }}
-                onClick={handleLinkClick}
               >
-                <ListItemText
-                  primary="Deals"
-                  primaryTypographyProps={{ fontWeight: 600 }}
-                />
-              </ListItem>
-              <ListItem
-                component={Link}
-                href="/about"
-                sx={{
-                  px: 3,
-                  py: 1.5,
-                  display: 'block',
-                  width: '100%',
-                  textAlign: 'left',
-                  '&:hover': {
-                    backgroundColor: alpha(theme.palette.primary.main, 0.1),
-                  }
-                }}
-                onClick={handleLinkClick}
-              >
-                <ListItemText
-                  primary="About"
-                  primaryTypographyProps={{ fontWeight: 600 }}
-                />
+                <ListItemText primary="Notifications" />
               </ListItem>
             </List>
           </Box>
 
-          <Box sx={{ p: 3, borderTop: `1px solid ${theme.palette.divider}` }}>
+          <Box sx={{
+            p: 3,
+            borderTop: `1px solid ${alpha(theme.palette.divider, 0.1)}`,
+            backgroundColor: alpha(theme.palette.background.default, 0.8),
+            backdropFilter: 'blur(10px)',
+          }}>
             {isSignedIn ? (
               <Box sx={{
                 textAlign: 'center',
@@ -960,17 +589,18 @@ const HeaderSection = () => {
                 alignItems: 'center',
                 gap: 2
               }}>
-                <UserButton
-                  afterSignOutUrl="/"
-                  appearance={{
-                    elements: {
-                      userButtonAvatarBox: {
-                        width: 64,
-                        height: 64,
-                      }
-                    }
+                <Avatar
+                  src={user.imageUrl}
+                  sx={{
+                    width: 64,
+                    height: 64,
+                    border: `2px solid ${theme.palette.primary.main}`,
+                    mb: 1
                   }}
                 />
+                <Typography variant="subtitle1" fontWeight={600}>
+                  {user.fullName || 'Welcome back!'}
+                </Typography>
               </Box>
             ) : (
               <>
@@ -978,16 +608,40 @@ const HeaderSection = () => {
                   fullWidth
                   variant="contained"
                   color="primary"
+
                   sx={{
                     mb: 2,
                     py: 1.5,
                     fontWeight: 600,
                     borderRadius: 2,
+                    boxShadow: theme.shadows[2],
+                    '&:hover': {
+                      boxShadow: theme.shadows[4],
+                    }
                   }}
                   href="/sign-in"
                 >
                   Sign In
                 </Button>
+                <Typography variant="body2" textAlign="center" color="text.secondary">
+                  New customer?{' '}
+                  <Link href="/sign-up" passHref>
+                    <Typography
+                      component="span"  
+                      sx={{
+                        color: theme.palette.primary.main,
+                        fontWeight: 600,
+                        textDecoration: 'none',
+                        '&:hover': {
+                          textDecoration: 'underline',
+                          cursor: 'pointer'
+                        }
+                      }}
+                    >
+                      Start here
+                    </Typography>
+                  </Link>
+                </Typography>
               </>
             )}
           </Box>
