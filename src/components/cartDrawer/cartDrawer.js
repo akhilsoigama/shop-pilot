@@ -1,6 +1,6 @@
 'use client'
-import { Box, Typography, IconButton, Button, Divider, Chip, Badge } from '@mui/material'
-import { Close, Add, Remove, Delete, ShoppingCart, ArrowForward, LocalShipping, Redeem } from '@mui/icons-material'
+import { Box, Typography, IconButton, Button, Divider, Chip, Badge, useMediaQuery } from '@mui/material'
+import { Close, Add, Remove, Delete, ShoppingCart, ArrowForward, LocalShipping, Redeem, Discount } from '@mui/icons-material'
 import Image from 'next/image'
 import { useTheme, alpha } from '@mui/material/styles'
 import { motion, AnimatePresence, useAnimationControls } from 'framer-motion'
@@ -11,21 +11,22 @@ const CartItem = ({ item, removeFromCart, updateQuantity }) => {
   const theme = useTheme()
   const controls = useAnimationControls()
   const [isRemoving, setIsRemoving] = useState(false)
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
   const handleRemove = () => {
     setIsRemoving(true)
     controls.start({
       x: -100,
       opacity: 0,
-      transition: { duration: 0.3 }
+      transition: { duration: 0.2 }
     }).then(() => removeFromCart(item._id))
   }
 
   const handleQuantityChange = (newQty) => {
     if (newQty !== item.quantity) {
       controls.start({
-        scale: [1, 1.1, 1],
-        transition: { duration: 0.3 }
+        scale: [1, 1.05, 1],
+        transition: { duration: 0.2 }
       })
       updateQuantity(item._id, newQty)
     }
@@ -33,594 +34,588 @@ const CartItem = ({ item, removeFromCart, updateQuantity }) => {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={controls}
-      exit={{ opacity: 0, x: -100 }}
-      transition={{ type: 'spring', damping: 10 }}
-      layout
-      style={{ 
+      key={item._id}
+      initial={{ opacity: 0, y: 10 }}
+      animate={isRemoving ? { opacity: 0, x: -100 } : { opacity: 1, y: 0 }}
+      exit={{ opacity: 0, x: 100 }}
+      transition={{ duration: 0.2, ease: "easeInOut" }}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        padding: theme.spacing(1.5),
+        marginBottom: theme.spacing(1.5),
+        borderRadius: 12,
+        backgroundColor: alpha(theme.palette.primary.main, theme.palette.mode === 'dark' ? 0.08 : 0.04),
         position: 'relative',
-        overflow: 'hidden'
+        overflow: 'hidden',
       }}
     >
-      {!isRemoving && (
-        <motion.div
-          whileHover={{ 
-            y: -2,
-            boxShadow: theme.shadows[3]
-          }}
-        >
-          <Box sx={{
-            display: 'flex',
-            gap: 2,
-            mb: 2,
-            p: 2,
-            borderRadius: 3,
-            bgcolor: alpha(theme.palette.primary.main, 0.03),
-            border: `1px solid ${alpha(theme.palette.divider, 0.1)}`,
-            position: 'relative',
-            overflow: 'hidden',
-            '&:before': {
-              content: '""',
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '4px',
-              height: '100%',
-              bgcolor: 'primary.main',
-              borderRadius: '3px 0 0 3px'
-            }
-          }}>
-            {/* Glow effect */}
-            <Box sx={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: '100%',
-              background: `radial-gradient(circle at center, ${alpha(theme.palette.primary.main, 0.05)} 0%, transparent 70%)`,
-              pointerEvents: 'none'
-            }} />
-
-            <motion.div 
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 10 }}
-            >
-              <Box sx={{
-                position: 'relative',
-                minWidth: 80,
-                height: 80,
-                borderRadius: 2,
+      {/* Pulse effect */}
+      <motion.div 
+        animate={{ 
+          opacity: [0, 0.2, 0],
+          scale: [1, 1.5, 2]
+        }}
+        transition={{ 
+          duration: 4,
+          repeat: Infinity,
+          ease: "easeOut"
+        }}
+        style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          width: 20,
+          height: 20,
+          borderRadius: '50%',
+          background: theme.palette.primary.main,
+          filter: 'blur(2px)',
+        }}
+      />
+      
+      <Box sx={{ 
+        flexShrink: 0, 
+        position: 'relative', 
+        width: isMobile ? 60 : 70, 
+        height: isMobile ? 60 : 70, 
+        borderRadius: 8,
+        overflow: 'hidden',
+        boxShadow: theme.shadows[1],
+        mr: 2
+      }}
+      >
+        <Image
+          src={item.productImage[0] || '/placeholder.png'}
+          alt={item.productName}
+          fill
+          style={{ objectFit: 'cover' }}
+          sizes={isMobile ? "60px" : "70px"}
+        />
+      </Box>
+      
+      <Box sx={{ flex: 1, minWidth: 0 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <Box sx={{ overflow: 'hidden' }}>
+            <Typography 
+              variant="body2" 
+              sx={{ 
+                fontWeight: 600,
+                whiteSpace: 'nowrap',
                 overflow: 'hidden',
-                bgcolor: 'background.default',
-                boxShadow: theme.shadows[1]
-              }}>
-                <Image
-                  src={item.productImage?.[0] || '/placeholder.jpg'}
-                  alt={item.productName}
-                  fill
-                  style={{ objectFit: 'cover' }}
-                  sizes="80px"
-                />
-              </Box>
-            </motion.div>
-
-            <Box sx={{ 
-              flexGrow: 1,
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between'
-            }}>
-              <Box>
-                <Typography variant="subtitle2" sx={{ 
-                  fontWeight: 700,
-                  mb: 0.5,
-                  letterSpacing: 0.2,
-                }} className='truncate'>
-                  {item.productName}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {item.brand}
-                </Typography>
-              </Box>
-              
-              <Box sx={{ 
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center'
-              }}>
-                <motion.div
-                  key={`price-${item.quantity}`}
-                  initial={{ scale: 1.2 }}
-                  animate={{ scale: 1 }}
-                  transition={{ type: 'spring', stiffness: 500 }}
-                >
-                  <Typography variant="body2" sx={{ 
-                    color: 'primary.main',
-                    fontWeight: 700,
-                    fontSize: '1rem'
-                  }}>
-                    ₹{item.discountPrice.toLocaleString()}
-                  </Typography>
-                </motion.div>
-                
-                {item.price > item.discountPrice && (
-                  <Typography variant="body2" sx={{ 
-                    textDecoration: 'line-through',
-                    color: 'text.disabled',
-                    fontSize: '0.75rem'
-                  }}>
-                    ₹{item.price.toLocaleString()}
-                  </Typography>
-                )}
-              </Box>
-            </Box>
-
-            <Box sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'space-between'
-            }}>
-              <motion.div whileTap={{ scale: 0.9 }}>
-                <IconButton
-                  size="small"
-                  onClick={handleRemove}
-                  sx={{ 
-                    color: 'error.main',
-                    '&:hover': {
-                      bgcolor: alpha(theme.palette.error.main, 0.1)
-                    }
-                  }}
-                >
-                  <Delete fontSize="small" />
-                </IconButton>
-              </motion.div>
-
-              <Box sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 0.5,
-                bgcolor: alpha(theme.palette.primary.main, 0.1),
-                borderRadius: 20,
-                p: 0.5
-              }}>
-                <motion.div whileTap={{ scale: 0.8 }}>
-                  <IconButton
-                    size="small"
-                    onClick={() => handleQuantityChange(item.quantity - 1)}
-                    disabled={item.quantity <= 1}
-                    sx={{
-                      '&:hover': {
-                        bgcolor: alpha(theme.palette.primary.main, 0.2)
-                      }
-                    }}
-                  >
-                    <Remove fontSize="small" />
-                  </IconButton>
-                </motion.div>
-
-                <motion.div
-                  key={`qty-${item.quantity}`}
-                  initial={{ scale: 1.5, color: theme.palette.primary.main }}
-                  animate={{ scale: 1, color: theme.palette.text.primary }}
-                  transition={{ type: 'spring', stiffness: 500 }}
-                >
-                  <Typography variant="body2" sx={{ 
-                    minWidth: 24,
-                    textAlign: 'center',
-                    fontWeight: 600
-                  }}>
-                    {item.quantity}
-                  </Typography>
-                </motion.div>
-
-                <motion.div whileTap={{ scale: 0.8 }}>
-                  <IconButton
-                    size="small"
-                    onClick={() => handleQuantityChange(item.quantity + 1)}
-                    sx={{
-                      '&:hover': {
-                        bgcolor: alpha(theme.palette.primary.main, 0.2)
-                      }
-                    }}
-                  >
-                    <Add fontSize="small" />
-                  </IconButton>
-                </motion.div>
-              </Box>
-            </Box>
+                textOverflow: 'ellipsis',
+                fontSize: isMobile ? '0.875rem' : '0.9375rem'
+              }}
+            >
+              {item.productName}
+            </Typography>
+            <Typography variant="caption" color="text.secondary" sx={{ fontSize: isMobile ? '0.7rem' : '0.75rem' }}>
+              {item.brand}
+            </Typography>
           </Box>
-        </motion.div>
-      )}
+          <motion.div whileTap={{ scale: 0.9 }}>
+            <IconButton 
+              size="small" 
+              onClick={handleRemove}
+              sx={{
+                p: 0.5,
+                '&:hover': {
+                  color: theme.palette.error.main,
+                  backgroundColor: alpha(theme.palette.error.main, 0.1)
+                }
+              }}
+            >
+              <Delete fontSize={isMobile ? "small" : "medium"} />
+            </IconButton>
+          </motion.div>
+        </Box>
+        
+        <Box sx={{ display: 'flex', alignItems: 'center', mt: 0.5 }}>
+          {item.discountPrice ? (
+            <>
+              <Typography variant="body2" sx={{ 
+                fontWeight: 700, 
+                mr: 1,
+                fontSize: isMobile ? '0.875rem' : '0.9375rem'
+              }}>
+                ₹{item.discountPrice.toLocaleString()}
+              </Typography>
+              <Typography variant="caption" sx={{ 
+                textDecoration: 'line-through', 
+                color: 'text.disabled', 
+                mr: 1,
+                fontSize: isMobile ? '0.7rem' : '0.75rem'
+              }}>
+                ₹{item.price.toLocaleString()}
+              </Typography>
+              <Chip 
+                label={`${Math.round((1 - item.discountPrice/item.price) * 100)}% OFF`} 
+                size="small" 
+                color="success"
+                icon={<Discount sx={{ fontSize: '12px !important' }} />}
+                sx={{ 
+                  height: 18, 
+                  fontSize: '0.6rem',
+                  '& .MuiChip-icon': {
+                    marginLeft: '4px'
+                  }
+                }}
+              />
+            </>
+          ) : (
+            <Typography variant="body2" sx={{ 
+              fontWeight: 700,
+              fontSize: isMobile ? '0.875rem' : '0.9375rem'
+            }}>
+              ₹{item.price.toLocaleString()}
+            </Typography>
+          )}
+        </Box>
+        
+        <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
+          <motion.div whileTap={{ scale: 0.95 }}>
+            <IconButton 
+              size="small" 
+              onClick={() => handleQuantityChange(Math.max(1, item.quantity - 1))}
+              disabled={item.quantity <= 1}
+              sx={{ 
+                p: 0.5,
+                border: `1px solid ${theme.palette.divider}`,
+                borderRadius: '6px 0 0 6px',
+                backgroundColor: theme.palette.background.paper
+              }}
+            >
+              <Remove fontSize="small" />
+            </IconButton>
+          </motion.div>
+          <Typography 
+            variant="body2" 
+            sx={{ 
+              px: 1.5, 
+              py: 0.5, 
+              borderTop: `1px solid ${theme.palette.divider}`,
+              borderBottom: `1px solid ${theme.palette.divider}`,
+              fontWeight: 600,
+              fontSize: isMobile ? '0.8125rem' : '0.875rem',
+              backgroundColor: theme.palette.background.paper
+            }}
+          >
+            {item.quantity}
+          </Typography>
+          <motion.div whileTap={{ scale: 0.95 }}>
+            <IconButton 
+              size="small" 
+              onClick={() => handleQuantityChange(item.quantity + 1)}
+              sx={{ 
+                p: 0.5,
+                border: `1px solid ${theme.palette.divider}`,
+                borderRadius: '0 6px 6px 0',
+                backgroundColor: theme.palette.background.paper
+              }}
+            >
+              <Add fontSize="small" />
+            </IconButton>
+          </motion.div>
+        </Box>
+      </Box>
     </motion.div>
   )
 }
 
 export default function CartDrawer() {
-    const theme = useTheme()
-    const {
-        cart,
-        removeFromCart,
-        updateQuantity,
-        getTotalPrice,
-        getTotalItems,
-        closeCart,
-        isCartOpen
-    } = useCart()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  const {
+    cart,
+    removeFromCart,
+    updateQuantity,
+    getTotalPrice,
+    getTotalItems,
+    closeCart,
+    isCartOpen
+  } = useCart()
 
-    const [isMounted, setIsMounted] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
+  const [isHoveringCheckout, setIsHoveringCheckout] = useState(false)
 
-    useEffect(() => {
-        setIsMounted(true)
-    }, [])
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
-    if (!isMounted) return null
+  if (!isMounted) return null
 
-    return (
-        <AnimatePresence>
-            {isCartOpen && (
-                <motion.div
-                    initial={{ x: '100%' }}
-                    animate={{ x: 0 }}
-                    exit={{ x: '100%' }}
-                    transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                    style={{
-                        position: 'fixed',
-                        top: 0,
-                        right: 0,
-                        height: '100vh',
-                        width: '100%',
-                        maxWidth: 420,
-                        zIndex: 1400,
-                        overflow: 'hidden'
-                    }}
-                >
-                    <Box sx={{
-                        height: '100%',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        bgcolor: 'background.paper',
-                        p: { xs: 2, sm: 3 },
-                        boxShadow: 24,
-                        position: 'relative'
+  const totalPrice = getTotalPrice()
+  const totalItems = getTotalItems()
+  const discountAmount = cart.reduce((sum, item) => {
+    return sum + (item.discountPrice ? (item.price - item.discountPrice) * item.quantity : 0)
+  }, 0)
+
+  return (
+    <AnimatePresence>
+      {isCartOpen && (
+        <>
+          {/* Overlay */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={closeCart}
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: alpha(theme.palette.common.black, 0.4),
+              zIndex: 1300,
+              backdropFilter: 'blur(3px)',
+            }}
+          />
+          
+          {/* Cart Drawer */}
+          <motion.div
+            initial={{ x: '100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '100%' }}
+            transition={{ 
+              type: 'spring', 
+              damping: 30, 
+              stiffness: 400,
+              mass: 0.5
+            }}
+            style={{
+              position: 'fixed',
+              top: 0,
+              right: 0,
+              height: '100vh',
+              width: '100%',
+              maxWidth: isMobile ? '100%' : 400,
+              zIndex: 1400,
+              overflow: 'hidden'
+            }}
+          >
+            <Box sx={{
+              height: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              bgcolor: 'background.paper',
+              boxShadow: 24,
+              position: 'relative',
+            }}>
+              {/* Header with gradient */}
+              <Box sx={{
+                background: theme.palette.mode === 'dark' 
+                  ? `linear-gradient(135deg, ${alpha(theme.palette.primary.dark, 0.7)} 0%, ${theme.palette.background.default} 100%)`
+                  : `linear-gradient(135deg, ${alpha(theme.palette.primary.light, 0.15)} 0%, ${theme.palette.background.paper} 100%)`,
+                p: isMobile ? 2 : 2.5,
+                position: 'relative',
+                overflow: 'hidden',
+              }}>
+                {/* Decorative elements */}
+                <Box sx={{
+                  position: 'absolute',
+                  top: -30,
+                  right: -30,
+                  width: 120,
+                  height: 120,
+                  borderRadius: '50%',
+                  bgcolor: alpha(theme.palette.primary.main, 0.08),
+                }} />
+                
+                <Box sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  position: 'relative',
+                  zIndex: 1
+                }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <motion.div
+                      animate={{ rotate: isHoveringCheckout ? -5 : 0 }}
+                      transition={{ type: 'spring', stiffness: 500 }}
+                    >
+                      <ShoppingCart sx={{ 
+                        fontSize: isMobile ? 24 : 26,
+                        color: theme.palette.mode === 'dark' ? theme.palette.primary.light : theme.palette.primary.main
+                      }} />
+                    </motion.div>
+                    <Typography variant="h6" sx={{
+                      fontWeight: 700,
+                      fontSize: isMobile ? '1.1rem' : '1.2rem',
+                      letterSpacing: 0.5,
+                      background: theme.palette.mode === 'dark'
+                        ? `linear-gradient(to right, ${theme.palette.primary.light}, ${theme.palette.secondary.light})`
+                        : `linear-gradient(to right, ${theme.palette.primary.dark}, ${theme.palette.secondary.dark})`,
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
                     }}>
-                        {/* Floating particles background */}
-                        <Box sx={{
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
-                            width: '100%',
-                            height: '100%',
-                            overflow: 'hidden',
-                            zIndex: 0,
-                            opacity: 0.05,
-                            pointerEvents: 'none'
-                        }}>
-                            {[...Array(20)].map((_, i) => (
-                                <motion.div
-                                    key={i}
-                                    initial={{ 
-                                        x: Math.random() * 100,
-                                        y: Math.random() * 100,
-                                        rotate: Math.random() * 360
-                                    }}
-                                    animate={{ 
-                                        y: [null, Math.random() * 100],
-                                        rotate: [null, Math.random() * 360]
-                                    }}
-                                    transition={{ 
-                                        duration: 10 + Math.random() * 20,
-                                        repeat: Infinity,
-                                        repeatType: 'reverse',
-                                        ease: 'easeInOut'
-                                    }}
-                                    style={{
-                                        position: 'absolute',
-                                        width: 10,
-                                        height: 10,
-                                        borderRadius: '50%',
-                                        background: theme.palette.primary.main,
-                                        filter: 'blur(1px)'
-                                    }}
-                                />
-                            ))}
-                        </Box>
+                      YOUR CART
+                    </Typography>
+                  </Box>
+                  <motion.div whileTap={{ scale: 0.9 }}>
+                    <IconButton 
+                      onClick={closeCart}
+                      size={isMobile ? "small" : "medium"}
+                      sx={{
+                        bgcolor: alpha(theme.palette.error.main, 0.1),
+                        '&:hover': {
+                          bgcolor: alpha(theme.palette.error.main, 0.15),
+                        }
+                      }}
+                    >
+                      <Close fontSize={isMobile ? "small" : "medium"} />
+                    </IconButton>
+                  </motion.div>
+                </Box>
+                
+                <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, gap: 1 }}>
+                  <Chip
+                    label={`${totalItems} ${totalItems === 1 ? 'ITEM' : 'ITEMS'}`}
+                    size="small"
+                    color="primary"
+                    variant="outlined"
+                    sx={{
+                      fontWeight: 600,
+                      fontSize: '0.65rem',
+                      height: 22,
+                    }}
+                  />
+                  {discountAmount > 0 && (
+                    <Chip
+                      label={`SAVED ₹${discountAmount.toLocaleString()}`}
+                      size="small"
+                      color="success"
+                      icon={<Discount sx={{ fontSize: '12px !important' }} />}
+                      sx={{
+                        fontWeight: 600,
+                        fontSize: '0.65rem',
+                        height: 22,
+                        '& .MuiChip-icon': {
+                          marginLeft: '4px'
+                        }
+                      }}
+                    />
+                  )}
+                </Box>
+              </Box>
 
-                        {/* Header */}
-                        <Box sx={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            mb: 2,
-                            position: 'relative',
-                            zIndex: 1
-                        }}>
-                            <motion.div 
-                                initial={{ opacity: 0, x: -20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: 0.1 }}
-                            >
-                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                                    <motion.div
-                                        animate={{ 
-                                            rotate: [0, 10, -10, 0],
-                                            y: [0, -5, 0]
-                                        }}
-                                        transition={{ 
-                                            duration: 1.5,
-                                            repeat: Infinity,
-                                            repeatType: 'mirror'
-                                        }}
-                                    >
-                                        <ShoppingCart color="primary" sx={{ fontSize: 28 }} />
-                                    </motion.div>
-                                    <Typography variant="h6" sx={{ 
-                                        fontWeight: 800,
-                                        fontSize: '1.3rem',
-                                        letterSpacing: 0.5,
-                                        background: `linear-gradient(45deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
-                                        WebkitBackgroundClip: 'text',
-                                        WebkitTextFillColor: 'transparent'
-                                    }}>
-                                        YOUR CART
-                                    </Typography>
-                                    <motion.div
-                                        initial={{ scale: 0 }}
-                                        animate={{ scale: 1 }}
-                                        transition={{ type: 'spring' }}
-                                    >
-                                        <Chip 
-                                            label={getTotalItems()} 
-                                            size="small" 
-                                            color="primary"
-                                            sx={{ 
-                                                ml: 1,
-                                                fontWeight: 700,
-                                                fontSize: '0.8rem'
-                                            }}
-                                        />
-                                    </motion.div>
-                                </Box>
-                            </motion.div>
-                            <motion.div whileHover={{ rotate: 90 }}>
-                                <IconButton 
-                                    onClick={closeCart}
-                                    sx={{
-                                        '&:hover': {
-                                            bgcolor: alpha(theme.palette.primary.main, 0.1)
-                                        }
-                                    }}
-                                >
-                                    <Close />
-                                </IconButton>
-                            </motion.div>
-                        </Box>
-
-                        <Divider sx={{ 
-                            mb: 2,
-                            borderColor: alpha(theme.palette.divider, 0.2)
-                        }} />
-
-                        {/* Cart Content */}
-                        {cart.length === 0 ? (
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ delay: 0.2 }}
-                                style={{ flex: 1 }}
-                            >
-                                <Box sx={{
-                                    flex: 1,
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    gap: 2,
-                                    textAlign: 'center',
-                                    position: 'relative',
-                                    zIndex: 1
-                                }}>
-                                    <motion.div
-                                        animate={{
-                                            y: [0, -15, 0],
-                                            rotate: [0, 5, -5, 0]
-                                        }}
-                                        transition={{ 
-                                            duration: 4,
-                                            repeat: Infinity,
-                                            repeatType: 'mirror'
-                                        }}
-                                    >
-                                        <ShoppingCart sx={{ 
-                                            fontSize: 80, 
-                                            color: 'text.disabled',
-                                            opacity: 0.3
-                                        }} />
-                                    </motion.div>
-                                    <Typography variant="h6" sx={{ 
-                                        fontWeight: 600,
-                                        color: 'text.secondary'
-                                    }}>
-                                        Your cart feels lonely
-                                    </Typography>
-                                    <Typography variant="body2" color="text.secondary">
-                                        Add some amazing products to get started!
-                                    </Typography>
-                                    <motion.div whileHover={{ scale: 1.05 }}>
-                                        <Button
-                                            variant="outlined"
-                                            onClick={closeCart}
-                                            endIcon={
-                                                <motion.div
-                                                    animate={{ x: [0, 5, 0] }}
-                                                    transition={{ 
-                                                        duration: 1.5,
-                                                        repeat: Infinity
-                                                    }}
-                                                >
-                                                    <ArrowForward />
-                                                </motion.div>
-                                            }
-                                            sx={{ 
-                                                mt: 3,
-                                                px: 4,
-                                                borderRadius: 2,
-                                                fontWeight: 600
-                                            }}
-                                        >
-                                            Continue Shopping
-                                        </Button>
-                                    </motion.div>
-                                </Box>
-                            </motion.div>
-                        ) : (
-                            <>
-                                <Box sx={{
-                                    flex: 1,
-                                    overflowY: 'auto',
-                                    pr: 1,
-                                    position: 'relative',
-                                    zIndex: 1,
-                                    '&::-webkit-scrollbar': { 
-                                        width: '6px',
-                                        height: '6px'
-                                    },
-                                    '&::-webkit-scrollbar-thumb': {
-                                        bgcolor: alpha(theme.palette.primary.main, 0.4),
-                                        borderRadius: '3px',
-                                        '&:hover': {
-                                            bgcolor: alpha(theme.palette.primary.main, 0.6)
-                                        }
-                                    }
-                                }}>
-                                    <AnimatePresence>
-                                        {cart.map((item) => (
-                                            <CartItem 
-                                                key={item._id}
-                                                item={item}
-                                                removeFromCart={removeFromCart}
-                                                updateQuantity={updateQuantity}
-                                            />
-                                        ))}
-                                    </AnimatePresence>
-                                </Box>
-
-                                <Divider sx={{ 
-                                    my: 2,
-                                    borderColor: alpha(theme.palette.divider, 0.2)
-                                }} />
-
-                                {/* Summary */}
-                                <Box sx={{ 
-                                    mb: 2,
-                                    position: 'relative',
-                                    zIndex: 1
-                                }}>
-                                    <motion.div
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ delay: 0.3 }}
-                                    >
-                                        <Box sx={{
-                                            display: 'flex',
-                                            justifyContent: 'space-between',
-                                            mb: 1.5
-                                        }}>
-                                            <Typography variant="body1">Subtotal:</Typography>
-                                            <motion.div
-                                                key={`total-${getTotalPrice()}`}
-                                                initial={{ scale: 1.2 }}
-                                                animate={{ scale: 1 }}
-                                                transition={{ type: 'spring' }}
-                                            >
-                                                <Typography variant="subtitle1" sx={{ 
-                                                    fontWeight: 700,
-                                                    fontSize: '1.1rem'
-                                                }}>
-                                                    ₹{getTotalPrice().toLocaleString()}
-                                                </Typography>
-                                            </motion.div>
-                                        </Box>
-                                        <Box sx={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            gap: 1,
-                                            mb: 2.5,
-                                            p: 1.5,
-                                            borderRadius: 2,
-                                            bgcolor: alpha(theme.palette.primary.main, 0.03)
-                                        }}>
-                                            <LocalShipping sx={{ 
-                                                fontSize: 20,
-                                                color: 'primary.main'
-                                            }} />
-                                            <Typography variant="body2" sx={{ flex: 1 }}>
-                                                <strong>Free shipping</strong> on orders over ₹999
-                                            </Typography>
-                                        </Box>
-                                    </motion.div>
-                                </Box>
-
-                                <Box sx={{ 
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    gap: 1.5,
-                                    position: 'relative',
-                                    zIndex: 1
-                                }}>
-                                    <motion.div
-                                        whileHover={{ scale: 1.01 }}
-                                        whileTap={{ scale: 0.98 }}
-                                    >
-                                        <Button
-                                            fullWidth
-                                            variant="contained"
-                                            size="large"
-                                            sx={{ 
-                                                py: 1.5,
-                                                borderRadius: 2,
-                                                fontWeight: 700,
-                                                fontSize: '1rem',
-                                                letterSpacing: 0.5,
-                                                textTransform: 'uppercase',
-                                                boxShadow: `0 4px 20px ${alpha(theme.palette.primary.main, 0.3)}`,
-                                                '&:hover': {
-                                                    boxShadow: `0 6px 25px ${alpha(theme.palette.primary.main, 0.4)}`
-                                                }
-                                            }}
-                                        >
-                                            Proceed to Checkout
-                                        </Button>
-                                    </motion.div>
-
-                                    <motion.div
-                                        whileHover={{ scale: 1.01 }}
-                                    >
-                                        <Button
-                                            fullWidth
-                                            variant="outlined"
-                                            onClick={closeCart}
-                                            sx={{
-                                                py: 1.25,
-                                                borderRadius: 2,
-                                                fontWeight: 600,
-                                                fontSize: '0.9rem',
-                                                borderWidth: 2,
-                                                '&:hover': {
-                                                    borderWidth: 2
-                                                }
-                                            }}
-                                        >
-                                            Continue Shopping
-                                        </Button>
-                                    </motion.div>
-                                </Box>
-                            </>
-                        )}
-                    </Box>
+              {cart.length === 0 ? (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1, duration: 0.3 }}
+                  style={{ flex: 1, display: 'flex', flexDirection: 'column' }}
+                >
+                  <Box sx={{
+                    flex: 1,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 1.5,
+                    textAlign: 'center',
+                    p: 3,
+                  }}>
+                    <motion.div
+                      animate={{ 
+                        y: [0, -5, 0],
+                        rotate: [0, 5, -5, 0]
+                      }}
+                      transition={{ 
+                        duration: 3, 
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                      }}
+                    >
+                      <ShoppingCart sx={{
+                        fontSize: isMobile ? 64 : 72,
+                        color: 'text.disabled',
+                        opacity: 0.3
+                      }} />
+                    </motion.div>
+                    <Typography variant="h6" sx={{
+                      fontWeight: 600,
+                      color: 'text.secondary',
+                      fontSize: isMobile ? '1.1rem' : '1.25rem'
+                    }}>
+                      Your cart is empty
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ 
+                      maxWidth: 300,
+                      fontSize: isMobile ? '0.8rem' : '0.875rem'
+                    }}>
+                      Looks like you have not added anything to your cart yet
+                    </Typography>
+                    <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                      <Button
+                        variant="outlined"
+                        onClick={closeCart}
+                        size={isMobile ? "small" : "medium"}
+                        sx={{ 
+                          mt: 2,
+                          borderRadius: 6,
+                          px: 3,
+                          textTransform: 'none',
+                          fontWeight: 600,
+                          fontSize: isMobile ? '0.8rem' : '0.875rem',
+                          borderWidth: 1.5,
+                          '&:hover': {
+                            borderWidth: 1.5
+                          }
+                        }}
+                      >
+                        Continue Shopping
+                      </Button>
+                    </motion.div>
+                  </Box>
                 </motion.div>
-            )}
-        </AnimatePresence>
-    )
+              ) : (
+                <>
+                  <Box sx={{
+                    flex: 1,
+                    overflowY: 'auto',
+                    p: isMobile ? 1.5 : 2,
+                    pt: 1,
+                  }}>
+                    <AnimatePresence>
+                      {cart.map((item) => (
+                        <CartItem
+                          key={item._id}
+                          item={item}
+                          removeFromCart={removeFromCart}
+                          updateQuantity={updateQuantity}
+                        />
+                      ))}
+                    </AnimatePresence>
+                  </Box>
+
+                  <Box sx={{ 
+                    p: isMobile ? 1.5 : 2,
+                    borderTop: `1px solid ${theme.palette.divider}`,
+                    background: alpha(theme.palette.primary.main, theme.palette.mode === 'dark' ? 0.05 : 0.02)
+                  }}>
+                    <Box sx={{ mb: 1.5 }}>
+                      <Box sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        mb: 0.5
+                      }}>
+                        <Typography variant="body2" sx={{ fontSize: isMobile ? '0.8125rem' : '0.875rem' }}>
+                          Subtotal:
+                        </Typography>
+                        <Typography variant="body2" sx={{ 
+                          fontWeight: 600,
+                          fontSize: isMobile ? '0.8125rem' : '0.875rem'
+                        }}>
+                          ₹{totalPrice.toLocaleString()}
+                        </Typography>
+                      </Box>
+                      {discountAmount > 0 && (
+                        <Box sx={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          mb: 0.5
+                        }}>
+                          <Typography variant="body2" sx={{ fontSize: isMobile ? '0.8125rem' : '0.875rem' }}>
+                            Discount:
+                          </Typography>
+                          <Typography variant="body2" color="success.main" sx={{ 
+                            fontWeight: 600,
+                            fontSize: isMobile ? '0.8125rem' : '0.875rem'
+                          }}>
+                            -₹{discountAmount.toLocaleString()}
+                          </Typography>
+                        </Box>
+                      )}
+                      <Divider sx={{ my: 1 }} />
+                      <Box sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                      }}>
+                        <Typography variant="subtitle1" sx={{ 
+                          fontWeight: 700,
+                          fontSize: isMobile ? '0.9375rem' : '1rem'
+                        }}>
+                          Total:
+                        </Typography>
+                        <Typography variant="subtitle1" sx={{ 
+                          fontWeight: 800,
+                          fontSize: isMobile ? '0.9375rem' : '1rem'
+                        }}>
+                          ₹{(totalPrice).toLocaleString()}
+                        </Typography>
+                      </Box>
+                    </Box>
+
+                    <Box sx={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: 1
+                    }}>
+                      <motion.div
+                        whileHover={{ scale: 1.01 }}
+                        whileTap={{ scale: 0.99 }}
+                        onHoverStart={() => setIsHoveringCheckout(true)}
+                        onHoverEnd={() => setIsHoveringCheckout(false)}
+                      >
+                        <Button
+                          fullWidth
+                          variant="contained"
+                          size={isMobile ? "medium" : "large"}
+                          endIcon={
+                            <motion.div
+                              animate={{ x: isHoveringCheckout ? 3 : 0 }}
+                              transition={{ type: 'spring', stiffness: 500 }}
+                            >
+                              <ArrowForward fontSize={isMobile ? "small" : "medium"} />
+                            </motion.div>
+                          }
+                          sx={{
+                            py: isMobile ? 0.75 : 1,
+                            borderRadius: 6,
+                            fontWeight: 700,
+                            fontSize: isMobile ? '0.8125rem' : '0.875rem',
+                            background: theme.palette.mode === 'dark'
+                              ? `linear-gradient(45deg, ${alpha(theme.palette.primary.dark, 0.9)} 0%, ${alpha(theme.palette.secondary.dark, 0.9)} 100%)`
+                              : `linear-gradient(45deg, ${alpha(theme.palette.primary.main, 0.9)} 0%, ${alpha(theme.palette.secondary.main, 0.9)} 100%)`,
+                            boxShadow: theme.shadows[2],
+                            '&:hover': {
+                              boxShadow: theme.shadows[4],
+                            }
+                          }}
+                        >
+                          Checkout Now
+                        </Button>
+                      </motion.div>
+
+                      <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}>
+                        <Button
+                          fullWidth
+                          variant="outlined"
+                          onClick={closeCart}
+                          size={isMobile ? "medium" : "large"}
+                          sx={{
+                            py: isMobile ? 0.625 : 0.875,
+                            borderRadius: 6,
+                            fontWeight: 600,
+                            fontSize: isMobile ? '0.8125rem' : '0.875rem',
+                            borderWidth: 1.5,
+                            '&:hover': {
+                              borderWidth: 1.5
+                            }
+                          }}
+                        >
+                          Continue Shopping
+                        </Button>
+                      </motion.div>
+                    </Box>
+                  </Box>
+                </>
+              )}
+            </Box>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  )
 }
