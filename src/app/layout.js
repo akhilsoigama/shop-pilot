@@ -5,6 +5,8 @@ import HeaderSection from "@/components/header-section/HeaderSeaction";
 import { CustomThemeProvider } from "@/hooks/DarkmodeProvider";
 import { CartProvider } from "@/context/cartContext";
 import { Toaster } from "sonner";
+import Navbar from "@/components/navbar-section/Navbar";
+import { Divider } from "@mui/material";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,15 +27,29 @@ export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
-        
-        <CartProvider>
+        <CartProvider >
           <body className={`${geistSans.variable} ${geistMono.variable} antialiased`} suppressHydrationWarning>
             <CustomThemeProvider>
-              {children}
-              <Toaster richColors position="top-right" />
-              <header className="w-full">
+              <header className="w-full sticky top-0 z-50">
                 <HeaderSection />
+                <Divider className="w-full h-[1px] bg-gray-200/70 dark:bg-gray-700" />
+                <Navbar />
               </header>
+              <main>
+                {children}
+              </main>
+              <Toaster
+                richColors
+                position="top-right"
+                toastOptions={{
+                  style: {
+                    zIndex: 9999,
+                    top: '4.5rem',   // top-10 in Tailwind (10 * 0.25rem)
+                    right: '5rem'    // right-20 in Tailwind (20 * 0.25rem)
+                  }
+                }}
+              />
+
             </CustomThemeProvider>
           </body>
         </CartProvider>
