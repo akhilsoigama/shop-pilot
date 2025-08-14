@@ -66,9 +66,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     transition: theme.transitions.create('width'),
     width: '100%',
     [theme.breakpoints.up('md')]: {
-      width: '16ch',
+      width: '20ch',
       '&:focus': {
-        width: '38ch',
+        width: '30ch',
       },
     },
   },
@@ -119,6 +119,7 @@ const HeaderSection = () => {
     <>
       <AppBar
         position="sticky"
+        
         sx={{
           backgroundColor: isScrolled
             ? alpha(theme.palette.background.default, 0.98)
@@ -143,7 +144,7 @@ const HeaderSection = () => {
                 edge="start"
                 onClick={handleDrawerToggle}
                 sx={{
-                  mr: 1,
+                  // mr: 1,
                   display: { md: 'none' },
                   '&:hover': {
                     backgroundColor: alpha(theme.palette.primary.main, 0.1),
@@ -179,8 +180,8 @@ const HeaderSection = () => {
                   >
                     <Image
                       src='/logo.png'
-                      width={40}
-                      height={40}
+                      width={60}
+                      height={60}
                       alt='logo'
                       style={{
                         transition: 'transform 0.3s ease',
@@ -188,7 +189,7 @@ const HeaderSection = () => {
                     />
                   </motion.div>
                   <Typography variant="h6" sx={{
-                    ml: 1,
+                    
                     fontWeight: 800,
                     background: `linear-gradient(45deg, ${theme.palette.primary.main} 30%, ${theme.palette.secondary.main} 90%)`,
                     WebkitBackgroundClip: 'text',
@@ -219,7 +220,7 @@ const HeaderSection = () => {
                     <Search />
                   </SearchIconWrapper>
                   <StyledInputBase className='truncate'
-                    placeholder="Search for products, brands and more..."
+                    placeholder="Search  products"
                     inputProps={{ 'aria-label': 'search' }}
                   />
                 </SearchContainer>
@@ -240,7 +241,7 @@ const HeaderSection = () => {
             >
               {!isMobile && (
                 <>
-                  <Link href="/orders" passHref>
+                  <Link href="/" passHref>
                     <NavButton
                       color="inherit"
                       startIcon={<Favorite />}
@@ -252,15 +253,6 @@ const HeaderSection = () => {
                       }}
                     >
                       Wishlist
-                    </NavButton>
-                  </Link>
-
-                  <Link href="/account" passHref >
-                    <NavButton
-                      color="inherit"
-                      startIcon={<Person />}
-                    >
-                      Account
                     </NavButton>
                   </Link>
                 </>
@@ -428,9 +420,8 @@ const HeaderSection = () => {
           }}>
             <Link href="/" passHref>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Image src='/logo.png' width={32} height={32} alt='shop-pilot' />
+                <Image src='/logo.png' width={40} height={40} alt='shop-pilot' />
                 <Typography variant="h6" sx={{
-                  ml: 1,
                   fontWeight: 800,
                   background: `linear-gradient(45deg, ${theme.palette.primary.main} 30%, ${theme.palette.secondary.main} 90%)`,
                   WebkitBackgroundClip: 'text',
