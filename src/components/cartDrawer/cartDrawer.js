@@ -221,6 +221,7 @@ const CartItem = ({ item, removeFromCart, updateQuantity }) => {
   )
 }
 
+
 export default function CartDrawer() {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
