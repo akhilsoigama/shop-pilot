@@ -18,33 +18,33 @@ export function CartProvider({ children }) {
   }, [cart])
 
   const addToCart = (product) => {
-    setCart(prev => {
-      // Check if variant exists
-      const variantId = product.variantId || product._id
-      
-      const existing = prev.find(item => 
-        item.variantId ? 
-        item.variantId === variantId : 
-        item._id === variantId
-      )
-      
-      if (existing) {
-        return prev.map(item => 
-          (item.variantId && item.variantId === variantId) || 
-          (!item.variantId && item._id === variantId) ? 
-          { ...item, quantity: item.quantity + 1 } : 
-          item
-        )
+  setCart(prevCart => {
+    // Check if product already exists in cart
+    const existingItem = prevCart.find(item => item._id === product._id);
+    
+    if (existingItem) {
+      // Update quantity if exists
+      return prevCart.map(item =>
+        item._id === product._id 
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      );
+    }
+    
+    return [
+      ...prevCart,
+      {
+        _id: product._id,
+        productName: product.productName,
+        brand: product.brand,
+        price: product.price,
+        discountPrice: product.discountPrice,
+        productImage: product.productImage,
+        quantity: 1
       }
-      
-      toast.success("Added to cart successfully")
-      return [...prev, { 
-        ...product, 
-        quantity: 1,
-        variantId: variantId
-      }]
-    })
-  }
+    ];
+  });
+};
 
   const removeFromCart = (productId) => {
     setCart(prev => prev.filter(item => 

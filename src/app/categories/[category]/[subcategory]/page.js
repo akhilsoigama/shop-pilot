@@ -2,7 +2,7 @@ import Subcategory from '@/components/subcategory/Subcategory'
 
 const page = () => {
   return (
-    <div id='subcategory' className='mt-10'>
+    <div id='subcategory'>
       <Subcategory/>
     </div>
   )
