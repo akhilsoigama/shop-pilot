@@ -112,11 +112,11 @@ export default function ProductPage({ product, onAddToCart, isOpen, onClose }) {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}
         transition={{ duration: 0.3 }}
-        className="fixed top-10 inset-0 z-50 bg-white dark:bg-gray-950 scrollbar-hide overflow-y-auto shadow-2xl"
+        className="fixed top-20 inset-0 z-30 bg-white dark:bg-gray-950 scrollbar-hide overflow-y-auto shadow-2xl"
       >
         {/* Close Button */}
         <button
-          className="fixed top-15 right-0 md:top-20 md:right-4 bg-white dark:bg-gray-900 p-2 rounded-full z-50 shadow-lg hover:scale-105 transition-transform"
+          className="fixed top-20 right-4 bg-white dark:bg-gray-900 p-2 rounded-full z-50 shadow-lg hover:scale-105 transition-transform"
           onClick={onClose}
           aria-label="Close product view"
         >
@@ -343,18 +343,17 @@ export default function ProductPage({ product, onAddToCart, isOpen, onClose }) {
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
                 <Button
                   size="lg"
-                  className="flex-1 h-12"
+                  className="flex-1 h-12 p-2"
                   onClick={() => onAddToCart({
-                    ...product,
-                    ...(selectedVariant && {
-                      price: selectedVariant.price,
-                      discountPrice: selectedVariant.discountPrice,
-                      discount: selectedVariant.discount,
-                      inStock: selectedVariant.inStock,
-                      variantId: selectedVariant._id
-                    })
+                    _id: product._id,
+                    productName: product.productName,
+                    brand: product.brand,
+                    price: product.price,
+                    discountPrice: product.discountPrice,
+                    productImage: product.productImage,
+                    quantity: 1
                   })}
-                  disabled={!inStock}
+                  disabled={!product.inStock}
                 >
                   <ShoppingCart className="mr-2 h-5 w-5" />
                   Add to Cart

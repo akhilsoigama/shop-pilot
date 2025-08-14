@@ -13,7 +13,7 @@ export default function SubcategoryPage() {
   if (!subcatObj) return <div className="text-gray-800 dark:text-gray-100">No Subcategories Found</div>
 
   return (
-    <div className="p-4 pt-[80px]">
+    <div className="p-4 ">
       <h1 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
         {decodedCategory} Subcategories
       </h1>
