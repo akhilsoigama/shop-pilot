@@ -29,7 +29,7 @@ export default function Home({ children }) {
       {!isLoading && (
         <>
           {children}
-          <main className="flex-grow mt-16 space-y-20">
+          <main className="flex-grow ">
             <section>
               <HeroSection />
             </section>
@@ -42,7 +42,7 @@ export default function Home({ children }) {
               <CategorySection />
             </section>
             
-            <section className="px-4 md:px-8 lg:px-20">
+            <section >
               <ItemSection />
             </section>
             
