@@ -43,7 +43,7 @@ export default function HeroSection() {
       initial="hidden"
       animate="visible"
       variants={containerVariants}
-      className={`dark:text-white h-full overflow-hidden flex flex-col-reverse md:flex-row items-center justify-between px-6 pt-0 pb-20 gap-10 ${poppins.className}`}
+      className={`dark:text-white h-full overflow-hidden flex flex-col-reverse md:flex-row items-center justify-between px-6 pb-10 gap-10 ${poppins.className}`}
     >
       {/* Left Content */}
       <motion.div

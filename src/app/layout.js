@@ -30,7 +30,7 @@ export default function RootLayout({ children }) {
         <CartProvider >
           <body className={`${geistSans.variable} ${geistMono.variable} antialiased`} suppressHydrationWarning>
             <CustomThemeProvider>
-              <header className="w-full sticky top-0 z-50">
+              <header className="w-full sticky top-0 z-20">
                 <HeaderSection />
                 <Divider className="w-full h-[1px] bg-gray-200/70 dark:bg-gray-700" />
                 <Navbar />
