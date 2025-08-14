@@ -47,23 +47,28 @@ export function CartProvider({ children }) {
 };
 
   const removeFromCart = (productId) => {
-    setCart(prev => prev.filter(item => item._id !== productId))
+    setCart(prev => prev.filter(item => 
+      (item.variantId && item.variantId !== productId) || 
+      (!item.variantId && item._id !== productId)
+    ))
   }
 
   const updateQuantity = (productId, newQuantity) => {
     if (newQuantity < 1) return
     setCart(prev => 
       prev.map(item => 
-        item._id === productId 
-          ? { ...item, quantity: newQuantity } 
-          : item
+        (item.variantId && item.variantId === productId) || 
+        (!item.variantId && item._id === productId) ? 
+        { ...item, quantity: newQuantity } : 
+        item
       )
     )
   }
 
   const getTotalItems = () => cart.reduce((sum, item) => sum + item.quantity, 0)
 
-  const getTotalPrice = () => cart.reduce((sum, item) => sum + (item.discountPrice * item.quantity), 0)
+  const getTotalPrice = () => cart.reduce((sum, item) => 
+    sum + (item.discountPrice * item.quantity), 0)
 
   const toggleCart = () => setIsCartOpen(!isCartOpen)
   const closeCart = () => setIsCartOpen(false)
