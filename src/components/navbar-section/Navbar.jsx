@@ -244,7 +244,7 @@ const Navbar = () => {
         <Box
             component="nav"
             sx={{
-                position: 'sticky',
+                // position: 'sticky',
                 top: 0,
                 zIndex: theme.zIndex.appBar,
                 backgroundColor: isScrolled ? alpha(theme.palette.background.default, 0.95) : theme.palette.background.default,

@@ -109,7 +109,7 @@ export default function LoadingLogo() {
             repeat: Infinity,
             ease: "easeInOut",
           }}
-          className="w-16 h-16 z-10 drop-shadow-lg" 
+          className="w-24 h-24 z-10 drop-shadow-lg" 
           style={{ margin: '8%' }} 
         />
       </motion.div>
