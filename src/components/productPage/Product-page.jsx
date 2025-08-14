@@ -21,6 +21,8 @@ export default function ProductPage({ product, onAddToCart, isOpen, onClose }) {
   const [isMobile, setIsMobile] = useState(false)
   const [isFavorite, setIsFavorite] = useState(false)
   const [selectedThumbnail, setSelectedThumbnail] = useState(0)
+  const [selectedVariant, setSelectedVariant] = useState(null)
+  const [selectedOptions, setSelectedOptions] = useState({})
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768)
@@ -32,7 +34,74 @@ export default function ProductPage({ product, onAddToCart, isOpen, onClose }) {
   useEffect(() => {
     setCurrentIndex(0)
     setSelectedThumbnail(0)
+    
+    // Initialize selected variant
+    if (product.variants && product.variants.length > 0) {
+      setSelectedVariant(product.variants[0])
+      
+      // Initialize selected options with first variant's specs
+      const initialOptions = {}
+      product.variants[0].specifications.forEach(spec => {
+        initialOptions[spec.name] = spec.value
+      })
+      setSelectedOptions(initialOptions)
+    }
   }, [product])
+
+  // Get available options for each specification
+  const getAvailableOptions = (specName) => {
+    if (!product.variants) return []
+    
+    const options = new Set()
+    product.variants.forEach(variant => {
+      variant.specifications.forEach(spec => {
+        if (spec.name === specName) {
+          options.add(spec.value)
+        }
+      })
+    })
+    return Array.from(options)
+  }
+
+  // Handle option selection
+  const handleOptionSelect = (specName, value) => {
+    const newOptions = {
+      ...selectedOptions,
+      [specName]: value
+    }
+    
+    setSelectedOptions(newOptions)
+    
+    // Find matching variant
+    const matchingVariant = product.variants.find(variant => {
+      return variant.specifications.every(spec => 
+        newOptions[spec.name] === spec.value
+      )
+    })
+    
+    if (matchingVariant) {
+      setSelectedVariant(matchingVariant)
+    }
+  }
+
+  // Get variant price display
+  const getPriceDisplay = () => {
+    if (selectedVariant) {
+      return {
+        price: selectedVariant.price,
+        discountPrice: selectedVariant.discountPrice,
+        discount: selectedVariant.discount
+      }
+    }
+    return {
+      price: product.price,
+      discountPrice: product.discountPrice,
+      discount: product.discount
+    }
+  }
+
+  const { price, discountPrice, discount } = getPriceDisplay()
+  const inStock = selectedVariant ? selectedVariant.inStock : product.inStock
 
   if (!isOpen || !product) return null
 
@@ -43,11 +112,11 @@ export default function ProductPage({ product, onAddToCart, isOpen, onClose }) {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}
         transition={{ duration: 0.3 }}
-        className="fixed top-20 inset-0 z-50 bg-white dark:bg-gray-950 scrollbar-hide overflow-y-auto shadow-2xl"
+        className="fixed top-10 inset-0 z-50 bg-white dark:bg-gray-950 scrollbar-hide overflow-y-auto shadow-2xl"
       >
         {/* Close Button */}
         <button
-          className="fixed top-4 right-4 bg-white dark:bg-gray-900 p-2 rounded-full z-50 shadow-lg hover:scale-105 transition-transform"
+          className="fixed top-15 right-0 md:top-20 md:right-4 bg-white dark:bg-gray-900 p-2 rounded-full z-50 shadow-lg hover:scale-105 transition-transform"
           onClick={onClose}
           aria-label="Close product view"
         >
@@ -196,16 +265,16 @@ export default function ProductPage({ product, onAddToCart, isOpen, onClose }) {
               <div className="space-y-2">
                 <div className="flex items-center gap-4">
                   <span className="text-3xl font-bold text-primary">
-                    ₹{product.discountPrice.toLocaleString()}
+                    ₹{discountPrice.toLocaleString()}
                   </span>
-                  {product.price > product.discountPrice && (
+                  {price > discountPrice && (
                     <span className="line-through text-gray-500 dark:text-gray-400">
-                      ₹{product.price.toLocaleString()}
+                      ₹{price.toLocaleString()}
                     </span>
                   )}
-                  {product.discount > 0 && (
+                  {discount > 0 && (
                     <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 text-sm font-medium">
-                      {product.discount}% OFF
+                      {discount}% OFF
                     </Badge>
                   )}
                 </div>
@@ -216,13 +285,15 @@ export default function ProductPage({ product, onAddToCart, isOpen, onClose }) {
               </div>
 
               {/* Stock Status */}
-              {product.inStock ? (
+              {inStock ? (
                 <div className="flex items-center gap-2">
                   <CheckCircle className="w-5 h-5 text-green-500" />
                   <span className="text-green-600 dark:text-green-400">In Stock</span>
-                  <span className="text-sm text-gray-500 dark:text-gray-400 ml-2">
-                    (Only {Math.floor(Math.random() * 10) + 5} left!)
-                  </span>
+                  {selectedVariant?.availableStock && (
+                    <span className="text-sm text-gray-500 dark:text-gray-400 ml-2">
+                      (Only {selectedVariant.availableStock} left!)
+                    </span>
+                  )}
                 </div>
               ) : (
                 <div className="flex items-center gap-2">
@@ -231,36 +302,33 @@ export default function ProductPage({ product, onAddToCart, isOpen, onClose }) {
                 </div>
               )}
 
-              {/* Color/Size Selector (Example) */}
-              <div className="space-y-3">
-                <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white">Color</h4>
-                  <div className="flex gap-2 mt-2">
-                    {['Black', 'White', 'Blue'].map((color) => (
-                      <button
-                        key={color}
-                        className="w-8 h-8 rounded-full border-2 border-gray-300 dark:border-gray-600 hover:border-primary focus:outline-none focus:ring-2 focus:ring-primary"
-                        style={{ backgroundColor: color.toLowerCase() }}
-                        aria-label={`Select ${color} color`}
-                      />
-                    ))}
-                  </div>
+              {/* Variant Selectors */}
+              {product.variants && product.variants.length > 0 && (
+                <div className="space-y-4 pt-3">
+                  {product.variants[0].specifications.map((spec, index) => (
+                    <div key={index}>
+                      <h4 className="font-medium text-gray-900 dark:text-white  mb-2">
+                        {spec.name}
+                      </h4>
+                      <div className="flex flex-wrap gap-2">
+                        {getAvailableOptions(spec.name).map((option) => (
+                          <button
+                            key={option}
+                            onClick={() => handleOptionSelect(spec.name, option)}
+                            className={`px-3 py-2 border rounded-md text-sm font-medium transition-all ${
+                              selectedOptions[spec.name] === option
+                                ? 'dark:bg-white bg-gray-800 dark:text-black text-white border-primary'
+                                : 'border-gray-300 hover:border-primary dark:border-gray-600 dark:hover:border-primary'
+                            }`}
+                          >
+                            {option}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
                 </div>
-
-                <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white">Size</h4>
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    {['S', 'M', 'L', 'XL'].map((size) => (
-                      <button
-                        key={size}
-                        className="px-4 py-2 border rounded-md text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
-                      >
-                        {size}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
+              )}
 
               {/* Description */}
               <div className="pt-2">
@@ -276,8 +344,17 @@ export default function ProductPage({ product, onAddToCart, isOpen, onClose }) {
                 <Button
                   size="lg"
                   className="flex-1 h-12"
-                  onClick={() => onAddToCart(product)}
-                  disabled={!product.inStock}
+                  onClick={() => onAddToCart({
+                    ...product,
+                    ...(selectedVariant && {
+                      price: selectedVariant.price,
+                      discountPrice: selectedVariant.discountPrice,
+                      discount: selectedVariant.discount,
+                      inStock: selectedVariant.inStock,
+                      variantId: selectedVariant._id
+                    })
+                  })}
+                  disabled={!inStock}
                 >
                   <ShoppingCart className="mr-2 h-5 w-5" />
                   Add to Cart
@@ -286,7 +363,7 @@ export default function ProductPage({ product, onAddToCart, isOpen, onClose }) {
                   variant="outline"
                   size="lg"
                   className="flex-1 h-12"
-                  disabled={!product.inStock}
+                  disabled={!inStock}
                 >
                   Buy Now
                 </Button>

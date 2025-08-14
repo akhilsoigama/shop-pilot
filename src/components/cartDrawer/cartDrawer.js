@@ -9,233 +9,103 @@ import { useEffect, useState } from 'react'
 
 const CartItem = ({ item, removeFromCart, updateQuantity }) => {
   const theme = useTheme()
-  const controls = useAnimationControls()
-  const [isRemoving, setIsRemoving] = useState(false)
 
-  const handleRemove = () => {
-    setIsRemoving(true)
-    controls.start({
-      x: -100,
-      opacity: 0,
-      transition: { duration: 0.3 }
-    }).then(() => removeFromCart(item._id))
-  }
-
-  const handleQuantityChange = (newQty) => {
-    if (newQty !== item.quantity) {
-      controls.start({
-        scale: [1, 1.1, 1],
-        transition: { duration: 0.3 }
-      })
-      updateQuantity(item._id, newQty)
-    }
+  // Get variant specifications text
+  const getVariantText = () => {
+    if (!item.specifications) return ''
+    return item.specifications
+      .filter(spec => ['Size', 'Color'].includes(spec.name))
+      .map(spec => `${spec.value}`)
+      .join(' | ')
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={controls}
-      exit={{ opacity: 0, x: -100 }}
-      transition={{ type: 'spring', damping: 10 }}
-      layout
-      style={{ 
+    <Box 
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 2,
+        mb: 2,
+        p: 2,
+        borderRadius: 3,
+        bgcolor: alpha(theme.palette.primary.main, 0.03),
+        border: `1px solid ${alpha(theme.palette.divider, 0.1)}`,
         position: 'relative',
-        overflow: 'hidden'
       }}
     >
-      {!isRemoving && (
-        <motion.div
-          whileHover={{ 
-            y: -2,
-            boxShadow: theme.shadows[3]
-          }}
-        >
-          <Box sx={{
-            display: 'flex',
-            gap: 2,
-            mb: 2,
-            p: 2,
-            borderRadius: 3,
-            bgcolor: alpha(theme.palette.primary.main, 0.03),
-            border: `1px solid ${alpha(theme.palette.divider, 0.1)}`,
-            position: 'relative',
-            overflow: 'hidden',
-            '&:before': {
-              content: '""',
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '4px',
-              height: '100%',
-              bgcolor: 'primary.main',
-              borderRadius: '3px 0 0 3px'
-            }
+      <Box sx={{ 
+        position: 'relative', 
+        minWidth: 80, 
+        height: 80,
+        borderRadius: 2,
+        overflow: 'hidden',
+      }}>
+        <Image
+          src={item.productImage?.[0] || '/placeholder.jpg'}
+          alt={item.productName}
+          fill
+          style={{ objectFit: 'cover' }}
+        />
+      </Box>
+      
+      <Box sx={{ flexGrow: 1 }}>
+        <Typography variant="body2" sx={{ fontWeight: 600 }}>
+          {item.productName}
+        </Typography>
+        
+        {/* Display variant info */}
+        {getVariantText() && (
+          <Typography variant="body2" sx={{ 
+            color: theme.palette.text.secondary,
+            fontSize: '0.8rem',
+            mt: 0.5
           }}>
-            {/* Glow effect */}
-            <Box sx={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: '100%',
-              background: `radial-gradient(circle at center, ${alpha(theme.palette.primary.main, 0.05)} 0%, transparent 70%)`,
-              pointerEvents: 'none'
-            }} />
-
-            <motion.div 
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 10 }}
-            >
-              <Box sx={{
-                position: 'relative',
-                minWidth: 80,
-                height: 80,
-                borderRadius: 2,
-                overflow: 'hidden',
-                bgcolor: 'background.default',
-                boxShadow: theme.shadows[1]
-              }}>
-                <Image
-                  src={item.productImage?.[0] || '/placeholder.jpg'}
-                  alt={item.productName}
-                  fill
-                  style={{ objectFit: 'cover' }}
-                  sizes="80px"
-                />
-              </Box>
-            </motion.div>
-
-            <Box sx={{ 
-              flexGrow: 1,
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between'
-            }}>
-              <Box>
-                <Typography variant="subtitle2" sx={{ 
-                  fontWeight: 700,
-                  mb: 0.5,
-                  letterSpacing: 0.2,
-                }} className='truncate'>
-                  {item.productName}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {item.brand}
-                </Typography>
-              </Box>
-              
-              <Box sx={{ 
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center'
-              }}>
-                <motion.div
-                  key={`price-${item.quantity}`}
-                  initial={{ scale: 1.2 }}
-                  animate={{ scale: 1 }}
-                  transition={{ type: 'spring', stiffness: 500 }}
-                >
-                  <Typography variant="body2" sx={{ 
-                    color: 'primary.main',
-                    fontWeight: 700,
-                    fontSize: '1rem'
-                  }}>
-                    ₹{item.discountPrice.toLocaleString()}
-                  </Typography>
-                </motion.div>
-                
-                {item.price > item.discountPrice && (
-                  <Typography variant="body2" sx={{ 
-                    textDecoration: 'line-through',
-                    color: 'text.disabled',
-                    fontSize: '0.75rem'
-                  }}>
-                    ₹{item.price.toLocaleString()}
-                  </Typography>
-                )}
-              </Box>
-            </Box>
-
-            <Box sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'space-between'
-            }}>
-              <motion.div whileTap={{ scale: 0.9 }}>
-                <IconButton
-                  size="small"
-                  onClick={handleRemove}
-                  sx={{ 
-                    color: 'error.main',
-                    '&:hover': {
-                      bgcolor: alpha(theme.palette.error.main, 0.1)
-                    }
-                  }}
-                >
-                  <Delete fontSize="small" />
-                </IconButton>
-              </motion.div>
-
-              <Box sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 0.5,
-                bgcolor: alpha(theme.palette.primary.main, 0.1),
-                borderRadius: 20,
-                p: 0.5
-              }}>
-                <motion.div whileTap={{ scale: 0.8 }}>
-                  <IconButton
-                    size="small"
-                    onClick={() => handleQuantityChange(item.quantity - 1)}
-                    disabled={item.quantity <= 1}
-                    sx={{
-                      '&:hover': {
-                        bgcolor: alpha(theme.palette.primary.main, 0.2)
-                      }
-                    }}
-                  >
-                    <Remove fontSize="small" />
-                  </IconButton>
-                </motion.div>
-
-                <motion.div
-                  key={`qty-${item.quantity}`}
-                  initial={{ scale: 1.5, color: theme.palette.primary.main }}
-                  animate={{ scale: 1, color: theme.palette.text.primary }}
-                  transition={{ type: 'spring', stiffness: 500 }}
-                >
-                  <Typography variant="body2" sx={{ 
-                    minWidth: 24,
-                    textAlign: 'center',
-                    fontWeight: 600
-                  }}>
-                    {item.quantity}
-                  </Typography>
-                </motion.div>
-
-                <motion.div whileTap={{ scale: 0.8 }}>
-                  <IconButton
-                    size="small"
-                    onClick={() => handleQuantityChange(item.quantity + 1)}
-                    sx={{
-                      '&:hover': {
-                        bgcolor: alpha(theme.palette.primary.main, 0.2)
-                      }
-                    }}
-                  >
-                    <Add fontSize="small" />
-                  </IconButton>
-                </motion.div>
-              </Box>
-            </Box>
-          </Box>
-        </motion.div>
-      )}
-    </motion.div>
+            {getVariantText()}
+          </Typography>
+        )}
+        
+        <Typography variant="body2" sx={{ 
+          color: theme.palette.primary.main,
+          fontWeight: 600,
+          mt: 1
+        }}>
+          ₹{item.discountPrice}
+        </Typography>
+      </Box>
+      
+      <Box sx={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        gap: 1 
+      }}>
+        <IconButton 
+          size="small"
+          onClick={() => updateQuantity(item.variantId || item._id, item.quantity - 1)}
+        >
+          <Remove fontSize="small" />
+        </IconButton>
+        
+        <Typography>{item.quantity}</Typography>
+        
+        <IconButton 
+          size="small"
+          onClick={() => updateQuantity(item.variantId || item._id, item.quantity + 1)}
+        >
+          <Add fontSize="small" />
+        </IconButton>
+        
+        <IconButton 
+          size="small"
+          onClick={() => removeFromCart(item.variantId || item._id)}
+          sx={{ color: theme.palette.error.main }}
+        >
+          <Delete fontSize="small" />
+        </IconButton>
+      </Box>
+    </Box>
   )
 }
+
 
 export default function CartDrawer() {
     const theme = useTheme()
