@@ -19,37 +19,56 @@ export function CartProvider({ children }) {
 
   const addToCart = (product) => {
     setCart(prev => {
-      const existing = prev.find(item => item._id === product._id)
+      // Check if variant exists
+      const variantId = product.variantId || product._id
+      
+      const existing = prev.find(item => 
+        item.variantId ? 
+        item.variantId === variantId : 
+        item._id === variantId
+      )
+      
       if (existing) {
         return prev.map(item => 
-          item._id === product._id 
-          ? { ...item, quantity: item.quantity + 1 } 
-          : item
+          (item.variantId && item.variantId === variantId) || 
+          (!item.variantId && item._id === variantId) ? 
+          { ...item, quantity: item.quantity + 1 } : 
+          item
         )
       }
-      toast.success("Add to cart successfully");
-      return [...prev, { ...product, quantity: 1 }]
+      
+      toast.success("Added to cart successfully")
+      return [...prev, { 
+        ...product, 
+        quantity: 1,
+        variantId: variantId
+      }]
     })
   }
 
   const removeFromCart = (productId) => {
-    setCart(prev => prev.filter(item => item._id !== productId))
+    setCart(prev => prev.filter(item => 
+      (item.variantId && item.variantId !== productId) || 
+      (!item.variantId && item._id !== productId)
+    ))
   }
 
   const updateQuantity = (productId, newQuantity) => {
     if (newQuantity < 1) return
     setCart(prev => 
       prev.map(item => 
-        item._id === productId 
-          ? { ...item, quantity: newQuantity } 
-          : item
+        (item.variantId && item.variantId === productId) || 
+        (!item.variantId && item._id === productId) ? 
+        { ...item, quantity: newQuantity } : 
+        item
       )
     )
   }
 
   const getTotalItems = () => cart.reduce((sum, item) => sum + item.quantity, 0)
 
-  const getTotalPrice = () => cart.reduce((sum, item) => sum + (item.discountPrice * item.quantity), 0)
+  const getTotalPrice = () => cart.reduce((sum, item) => 
+    sum + (item.discountPrice * item.quantity), 0)
 
   const toggleCart = () => setIsCartOpen(!isCartOpen)
   const closeCart = () => setIsCartOpen(false)
