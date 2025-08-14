@@ -1,5 +1,23 @@
 import mongoose from "mongoose";
 
+const specificationSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  value: { type: String, required: true },
+  type: { type: String, enum: ['text', 'number', 'dropdown'], required: true }
+});
+
+const variantSchema = new mongoose.Schema({
+  specifications: [specificationSchema],
+  price: { type: Number, required: true },
+  discount: { type: Number, default: 0 },
+  discountPrice: { type: Number },
+  quantity: { type: Number, default: 1 },
+  availableStock: { type: Number, default: 0 },
+  inStock: { type: Boolean, default: true },
+  sku: { type: String },
+  stripePriceId: { type: String }
+}, { _id: true }); // Add _id for variants
+
 const ProductSchema = new mongoose.Schema({
   productName: { type: String, required: true },
   brand: { type: String, required: true },
@@ -7,9 +25,9 @@ const ProductSchema = new mongoose.Schema({
   subCategory: { type: String, required: true },
   productKey: { type: String, required: true },
   price: { type: Number, required: true },
-  discount: { type: Number },
+  discount: { type: Number, default: 0 },
   discountPrice: { type: Number },
-  inStock: { type: Boolean, required: true },
+  inStock: { type: Boolean, default: true },
   productImage: {
     type: [String],
     validate: {
@@ -20,6 +38,8 @@ const ProductSchema = new mongoose.Schema({
   },
   productDescription: { type: String, required: true },
   quantity: { type: Number, default: 1 },
+  specifications: [specificationSchema],
+  variants: [variantSchema],
   stripeProductId: { type: String },
   stripePriceId: { type: String },
 }, { timestamps: true });
