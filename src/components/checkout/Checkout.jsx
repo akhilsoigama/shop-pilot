@@ -14,7 +14,6 @@ export default function CheckoutPage() {
   const [status, setStatus] = useState('loading')
   const [errorMessage, setErrorMessage] = useState('')
 
-  // Safely get sessionId from params
   const sessionId = params?.sessionId
   console.log(sessionId, 'Session ID from params')
   useEffect(() => {
@@ -22,14 +21,14 @@ export default function CheckoutPage() {
       setStatus('error')
       setErrorMessage('Invalid checkout session')
       toast.error('Missing session ID')
-      router.push('/cart')
+      router.push('/')
       return
     }
 
     const paymentStatus = searchParams.get('payment_status')
     if (paymentStatus === 'success') {
       toast.success('Payment completed successfully!')
-      router.replace('/orders')
+      router.replace('/yourOrder')
     } else if (paymentStatus === 'failed') {
       setStatus('error')
       setErrorMessage('Payment failed. Please try again.')
@@ -78,7 +77,7 @@ export default function CheckoutPage() {
       setStatus('loading')
       setErrorMessage('')
     } else {
-      router.push('/cart')
+      router.push('/')
     }
   }
 
@@ -98,10 +97,10 @@ export default function CheckoutPage() {
         </Alert>
         <Button 
           variant="contained"
-          href="/cart"
+          href="/"
           sx={{ borderRadius: 2, px: 4 }}
         >
-          Back to Cart
+          Back to Home
         </Button>
       </Box>
     )
@@ -135,10 +134,10 @@ export default function CheckoutPage() {
             </Button>
             <Button 
               variant="outlined" 
-              href="/cart"
+              href="/"
               sx={{ borderRadius: 2, px: 4 }}
             >
-              Back to Cart
+              Back to Home
             </Button>
           </Box>
         </>
@@ -161,7 +160,7 @@ export default function CheckoutPage() {
           </Typography>
           <Button 
             variant="outlined" 
-            href="/cart"
+            href="/"
             sx={{ borderRadius: 2, px: 4 }}
           >
             Cancel and Return to Cart
