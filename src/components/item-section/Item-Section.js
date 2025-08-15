@@ -118,11 +118,11 @@ export default function PremiumCollectionSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1 }}
             sx={{
-              fontWeight: 900,
+              fontWeight: 700,
               mb: 2,
               color: "text.primary",
               letterSpacing: { xs: "-0.02em", md: "-0.03em" },
-              fontSize: { xs: "2.25rem", md: "4rem" },
+              fontSize: { xs: "1.25rem", md: "2rem" },
               lineHeight: { xs: 1.1, md: 1 },
               position: 'relative',
               display: 'inline-block',
