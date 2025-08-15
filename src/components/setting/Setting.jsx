@@ -21,16 +21,15 @@ import {
     Switch,
     Avatar,
     Badge,
-    useMediaQuery,
     Box,
     alpha,
+    useTheme,
+    useMediaQuery,
+    styled,
 } from "@mui/material";
-import { styled, useTheme } from "@mui/system";
 import { useRouter } from "next/navigation";
-import { MdDarkMode, MdLightMode } from "react-icons/md";
 import { useColorMode } from "@/hooks/DarkmodeProvider";
 import { useUser } from "@clerk/nextjs";
-
 const PremiumDropdown = styled(Paper)(({ theme }) => ({
     borderRadius: "12px",
     boxShadow: theme.shadows[6],

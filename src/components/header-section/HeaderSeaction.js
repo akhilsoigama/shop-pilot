@@ -4,14 +4,14 @@ import { motion } from 'framer-motion';
 import {
   AppBar, Toolbar, Button, IconButton, Drawer, List,
   ListItem, ListItemText, Box, Container, Typography,
-  Badge, InputBase, useTheme, Avatar
+  Badge, InputBase, useTheme, Avatar,
+  useMediaQuery
 } from '@mui/material';
 import { alpha, styled } from '@mui/material/styles';
 import {
   Menu, Close, ShoppingCart, Search,
   Favorite
 } from '@mui/icons-material';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import { UserButton, useUser } from '@clerk/nextjs';
 import Image from 'next/image';
 import { useCart } from '@/context/cartContext';
