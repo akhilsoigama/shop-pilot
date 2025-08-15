@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -9,22 +9,12 @@ import { Search, ArrowRight } from 'lucide-react';
 import { categories, categoryImages } from '@/lib/category';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { useMediaQuery } from '@mui/material';
 
 export default function CategoriesPage() {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+  const isMobile = useMediaQuery('md'); // MUI media query
 
   const filteredCategories = categories.filter(cat => 
     cat.toLowerCase().includes(searchTerm.toLowerCase())
