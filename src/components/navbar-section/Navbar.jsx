@@ -3,7 +3,6 @@ import {
     Box,
     Container,
     Typography,
-    useMediaQuery,
     Button,
     List,
     ListItemText,
@@ -12,7 +11,8 @@ import {
     useTheme,
     Collapse,
     Divider,
-    ListItem
+    ListItem,
+    useMediaQuery
 } from '@mui/material';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
@@ -21,7 +21,6 @@ import React, { useState, useEffect } from 'react';
 import { categories, Subcategories } from '@/lib/category';
 import styled from '@emotion/styled';
 import { ExpandMore, ExpandLess, Menu as MenuIcon } from '@mui/icons-material';
-
 const MegaMenuContainer = styled(motion.div)(({ theme }) => ({
     position: 'fixed',
     left: 0,
