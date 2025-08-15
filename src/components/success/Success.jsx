@@ -6,6 +6,7 @@ import { CheckCircle, LocalShipping, Email } from '@mui/icons-material'
 import { useCart } from '@/context/cartContext'
 import { useTheme } from '@mui/material/styles'
 import Link from 'next/link'
+import { toast } from 'sonner'
 
 export default function SuccessPage() {
     const theme = useTheme()
@@ -14,19 +15,24 @@ export default function SuccessPage() {
     const [orderDetails, setOrderDetails] = useState(null)
     const { clearCart } = useCart()
 
-    useEffect(() => {
-        if (sessionId) {
-            // Verify payment with your backend
-            fetch(`/api/verify-payment?session_id=${sessionId}`)
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success) {
-                        setOrderDetails(data.order)
-                        clearCart()
-                    }
-                })
-        }
-    }, [sessionId, clearCart])
+useEffect(() => {
+    if (sessionId) {
+        axios.get(`/api/verify-payment`, {
+            params: {
+                session_id: sessionId
+            }
+        })
+        .then(response => {
+            if (response.data.success) {
+                setOrderDetails(response.data.order);
+                clearCart();
+            }
+        })
+        .catch(error => {
+            toast.error('Error verifying payment:', error);
+        });
+    }
+}, [sessionId, clearCart]);
 
     return (
         <Box sx={{

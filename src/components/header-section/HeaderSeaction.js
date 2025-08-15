@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   AppBar, Toolbar, Button, IconButton, Drawer, List,
   ListItem, ListItemText, Box, Container, Typography,
@@ -9,17 +9,17 @@ import {
 import { alpha, styled } from '@mui/material/styles';
 import {
   Menu, Close, ShoppingCart, Search,
-  Person, Favorite
+  Favorite
 } from '@mui/icons-material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { UserButton, useUser } from '@clerk/nextjs';
-import { useColorMode } from '@/hooks/DarkmodeProvider';
-import { MdDarkMode, MdLightMode } from "react-icons/md";
 import Image from 'next/image';
 import { useCart } from '@/context/cartContext';
 import Link from 'next/link';
 import CartDrawer from '@/components/cartDrawer/cartDrawer';
-
+import SettingsDropdown from '../setting/Setting';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import OrderIcon from '../order-icon/OrderIcon';
 const SearchContainer = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: 20,
@@ -91,7 +91,6 @@ const NavButton = styled(Button)(({ theme }) => ({
 const HeaderSection = () => {
   const theme = useTheme();
   const { isSignedIn, user } = useUser();
-  const { toggleColorMode, mode } = useColorMode();
   const {
     getTotalItems,
     isCartOpen,
@@ -119,7 +118,7 @@ const HeaderSection = () => {
     <>
       <AppBar
         position="sticky"
-        
+
         sx={{
           backgroundColor: isScrolled
             ? alpha(theme.palette.background.default, 0.98)
@@ -189,7 +188,7 @@ const HeaderSection = () => {
                     />
                   </motion.div>
                   <Typography variant="h6" sx={{
-                    
+
                     fontWeight: 800,
                     background: `linear-gradient(45deg, ${theme.palette.primary.main} 30%, ${theme.palette.secondary.main} 90%)`,
                     WebkitBackgroundClip: 'text',
@@ -285,57 +284,31 @@ const HeaderSection = () => {
                   <ShoppingCart />
                 </Badge>
               </IconButton>
+              <OrderIcon />
 
-              <motion.div
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                style={{
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
+              <Button
+                variant="text"
+                color="inherit"
+                sx={{
+                  minWidth: "0",
+                  width: 40,
+                  height: 40,
+                  borderRadius: "50%",
+                  padding: 0,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  "&:hover": {
+                    backgroundColor: "rgba(0,0,0,0.04)",
+                  },
                 }}
-                onClick={toggleColorMode}
               >
-                <Box sx={{
-                  p: 1,
-                  borderRadius: '50%',
-                  backgroundColor: alpha(theme.palette.primary.main, 0.1),
-                  '&:hover': {
-                    backgroundColor: alpha(theme.palette.primary.main, 0.2),
-                  }
-                }}>
-                  <AnimatePresence mode="wait" initial={false}>
-                    {mode === 'dark' ? (
-                      <motion.div
-                        key="light"
-                        initial={{ opacity: 0, rotate: -30 }}
-                        animate={{ opacity: 1, rotate: 0 }}
-                        exit={{ opacity: 0, rotate: 30 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <MdLightMode style={{
-                          fontSize: '20px',
-                          color: theme.palette.primary.main
-                        }} />
-                      </motion.div>
-                    ) : (
-                      <motion.div
-                        key="dark"
-                        initial={{ opacity: 0, rotate: 30 }}
-                        animate={{ opacity: 1, rotate: 0 }}
-                        exit={{ opacity: 0, rotate: -30 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <MdDarkMode style={{
-                          fontSize: '20px',
-                          color: theme.palette.primary.main
-                        }} />
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </Box>
-              </motion.div>
+                <Badge badgeContent={3} color="primary" overlap="circular">
+                  <NotificationsIcon size={20} />
+                </Badge>
+              </Button>
+
+              <SettingsDropdown />
 
               {!isMobile && isSignedIn ? (
                 <Box sx={{ ml: 1 }}>
@@ -432,51 +405,6 @@ const HeaderSection = () => {
               </Box>
             </Link>
             <Box display="flex" alignItems="center" gap={1}>
-              <motion.div
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                style={{ cursor: 'pointer' }}
-                onClick={toggleColorMode}
-              >
-                <Box sx={{
-                  p: 1,
-                  borderRadius: '50%',
-                  backgroundColor: alpha(theme.palette.primary.main, 0.1),
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}>
-                  <AnimatePresence mode="wait" initial={false}>
-                    {mode === 'dark' ? (
-                      <motion.div
-                        key="light-mobile"
-                        initial={{ opacity: 0, rotate: -30 }}
-                        animate={{ opacity: 1, rotate: 0 }}
-                        exit={{ opacity: 0, rotate: 30 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <MdLightMode style={{
-                          fontSize: '20px',
-                          color: theme.palette.primary.main
-                        }} />
-                      </motion.div>
-                    ) : (
-                      <motion.div
-                        key="dark-mobile"
-                        initial={{ opacity: 0, rotate: 30 }}
-                        animate={{ opacity: 1, rotate: 0 }}
-                        exit={{ opacity: 0, rotate: -30 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <MdDarkMode style={{
-                          fontSize: '20px',
-                          color: theme.palette.primary.main
-                        }} />
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </Box>
-              </motion.div>
               <IconButton
                 onClick={handleDrawerToggle}
                 sx={{
@@ -618,7 +546,7 @@ const HeaderSection = () => {
                   New customer?{' '}
                   <Link href="/sign-up" passHref>
                     <Typography
-                      component="span"  
+                      component="span"
                       sx={{
                         color: theme.palette.primary.main,
                         fontWeight: 600,
