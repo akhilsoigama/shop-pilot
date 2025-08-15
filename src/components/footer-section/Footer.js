@@ -60,7 +60,6 @@ export default function PremiumFooter() {
             sx={{
                 position: 'relative',
                 overflow: 'hidden',
-                bgcolor: theme.palette.mode === 'dark' ? 'rgba(10,10,12,0.98)' : 'rgba(248,248,252,1)',
                 pt: 6,
                 pb: 3,
                 px: { xs: 4, md: 8 },
@@ -108,7 +107,6 @@ export default function PremiumFooter() {
                         sx={{
                             display: 'flex',
                             alignItems: 'center',
-                            gap: 2,
                             flexShrink: 0
                         }}
                     >
