@@ -1,9 +1,9 @@
-import Subcategory from '@/components/subcategory/Subcategory'
+import SubcategoryLayout from "@/components/subcategory-layout/SubcategoryLayout"
 
 const page = () => {
   return (
     <div id='subcategory'>
-      <Subcategory/>
+      <SubcategoryLayout/>
     </div>
   )
 }
