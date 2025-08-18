@@ -1,11 +1,15 @@
 'use client'
-import { Box, Typography, IconButton, Button, Divider, Chip, Badge, useMediaQuery } from '@mui/material'
-import { Close, Add, Remove, Delete, ShoppingCart, ArrowForward, LocalShipping, Redeem, Discount } from '@mui/icons-material'
+import { Box, Typography, IconButton, Button, Divider, Chip, useMediaQuery, } from '@mui/material'
+import { Close, Add, Remove, Delete, ShoppingCart, ArrowForward,  Discount } from '@mui/icons-material'
 import Image from 'next/image'
 import { useTheme, alpha } from '@mui/material/styles'
 import { motion, AnimatePresence, useAnimationControls } from 'framer-motion'
 import { useCart } from '@/context/cartContext'
 import { useEffect, useState } from 'react'
+import useCheckout from '@/hooks/useCheckout'
+import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
+import { useUser } from '@clerk/nextjs'
 
 const CartItem = ({ item, removeFromCart, updateQuantity }) => {
   const theme = useTheme()
@@ -51,12 +55,12 @@ const CartItem = ({ item, removeFromCart, updateQuantity }) => {
       }}
     >
       {/* Pulse effect */}
-      <motion.div 
-        animate={{ 
+      <motion.div
+        animate={{
           opacity: [0, 0.2, 0],
           scale: [1, 1.5, 2]
         }}
-        transition={{ 
+        transition={{
           duration: 4,
           repeat: Infinity,
           ease: "easeOut"
@@ -72,12 +76,12 @@ const CartItem = ({ item, removeFromCart, updateQuantity }) => {
           filter: 'blur(2px)',
         }}
       />
-      
-      <Box sx={{ 
-        flexShrink: 0, 
-        position: 'relative', 
-        width: isMobile ? 60 : 70, 
-        height: isMobile ? 60 : 70, 
+
+      <Box sx={{
+        flexShrink: 0,
+        position: 'relative',
+        width: isMobile ? 60 : 70,
+        height: isMobile ? 60 : 70,
         borderRadius: 8,
         overflow: 'hidden',
         boxShadow: theme.shadows[1],
@@ -92,13 +96,13 @@ const CartItem = ({ item, removeFromCart, updateQuantity }) => {
           sizes={isMobile ? "60px" : "70px"}
         />
       </Box>
-      
+
       <Box sx={{ flex: 1, minWidth: 0 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <Box sx={{ overflow: 'hidden' }}>
-            <Typography 
-              variant="body2" 
-              sx={{ 
+            <Typography
+              variant="body2"
+              sx={{
                 fontWeight: 600,
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
@@ -113,8 +117,8 @@ const CartItem = ({ item, removeFromCart, updateQuantity }) => {
             </Typography>
           </Box>
           <motion.div whileTap={{ scale: 0.9 }}>
-            <IconButton 
-              size="small" 
+            <IconButton
+              size="small"
               onClick={handleRemove}
               sx={{
                 p: 0.5,
@@ -128,32 +132,32 @@ const CartItem = ({ item, removeFromCart, updateQuantity }) => {
             </IconButton>
           </motion.div>
         </Box>
-        
+
         <Box sx={{ display: 'flex', alignItems: 'center', mt: 0.5 }}>
           {item.discountPrice ? (
             <>
-              <Typography variant="body2" sx={{ 
-                fontWeight: 700, 
+              <Typography variant="body2" sx={{
+                fontWeight: 700,
                 mr: 1,
                 fontSize: isMobile ? '0.875rem' : '0.9375rem'
               }}>
                 ₹{item.discountPrice.toLocaleString()}
               </Typography>
-              <Typography variant="caption" sx={{ 
-                textDecoration: 'line-through', 
-                color: 'text.disabled', 
+              <Typography variant="caption" sx={{
+                textDecoration: 'line-through',
+                color: 'text.disabled',
                 mr: 1,
                 fontSize: isMobile ? '0.7rem' : '0.75rem'
               }}>
                 ₹{item.price.toLocaleString()}
               </Typography>
-              <Chip 
-                label={`${Math.round((1 - item.discountPrice/item.price) * 100)}% OFF`} 
-                size="small" 
+              <Chip
+                label={`${Math.round((1 - item.discountPrice / item.price) * 100)}% OFF`}
+                size="small"
                 color="success"
                 icon={<Discount sx={{ fontSize: '12px !important' }} />}
-                sx={{ 
-                  height: 18, 
+                sx={{
+                  height: 18,
                   fontSize: '0.6rem',
                   '& .MuiChip-icon': {
                     marginLeft: '4px'
@@ -162,7 +166,7 @@ const CartItem = ({ item, removeFromCart, updateQuantity }) => {
               />
             </>
           ) : (
-            <Typography variant="body2" sx={{ 
+            <Typography variant="body2" sx={{
               fontWeight: 700,
               fontSize: isMobile ? '0.875rem' : '0.9375rem'
             }}>
@@ -170,14 +174,14 @@ const CartItem = ({ item, removeFromCart, updateQuantity }) => {
             </Typography>
           )}
         </Box>
-        
+
         <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
           <motion.div whileTap={{ scale: 0.95 }}>
-            <IconButton 
-              size="small" 
+            <IconButton
+              size="small"
               onClick={() => handleQuantityChange(Math.max(1, item.quantity - 1))}
               disabled={item.quantity <= 1}
-              sx={{ 
+              sx={{
                 p: 0.5,
                 border: `1px solid ${theme.palette.divider}`,
                 borderRadius: '6px 0 0 6px',
@@ -187,11 +191,11 @@ const CartItem = ({ item, removeFromCart, updateQuantity }) => {
               <Remove fontSize="small" />
             </IconButton>
           </motion.div>
-          <Typography 
-            variant="body2" 
-            sx={{ 
-              px: 1.5, 
-              py: 0.5, 
+          <Typography
+            variant="body2"
+            sx={{
+              px: 1.5,
+              py: 0.5,
               borderTop: `1px solid ${theme.palette.divider}`,
               borderBottom: `1px solid ${theme.palette.divider}`,
               fontWeight: 600,
@@ -202,10 +206,10 @@ const CartItem = ({ item, removeFromCart, updateQuantity }) => {
             {item.quantity}
           </Typography>
           <motion.div whileTap={{ scale: 0.95 }}>
-            <IconButton 
-              size="small" 
+            <IconButton
+              size="small"
               onClick={() => handleQuantityChange(item.quantity + 1)}
-              sx={{ 
+              sx={{
                 p: 0.5,
                 border: `1px solid ${theme.palette.divider}`,
                 borderRadius: '0 6px 6px 0',
@@ -234,10 +238,11 @@ export default function CartDrawer() {
     closeCart,
     isCartOpen
   } = useCart()
-
+  const { checkout, loading } = useCheckout();
+  const router = useRouter()
   const [isMounted, setIsMounted] = useState(false)
   const [isHoveringCheckout, setIsHoveringCheckout] = useState(false)
-
+  const { user } = useUser()
   useEffect(() => {
     setIsMounted(true)
   }, [])
@@ -249,7 +254,47 @@ export default function CartDrawer() {
   const discountAmount = cart.reduce((sum, item) => {
     return sum + (item.discountPrice ? (item.price - item.discountPrice) * item.quantity : 0)
   }, 0)
+  const handleCheckout = async () => {
+    try {
+      if (!user) {
+        router.push('/sign-in');
+        return;
+      }
 
+      const lineItems = cart.map((item) => ({
+        price_data: {
+          currency: "inr",
+          product_data: {
+            name: item.productName,
+            images: [item.productImage[0]],
+            metadata: { productId: item._id },
+          },
+          unit_amount: (item.discountPrice || item.price) * 100,
+        },
+        quantity: item.quantity,
+      }));
+
+      const primaryEmail = user.emailAddresses[0]?.emailAddress;
+
+      if (!primaryEmail) {
+        throw new Error("Please add an email address to your account");
+      }
+
+      const { sessionId, error } = await checkout({
+        items: lineItems,
+        customerEmail: primaryEmail,
+      });
+
+      if (error) {
+        throw new Error(error);
+      }
+
+      router.push(`/checkout/${sessionId}`);
+    } catch (err) {
+      toast.error(err.message || "Checkout failed");
+      console.error('Checkout error:', err);
+    }
+  };
   return (
     <AnimatePresence>
       {isCartOpen && (
@@ -272,15 +317,15 @@ export default function CartDrawer() {
               backdropFilter: 'blur(3px)',
             }}
           />
-          
+
           {/* Cart Drawer */}
           <motion.div
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
-            transition={{ 
-              type: 'spring', 
-              damping: 30, 
+            transition={{
+              type: 'spring',
+              damping: 30,
               stiffness: 400,
               mass: 0.5
             }}
@@ -305,7 +350,7 @@ export default function CartDrawer() {
             }}>
               {/* Header with gradient */}
               <Box sx={{
-                background: theme.palette.mode === 'dark' 
+                background: theme.palette.mode === 'dark'
                   ? `linear-gradient(135deg, ${alpha(theme.palette.primary.dark, 0.7)} 0%, ${theme.palette.background.default} 100%)`
                   : `linear-gradient(135deg, ${alpha(theme.palette.primary.light, 0.15)} 0%, ${theme.palette.background.paper} 100%)`,
                 p: isMobile ? 2 : 2.5,
@@ -322,7 +367,7 @@ export default function CartDrawer() {
                   borderRadius: '50%',
                   bgcolor: alpha(theme.palette.primary.main, 0.08),
                 }} />
-                
+
                 <Box sx={{
                   display: 'flex',
                   justifyContent: 'space-between',
@@ -335,7 +380,7 @@ export default function CartDrawer() {
                       animate={{ rotate: isHoveringCheckout ? -5 : 0 }}
                       transition={{ type: 'spring', stiffness: 500 }}
                     >
-                      <ShoppingCart sx={{ 
+                      <ShoppingCart sx={{
                         fontSize: isMobile ? 24 : 26,
                         color: theme.palette.mode === 'dark' ? theme.palette.primary.light : theme.palette.primary.main
                       }} />
@@ -354,7 +399,7 @@ export default function CartDrawer() {
                     </Typography>
                   </Box>
                   <motion.div whileTap={{ scale: 0.9 }}>
-                    <IconButton 
+                    <IconButton
                       onClick={closeCart}
                       size={isMobile ? "small" : "medium"}
                       sx={{
@@ -368,7 +413,7 @@ export default function CartDrawer() {
                     </IconButton>
                   </motion.div>
                 </Box>
-                
+
                 <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, gap: 1 }}>
                   <Chip
                     label={`${totalItems} ${totalItems === 1 ? 'ITEM' : 'ITEMS'}`}
@@ -418,12 +463,12 @@ export default function CartDrawer() {
                     p: 3,
                   }}>
                     <motion.div
-                      animate={{ 
+                      animate={{
                         y: [0, -5, 0],
                         rotate: [0, 5, -5, 0]
                       }}
-                      transition={{ 
-                        duration: 3, 
+                      transition={{
+                        duration: 3,
                         repeat: Infinity,
                         ease: "easeInOut"
                       }}
@@ -441,7 +486,7 @@ export default function CartDrawer() {
                     }}>
                       Your cart is empty
                     </Typography>
-                    <Typography variant="body2" color="text.secondary" sx={{ 
+                    <Typography variant="body2" color="text.secondary" sx={{
                       maxWidth: 300,
                       fontSize: isMobile ? '0.8rem' : '0.875rem'
                     }}>
@@ -452,7 +497,7 @@ export default function CartDrawer() {
                         variant="outlined"
                         onClick={closeCart}
                         size={isMobile ? "small" : "medium"}
-                        sx={{ 
+                        sx={{
                           mt: 2,
                           borderRadius: 6,
                           px: 3,
@@ -490,7 +535,7 @@ export default function CartDrawer() {
                     </AnimatePresence>
                   </Box>
 
-                  <Box sx={{ 
+                  <Box sx={{
                     p: isMobile ? 1.5 : 2,
                     borderTop: `1px solid ${theme.palette.divider}`,
                     background: alpha(theme.palette.primary.main, theme.palette.mode === 'dark' ? 0.05 : 0.02)
@@ -504,7 +549,7 @@ export default function CartDrawer() {
                         <Typography variant="body2" sx={{ fontSize: isMobile ? '0.8125rem' : '0.875rem' }}>
                           Subtotal:
                         </Typography>
-                        <Typography variant="body2" sx={{ 
+                        <Typography variant="body2" sx={{
                           fontWeight: 600,
                           fontSize: isMobile ? '0.8125rem' : '0.875rem'
                         }}>
@@ -520,7 +565,7 @@ export default function CartDrawer() {
                           <Typography variant="body2" sx={{ fontSize: isMobile ? '0.8125rem' : '0.875rem' }}>
                             Discount:
                           </Typography>
-                          <Typography variant="body2" color="success.main" sx={{ 
+                          <Typography variant="body2" color="success.main" sx={{
                             fontWeight: 600,
                             fontSize: isMobile ? '0.8125rem' : '0.875rem'
                           }}>
@@ -533,13 +578,13 @@ export default function CartDrawer() {
                         display: 'flex',
                         justifyContent: 'space-between',
                       }}>
-                        <Typography variant="subtitle1" sx={{ 
+                        <Typography variant="subtitle1" sx={{
                           fontWeight: 700,
                           fontSize: isMobile ? '0.9375rem' : '1rem'
                         }}>
                           Total:
                         </Typography>
-                        <Typography variant="subtitle1" sx={{ 
+                        <Typography variant="subtitle1" sx={{
                           fontWeight: 800,
                           fontSize: isMobile ? '0.9375rem' : '1rem'
                         }}>
@@ -562,6 +607,8 @@ export default function CartDrawer() {
                         <Button
                           fullWidth
                           variant="contained"
+                          onClick={handleCheckout}
+                          disabled={loading}
                           size={isMobile ? "medium" : "large"}
                           endIcon={
                             <motion.div
@@ -585,7 +632,7 @@ export default function CartDrawer() {
                             }
                           }}
                         >
-                          Checkout Now
+                          {loading ? "Processing..." : "Checkout Now"}
                         </Button>
                       </motion.div>
 
