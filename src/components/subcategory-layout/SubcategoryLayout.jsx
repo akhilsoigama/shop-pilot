@@ -4,8 +4,6 @@ import { useParams } from "next/navigation";
 import { useState, useEffect, useMemo } from "react";
 import { Subcategories } from "@/lib/category";
 import { useCart } from "@/context/cartContext";
-import ProductPage from "../productPage/Product-page";
-import { AnimatePresence } from "framer-motion";
 import Subcategory from "../subcategory/Subcategory";
 import FilterSidebar from "../filter-sidebar/FilterSidebar";
 
@@ -131,12 +129,15 @@ export default function SubcategoryLayout() {
         minPrice={minPrice}
         maxPrice={maxPrice}
         decodedSubcategory={decodedSubcategory}
-        onViewProduct={handleViewProduct}
+        // onViewProduct={handleViewProduct}
         hoveredProduct={hoveredProduct}
         setHoveredProduct={setHoveredProduct}
         onClearAll={clearAllFilters}
+        category={category}
+        subcategory={subcategory}
+        onAddToCart={addToCart}
       />
-      
+{/*       
       <AnimatePresence>
         {isDialogOpen && (
           <ProductPage
@@ -146,7 +147,7 @@ export default function SubcategoryLayout() {
             onClose={() => setIsDialogOpen(false)}
           />
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
     </div>
   );
 }

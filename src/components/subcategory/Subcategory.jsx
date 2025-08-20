@@ -7,6 +7,7 @@ import Image from "next/image";
 import { Heart, Search, X, Star, Zap } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 export default function Subcategory({
   products,
@@ -22,11 +23,13 @@ export default function Subcategory({
   onViewProduct,
   hoveredProduct,
   setHoveredProduct,
-  onClearAll
+  onClearAll,
+  category,
+  subcategory
 }) {
-  const noProductsFound = products && products.length === 0 && 
-    (searchQuery.trim() !== '' || Object.keys(activeFilters).length > 0 || 
-    priceRange[0] !== minPrice || priceRange[1] !== maxPrice);
+  const noProductsFound = products && products.length === 0 &&
+    (searchQuery.trim() !== '' || Object.keys(activeFilters).length > 0 ||
+      priceRange[0] !== minPrice || priceRange[1] !== maxPrice);
 
   if (isLoading) return (
     <div className="p-4 md:p-6 lg:p-8 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-950 min-h-screen">
@@ -143,7 +146,7 @@ export default function Subcategory({
                   No products found
                 </h3>
                 <p className="text-gray-600 dark:text-gray-400 mb-4">
-                  {searchQuery.trim() !== '' 
+                  {searchQuery.trim() !== ''
                     ? `No products match your search for "${searchQuery}"`
                     : 'No products match your current filters'}
                 </p>
@@ -250,13 +253,14 @@ export default function Subcategory({
                           </Badge>
                         </div>
 
-                        <Button
-                          size="sm"
-                          className="w-full py-2 text-sm bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary"
-                          onClick={() => onViewProduct(product)}
-                        >
-                          View Details
-                        </Button>
+                        <Link href={`/categories/${category}/${subcategory}/${product._id}`}>
+                          <Button
+                            size="sm"
+                            className="w-full py-2 text-sm bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary"
+                          >
+                            View Details
+                          </Button>
+                        </Link>
                       </div>
                     </CardContent>
 

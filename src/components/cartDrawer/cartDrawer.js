@@ -23,7 +23,7 @@ const CartItem = ({ item, removeFromCart, updateQuantity }) => {
       x: -100,
       opacity: 0,
       transition: { duration: 0.2 }
-    }).then(() => removeFromCart(item._id))
+    }).then(() => removeFromCart(item._id, item.selectedVariant?._id))
   }
 
   const handleQuantityChange = (newQty) => {
@@ -32,7 +32,7 @@ const CartItem = ({ item, removeFromCart, updateQuantity }) => {
         scale: [1, 1.05, 1],
         transition: { duration: 0.2 }
       })
-      updateQuantity(item._id, newQty)
+      updateQuantity(item._id, item.selectedVariant?._id, newQty)
     }
   }
 
