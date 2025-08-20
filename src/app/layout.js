@@ -21,19 +21,6 @@ export default function RootLayout({ children }) {
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans`}>
-          {/* Toast Notification */}
-          <Toaster
-            richColors
-            position="top-right"
-            toastOptions={{
-              style: {
-                zIndex: 9999,
-                top: '4.5rem',
-                right: '5rem',
-              },
-            }}
-          />
-          
           <CustomThemeProvider>
             <CartProvider>
               <header className="w-full sticky top-0 z-20">
@@ -42,6 +29,13 @@ export default function RootLayout({ children }) {
                 <Navbar />
               </header>
               <main>{children}</main>
+              <Toaster
+                position="top-right"
+                visibleToasts={3}
+                expand={true}
+                richColors
+                closeButton
+              />
             </CartProvider>
           </CustomThemeProvider>
         </body>
