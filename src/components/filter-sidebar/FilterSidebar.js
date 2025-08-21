@@ -153,7 +153,7 @@ export default function FilterSidebar({
           )}
         </div>
 
-        <ScrollArea className="h-[calc(100vh-220px)] pr-4">
+        <ScrollArea className="h-[calc(100vh-220px)]  pr-4">
           <Accordion type="multiple" defaultValue={['price', ...(subcategory?.fields?.map(f => f.name) || [])]} className="space-y-4">
             <AccordionItem value="price" className="border-none">
               <AccordionTrigger className="py-3 hover:no-underline group">
