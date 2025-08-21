@@ -306,7 +306,7 @@ export default function WishlistPage() {
                             </motion.div>
                             <h3 className="text-2xl sm:text-3xl font-semibold text-gray-800 dark:text-white mb-3">Your wishlist is empty</h3>
                             <p className="text-gray-600 dark:text-gray-400 max-w-md mx-auto mb-8 text-sm sm:text-base">
-                                Discover amazing products and add them to your wishlist. They'll appear here!
+                                Discover amazing products and add them to your wishlist. They all appear here!
                             </p>
                             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                                 <Button 
