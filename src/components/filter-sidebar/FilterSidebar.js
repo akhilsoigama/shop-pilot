@@ -135,7 +135,7 @@ export default function FilterSidebar({
       transition={{ duration: 0.3 }}
       className="hidden lg:block w-70 pr-6"
     >
-      <div className="rounded-xl mt-[100px] border bg-background p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900/50">
+      <div className="rounded-xl sticky top-30  border bg-background p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900/50">
         <div className="flex justify-between items-center mb-5 pb-2 border-b dark:border-gray-800">
           <h3 className="text-lg font-bold flex items-center gap-2 text-gray-800 dark:text-white">
             <SlidersHorizontal className="h-5 w-5 text-primary" />
