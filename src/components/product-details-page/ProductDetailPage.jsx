@@ -4,15 +4,9 @@ import { useState, useEffect, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
-import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-} from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Skeleton } from "@/components/ui/skeleton"
 import {
@@ -30,6 +24,7 @@ import {
     RotateCcw,
     CreditCard,
     AlertCircle,
+    Crown,
 } from "lucide-react"
 import {
     Tooltip,
@@ -37,19 +32,17 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { cn } from "@/lib/utils"
-import { useCart } from "@/context/cartContext" // ✅ Add this import
+import { useCart } from "@/context/cartContext"
+import useCheckout from "@/hooks/useCheckout"
+import { toast } from "sonner"
+import { useUser } from "@clerk/nextjs"
+import ShareModal from "../share-model/ShareModel"
+import { useWishlist } from "@/context/wishlistContext"
 
-// Custom Carousel Component (unchanged)
+// Custom Carousel Component 
 function ImageCarousel({ images }) {
     const [currentIndex, setCurrentIndex] = useState(0)
 
@@ -147,13 +140,72 @@ function ImageCarousel({ images }) {
 }
 
 export default function ProductDetailPage({ product }) {
-    const [isFavorite, setIsFavorite] = useState(false)
+    const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+    const isFavorite = isInWishlist(product._id);
     const [selectedVariant, setSelectedVariant] = useState(null)
     const [selectedOptions, setSelectedOptions] = useState({})
     const [quantity, setQuantity] = useState(1)
     const [isLoading, setIsLoading] = useState(true)
+    const { checkout, loading } = useCheckout();
+    const { user } = useUser();
     const router = useRouter()
-     const { addToCart, isInitialized } = useCart() 
+    const { addToCart, isInitialized } = useCart()
+    const [isShareModalOpen, setIsShareModalOpen] = useState(false)
+
+    const handleToggleWishlist = () => {
+        if (isFavorite) {
+            removeFromWishlist(product._id);
+            toast.success("Removed from wishlist");
+        } else {
+            addToWishlist(product);
+            toast.success("Added to wishlist");
+        }
+    };
+
+    const handleCheckout = async () => {
+        try {
+            if (!user) {
+                router.push('/sign-in');
+                return;
+            }
+
+            const lineItems = [{
+                price_data: {
+                    currency: "inr",
+                    product_data: {
+                        name: product.productName,
+                        images: [product.productImage[0]],
+                        metadata: {
+                            productId: product._id,
+                            variantId: selectedVariant?._id || ''
+                        },
+                    },
+                    unit_amount: (discountPrice || price) * 100,
+                },
+                quantity: quantity,
+            }];
+
+            const primaryEmail = user.emailAddresses[0]?.emailAddress;
+
+            if (!primaryEmail) {
+                throw new Error("Please add an email address to your account");
+            }
+
+            const { sessionId, error } = await checkout({
+                items: lineItems,
+                customerEmail: primaryEmail,
+            });
+
+            if (error) {
+                throw new Error(error);
+            }
+
+            router.push(`/checkout/${sessionId}`);
+        } catch (err) {
+            toast.error(err.message || "Checkout failed");
+            console.error('Checkout error:', err);
+        }
+    };
 
     useEffect(() => {
         if (product) {
@@ -224,9 +276,9 @@ export default function ProductDetailPage({ product }) {
         })
     }
 
-   if (!isInitialized) {
-    return <ProductDetailSkeleton />
-  }
+    if (!isInitialized) {
+        return <ProductDetailSkeleton />
+    }
 
     if (!product) {
         return (
@@ -276,7 +328,7 @@ export default function ProductDetailPage({ product }) {
                                         <Button
                                             variant="ghost"
                                             size="icon"
-                                            onClick={() => setIsFavorite(!isFavorite)}
+                                            onClick={handleToggleWishlist}
                                             className="relative"
                                         >
                                             <motion.div
@@ -293,7 +345,7 @@ export default function ProductDetailPage({ product }) {
                                         </Button>
                                     </TooltipTrigger>
                                     <TooltipContent>
-                                        <p>{isFavorite ? "Remove from favorites" : "Add to favorites"}</p>
+                                        <p>{isFavorite ? "Remove from wishlist" : "Add to wishlist"}</p>
                                     </TooltipContent>
                                 </Tooltip>
                             </TooltipProvider>
@@ -301,8 +353,15 @@ export default function ProductDetailPage({ product }) {
                             <TooltipProvider>
                                 <Tooltip>
                                     <TooltipTrigger asChild>
-                                        <Button variant="ghost" size="icon">
-                                            <Share2 className="w-5 h-5" />
+                                        <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            onClick={() => setIsShareModalOpen(true)}
+                                            className="rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
+                                        >
+                                            <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                                                <Share2 className="w-5 h-5" />
+                                            </motion.div>
                                         </Button>
                                     </TooltipTrigger>
                                     <TooltipContent>
@@ -488,20 +547,57 @@ export default function ProductDetailPage({ product }) {
                         >
                             <Button
                                 size="lg"
-                                className="flex-1 h-14 text-lg"
-                                onClick={handleAddToCart} // ✅ Use the new handler
+                                className="flex-1 h-14 text-lg bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 dark:from-blue-600 dark:to-purple-700 dark:hover:from-blue-700 dark:hover:to-purple-800 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl shadow-lg rounded-xl border-0 text-white font-bold relative overflow-hidden group"
+                                onClick={handleAddToCart}
                                 disabled={!inStock}
                             >
-                                <ShoppingCart className="w-5 h-5 mr-2" />
-                                Add to Cart
+                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+
+                                <motion.div
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className="flex items-center justify-center relative z-10"
+                                >
+                                    <ShoppingCart className="w-5 h-5 mr-2" />
+                                    Add to Cart
+                                </motion.div>
                             </Button>
                             <Button
                                 variant="default"
                                 size="lg"
-                                className="flex-1 h-14 text-lg bg-gradient-to-r from-primary to-primary/90"
-                                disabled={!inStock}
+                                className="flex-1 h-14 text-lg bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 dark:from-amber-600 dark:to-yellow-700 dark:hover:from-amber-700 dark:hover:to-yellow-800 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl shadow-lg rounded-xl border-0 text-white font-bold relative overflow-hidden group"
+                                disabled={!inStock || loading}
+                                onClick={handleCheckout}
                             >
-                                Buy Now
+                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-yellow-200/40 to-transparent -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+
+                                <div className="flex items-center justify-center relative z-10">
+                                    <AnimatePresence mode="wait">
+                                        {loading ? (
+                                            <motion.div
+                                                key="loading"
+                                                initial={{ opacity: 0, scale: 0.8 }}
+                                                animate={{ opacity: 1, scale: 1 }}
+                                                exit={{ opacity: 0, scale: 0.8 }}
+                                                className="flex items-center"
+                                            >
+                                                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                                                Processing...
+                                            </motion.div>
+                                        ) : (
+                                            <motion.div
+                                                key="content"
+                                                initial={{ opacity: 0, scale: 0.8 }}
+                                                animate={{ opacity: 1, scale: 1 }}
+                                                exit={{ opacity: 0, scale: 0.8 }}
+                                                className="flex items-center"
+                                            >
+                                                <Crown className="w-5 h-5 mr-2 fill-current" />
+                                                Buy Now
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
                             </Button>
                         </motion.div>
 
@@ -537,55 +633,96 @@ export default function ProductDetailPage({ product }) {
                 </div>
 
                 {/* Product Details Tabs */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.7 }}
-                    className="mt-16"
-                >
-                    <Tabs defaultValue="description" className="w-full">
-                        <TabsList className="w-full overflow-x-auto justify-start">
-                            <TabsTrigger value="description">Description</TabsTrigger>
-                            <TabsTrigger value="specifications">Specifications</TabsTrigger>
-                            <TabsTrigger value="reviews">Reviews (24)</TabsTrigger>
-                            <TabsTrigger value="shipping">Shipping & Returns</TabsTrigger>
-                        </TabsList>
+                <Tabs defaultValue="description" className="w-full">
+                    <TabsList className="w-full overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden justify-start">
+                        {['description', 'specifications', 'reviews', 'shipping'].map((tab) => (
+                            <TabsTrigger
+                                key={tab}
+                                value={tab}
+                                asChild
+                            >
+                                <motion.div
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    transition={{ duration: 0.2, ease: "easeInOut" }}
+                                    className="relative px-4 py-2"
+                                >
+                                    {tab === 'description' && 'Description'}
+                                    {tab === 'specifications' && 'Specifications'}
+                                    {tab === 'reviews' && 'Reviews (24)'}
+                                    {tab === 'shipping' && 'Shipping & Returns'}
+                                </motion.div>
+                            </TabsTrigger>
+                        ))}
+                    </TabsList>
 
-                        <TabsContent value="description" className="pt-6">
+                    <TabsContent value="description" className="pt-6">
+                        <motion.div
+                            key="description"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.3 }}
+                        >
                             <div
                                 className="prose prose-lg dark:prose-invert max-w-none"
                                 dangerouslySetInnerHTML={{ __html: product.productDescription || "No description available." }}
                             />
-                        </TabsContent>
+                        </motion.div>
+                    </TabsContent>
 
-                        <TabsContent value="specifications" className="pt-6">
+                    <TabsContent value="specifications" className="pt-6">
+                        <motion.div
+                            key="specifications"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.3 }}
+                        >
                             <div className="grid gap-4">
                                 {product.specifications?.map((spec, index) => (
-                                    <div key={index} className="flex justify-between py-3 border-b">
+                                    <div key={`${spec.name}-${index}`} className="flex justify-between py-3 border-b">
                                         <span className="font-medium text-gray-900 dark:text-white">{spec.name}</span>
                                         <span className="text-gray-600 dark:text-gray-400">{spec.value}</span>
                                     </div>
                                 ))}
                             </div>
-                        </TabsContent>
+                        </motion.div>
+                    </TabsContent>
 
-                        <TabsContent value="reviews" className="pt-6">
+                    <TabsContent value="reviews" className="pt-6">
+                        <motion.div
+                            key="reviews"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.3 }}
+                        >
                             <div className="space-y-4">
                                 <p className="text-gray-600 dark:text-gray-400">Reviews coming soon...</p>
                             </div>
-                        </TabsContent>
+                        </motion.div>
+                    </TabsContent>
 
-                        <TabsContent value="shipping" className="pt-6">
+                    <TabsContent value="shipping" className="pt-6">
+                        <motion.div
+                            key="shipping"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.3 }}
+                        >
                             <div className="space-y-4">
                                 <h4 className="font-semibold">Shipping Information</h4>
                                 <p>Free standard shipping on orders over ₹500. Express shipping available.</p>
                                 <h4 className="font-semibold">Return Policy</h4>
                                 <p>30-day return policy. Free return shipping for defective items.</p>
                             </div>
-                        </TabsContent>
-                    </Tabs>
-                </motion.div>
+                        </motion.div>
+                    </TabsContent>
+                </Tabs>
             </div>
+            <ShareModal
+                product={product}
+                isOpen={isShareModalOpen}
+                onClose={() => setIsShareModalOpen(false)}
+            />
         </div>
     )
 }
