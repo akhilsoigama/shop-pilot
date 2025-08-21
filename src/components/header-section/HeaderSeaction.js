@@ -20,6 +20,7 @@ import CartDrawer from '@/components/cartDrawer/cartDrawer';
 import SettingsDropdown from '../setting/Setting';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import OrderIcon from '../order-icon/OrderIcon';
+
 const SearchContainer = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: 20,
@@ -240,7 +241,7 @@ const HeaderSection = () => {
             >
               {!isMobile && (
                 <>
-                  <Link href="/" passHref>
+                  <Link href="/wishlist" passHref>
                     <NavButton
                       color="inherit"
                       startIcon={<Favorite />}

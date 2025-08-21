@@ -7,6 +7,7 @@ import { Toaster } from "sonner";
 import Navbar from "@/components/navbar-section/Navbar";
 import { Divider } from "@mui/material";
 import HeaderSection from "@/components/header-section/HeaderSeaction";
+import { WishlistProvider } from "@/context/wishlistContext";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -23,19 +24,21 @@ export default function RootLayout({ children }) {
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans`}>
           <CustomThemeProvider>
             <CartProvider>
-              <header className="w-full sticky top-0 z-20">
-                <HeaderSection />
-                <Divider className="w-full h-[1px] bg-gray-200/70 dark:bg-gray-700" />
-                <Navbar />
-              </header>
-              <main>{children}</main>
-              <Toaster
-                position="top-right"
-                visibleToasts={3}
-                expand={true}
-                richColors
-                closeButton
-              />
+              <WishlistProvider>
+                <header className="w-full sticky top-0 z-20">
+                  <HeaderSection />
+                  <Divider className="w-full h-[1px] bg-gray-200/70 dark:bg-gray-700" />
+                  <Navbar />
+                </header>
+                <main>{children}</main>
+                <Toaster
+                  position="top-right"
+                  visibleToasts={3}
+                  expand={true}
+                  richColors
+                  closeButton
+                />
+              </WishlistProvider>
             </CartProvider>
           </CustomThemeProvider>
         </body>
