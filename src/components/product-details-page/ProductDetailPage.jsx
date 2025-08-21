@@ -554,7 +554,6 @@ export default function ProductDetailPage({ product }) {
                                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
 
                                 <motion.div
-                                    whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
                                     className="flex items-center justify-center relative z-10"
                                 >
@@ -633,8 +632,8 @@ export default function ProductDetailPage({ product }) {
                 </div>
 
                 {/* Product Details Tabs */}
-                <Tabs defaultValue="description" className="w-full">
-                    <TabsList className="w-full overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden justify-start">
+                <Tabs defaultValue="description" className="w-full mt-5 dark:bg-gray-950">
+                    <TabsList className="w-full overflow-x-auto dark:bg-gray-900 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden justify-start">
                         {['description', 'specifications', 'reviews', 'shipping'].map((tab) => (
                             <TabsTrigger
                                 key={tab}
