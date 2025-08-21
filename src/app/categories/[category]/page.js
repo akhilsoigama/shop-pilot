@@ -129,7 +129,7 @@ export default function SubcategoryPage() {
           className="text-6xl mb-4"
         >😢</motion.div>
         <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">Category Not Found</h2>
-        <p className="text-gray-600 dark:text-gray-300">The requested category doesn't exist.</p>
+        <p className="text-gray-600 dark:text-gray-300">The requested category does not exist.</p>
       </div>
     </motion.div>
   )
