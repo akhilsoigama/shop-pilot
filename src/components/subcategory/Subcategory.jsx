@@ -4,12 +4,14 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { Heart, Search, X, Star, Zap, SortAsc, Grid, List,  ChevronLeft, ChevronRight } from "lucide-react";
+import { Heart, Search, X, Star, Zap, SortAsc, Grid, List, ChevronLeft, ChevronRight, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useState, useMemo } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useWishlist } from "@/context/wishlistContext";
+import { toast } from "sonner";
 
 export default function Subcategory({
   products,
@@ -32,8 +34,8 @@ export default function Subcategory({
   const [viewMode, setViewMode] = useState('grid');
   const [sortBy, setSortBy] = useState('recommended');
   const [currentPage, setCurrentPage] = useState(1);
-  const [productsPerPage, setProductsPerPage] = useState(10); 
-
+  const [productsPerPage, setProductsPerPage] = useState(10);
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const noProductsFound = products && products.length === 0 &&
     (searchQuery.trim() !== '' || Object.keys(activeFilters).length > 0 ||
       priceRange[0] !== minPrice || priceRange[1] !== maxPrice);
@@ -42,9 +44,9 @@ export default function Subcategory({
 
   const sortedProducts = useMemo(() => {
     if (!products) return [];
-    
+
     let sorted = [...products];
-    
+
     switch (sortBy) {
       case 'newest':
         sorted.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
@@ -62,7 +64,7 @@ export default function Subcategory({
       default:
         break;
     }
-    
+
     return sorted;
   }, [products, sortBy]);
 
@@ -96,8 +98,8 @@ export default function Subcategory({
 
   // Generate page numbers for pagination
   const pageNumbers = [];
-  const maxVisiblePages = 5; 
-  
+  const maxVisiblePages = 5;
+
   if (totalPages <= maxVisiblePages) {
     // Show all pages if total pages is less than max visible
     for (let i = 1; i <= totalPages; i++) {
@@ -189,7 +191,7 @@ export default function Subcategory({
 
             <div className="flex flex-wrap gap-2 lg:gap-3 justify-end items-center">
               <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-[143px] lg:w-[180px] h-10 lg:h-12 rounded-xl bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-xs lg:text-sm">
+                <SelectTrigger className="w-[160px] lg:w-[180px] h-10 lg:h-12 rounded-xl bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-xs lg:text-sm">
                   <div className="flex items-center">
                     <SortAsc className="h-3 w-3 lg:h-4 lg:w-4 mr-1 lg:mr-2" />
                     <SelectValue placeholder="Sort by" />
@@ -253,7 +255,7 @@ export default function Subcategory({
             <p className="text-sm text-gray-600 dark:text-gray-400">
               Showing {indexOfFirstProduct + 1}-{Math.min(indexOfLastProduct, sortedProducts.length)} of {sortedProducts.length} products
             </p>
-            
+
             {/* Products per page selector */}
             <div className="flex items-center gap-3">
               <span className="text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">
@@ -408,22 +410,40 @@ export default function Subcategory({
                           <Link href={`/categories/${decodedCategory}/${subcategory}/${product._id}`} className="flex-1">
                             <Button
                               size="sm"
-                              className="w-full py-2.5 text-sm bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary rounded-xl"
+                              className="w-full py-2.5 dark:text-white text-sm bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 hover:from-blue-600 hover:via-purple-600 hover:to-pink-600 dark:bg-gradient-to-r dark:from-blue-600 dark:via-purple-600 dark:to-pink-600 dark:hover:from-blue-700 dark:hover:via-purple-700 dark:hover:to-pink-700 rounded-xl transition-all duration-500 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 hover:scale-105 relative overflow-hidden group"
                             >
-                              View Details
+                              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 delay-75"></div>
+                              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 delay-300"></div>
+
+                              <span className="relative z-10">View Details</span>
                             </Button>
                           </Link>
                           <Button
                             size="icon"
                             variant="outline"
                             className="rounded-xl border-gray-300 dark:border-gray-700"
-                            onMouseEnter={() => setHoveredProduct(product._id)}
-                            onMouseLeave={() => setHoveredProduct(null)}
+                            onClick={() => {
+                              if (isInWishlist(product._id)) {
+                                removeFromWishlist(product._id);
+                                toast.success("Removed from wishlist", {
+                                  icon: <Trash2 className="w-4 h-4" />,
+                                });
+                              } else {
+                                addToWishlist(product);
+                                toast.success("Added to wishlist", {
+                                  icon: <Heart className="w-4 h-4" fill="currentColor" />,
+                                });
+                              }
+                            }}
                           >
                             <Heart
                               className={cn(
                                 "w-4 h-4 transition-colors",
-                                hoveredProduct === product._id ? "text-red-500 fill-red-500" : "text-gray-400 hover:text-red-500"
+                                isInWishlist(product._id)
+                                  ? "text-red-500 fill-red-500"
+                                  : hoveredProduct === product._id
+                                    ? "text-red-500"
+                                    : "text-gray-400"
                               )}
                             />
                           </Button>
@@ -458,7 +478,7 @@ export default function Subcategory({
               >
                 <ChevronLeft className="h-4 w-4" />
               </Button>
-              
+
               {pageNumbers.map((pageNumber, index) => (
                 pageNumber === '...' ? (
                   <span key={`ellipsis-${index}`} className="px-2 text-gray-500">
@@ -470,17 +490,16 @@ export default function Subcategory({
                     variant={currentPage === pageNumber ? "default" : "outline"}
                     size="icon"
                     onClick={() => paginate(pageNumber)}
-                    className={`rounded-xl h-10 w-10 ${
-                      currentPage === pageNumber 
-                        ? "bg-primary text-white" 
-                        : "hover:bg-gray-100 dark:hover:bg-gray-800"
-                    }`}
+                    className={`rounded-xl h-10 w-10 ${currentPage === pageNumber
+                      ? "bg-primary text-white"
+                      : "hover:bg-gray-100 dark:hover:bg-gray-800"
+                      }`}
                   >
                     {pageNumber}
                   </Button>
                 )
               ))}
-              
+
               <Button
                 variant="outline"
                 size="icon"
