@@ -105,7 +105,7 @@ export default function SubcategoryLayout() {
   };
 
   return (
-      <div className="flex flex-col md:flex-row gap-2 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-950">
+      <div className="flex flex-col md:flex-row gap-0 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-950">
       <FilterSidebar
         subcategory={currentSubcategory}
         products={products}
@@ -129,7 +129,6 @@ export default function SubcategoryLayout() {
         minPrice={minPrice}
         maxPrice={maxPrice}
         decodedSubcategory={decodedSubcategory}
-        // onViewProduct={handleViewProduct}
         hoveredProduct={hoveredProduct}
         setHoveredProduct={setHoveredProduct}
         onClearAll={clearAllFilters}
@@ -137,17 +136,6 @@ export default function SubcategoryLayout() {
         subcategory={subcategory}
         onAddToCart={addToCart}
       />
-{/*       
-      <AnimatePresence>
-        {isDialogOpen && (
-          <ProductPage
-            product={selectedProduct}
-            onAddToCart={addToCart}
-            isOpen={isDialogOpen}
-            onClose={() => setIsDialogOpen(false)}
-          />
-        )}
-      </AnimatePresence> */}
     </div>
   );
 }
