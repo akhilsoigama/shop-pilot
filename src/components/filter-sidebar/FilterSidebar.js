@@ -135,7 +135,7 @@ export default function FilterSidebar({
       transition={{ duration: 0.3 }}
       className="hidden lg:block w-70 pr-6"
     >
-      <div className="rounded-xl sticky top-30  border bg-background p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900/50">
+      <div className="rounded-r-xl sticky top-30  border p-5 shadow-sm ">
         <div className="flex justify-between items-center mb-5 pb-2 border-b dark:border-gray-800">
           <h3 className="text-lg font-bold flex items-center gap-2 text-gray-800 dark:text-white">
             <SlidersHorizontal className="h-5 w-5 text-primary" />
@@ -240,7 +240,7 @@ export default function FilterSidebar({
           </Button>
         </DrawerTrigger>
         {/* className={"bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 rounded-xl shadow-lg"} */}
-        <DrawerContent className="h-full top-0 right-0 dark:bg-[#0e1525] dark:text-white dark:border-gray-700 left-auto mt-0 w-[85vw] max-w-sm rounded-none">
+        <DrawerContent className="h-full top-0 right-0 dark:bg-[#020511] dark:text-white dark:border-gray-700 left-auto mt-0 w-[85vw] max-w-sm rounded-none">
           <div className="h-full flex flex-col">
             <DrawerHeader className="border-b dark:border-gray-800 px-4 py-3">
               <div className="flex items-center justify-between">

@@ -47,8 +47,8 @@ export const CustomThemeProvider = ({ children }) => {
           main: mode === 'dark' ? '#f48fb1' : '#dc004e',
         },
         background: {
-          default: mode === 'dark' ? '#07061c' : '#ffffff',
-          paper: mode === 'dark' ? '#121212' : '#f5f5f5',
+          default: mode === 'dark' ? '#010517' : '#ffffff',
+          paper: mode === 'dark' ? '#010517' : '#f5f5f5',
         },
       },
       typography: {

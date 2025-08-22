@@ -19,9 +19,6 @@ export default function SubcategoryLayout() {
   const decodedCategory = decodeURIComponent(category);
   const decodedSubcategory = decodeURIComponent(subcategory);
   const { addToCart } = useCart();
-
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [hoveredProduct, setHoveredProduct] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilters, setActiveFilters] = useState({});
@@ -95,11 +92,6 @@ export default function SubcategoryLayout() {
     return filtered;
   }, [products, priceRange, activeFilters, searchQuery]);
 
-  const handleViewProduct = (product) => {
-    setSelectedProduct(product);
-    setIsDialogOpen(true);
-  };
-
   const clearAllFilters = () => {
     setSearchQuery("");
     setActiveFilters({});
@@ -107,7 +99,7 @@ export default function SubcategoryLayout() {
   };
 
   return (
-    <div className="flex flex-col md:flex-row gap-0 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-950">
+    <div className="flex flex-col md:flex-row gap-0 ">
       <FilterSidebar
         subcategory={currentSubcategory}
         products={products}
