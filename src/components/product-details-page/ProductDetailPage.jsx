@@ -41,6 +41,7 @@ import { toast } from "sonner"
 import { useUser } from "@clerk/nextjs"
 import ShareModal from "../share-model/ShareModel"
 import { useWishlist } from "@/context/wishlistContext"
+import LikeButton from "../like-count/LikeCount"
 
 // Custom Carousel Component 
 function ImageCarousel({ images }) {
@@ -322,7 +323,7 @@ export default function ProductDetailPage({ product }) {
                         </Button>
 
                         <div className="flex items-center gap-2">
-                            <TooltipProvider>
+                            {/* <TooltipProvider>
                                 <Tooltip>
                                     <TooltipTrigger asChild>
                                         <Button
@@ -348,8 +349,8 @@ export default function ProductDetailPage({ product }) {
                                         <p>{isFavorite ? "Remove from wishlist" : "Add to wishlist"}</p>
                                     </TooltipContent>
                                 </Tooltip>
-                            </TooltipProvider>
-
+                            </TooltipProvider> */}
+                          <LikeButton productId={product._id} userId={user?.id}  />
                             <TooltipProvider>
                                 <Tooltip>
                                     <TooltipTrigger asChild>
