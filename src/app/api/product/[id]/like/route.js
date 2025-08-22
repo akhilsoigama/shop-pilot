@@ -4,14 +4,14 @@ import { dbConnect } from "@/lib/db"
 
 export async function PATCH(req, { params }) {
     await dbConnect()
-
+    const { id } = await params;
     const { userId } = getAuth(req)
     if (!userId) {
         return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 })
     }
 
     try {
-        const product = await Product.findById(params.id)
+        const product = await Product.findById(id)
         if (!product) {
             return new Response(JSON.stringify({ error: "Product not found" }), { status: 404 })
         }
