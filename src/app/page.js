@@ -21,7 +21,7 @@ export default function Home({ children }) {
   }, [pathname]);
 
   return (
-    <div className="flex flex-col min-h-screen dark:bg-gray-950" suppressHydrationWarning>
+    <div className="flex flex-col min-h-screen " suppressHydrationWarning>
       <AnimatePresence mode="wait">
         {isLoading && <LoadingLogo />}
       </AnimatePresence>

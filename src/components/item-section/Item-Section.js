@@ -10,7 +10,7 @@ const items = [
     title: "Modern Living",
     category: "Home & Living",
     description: "Elevate your space with our premium furniture collection",
-    image: "/images/Home-living.webp",
+    image: "/images/Home-living.jpeg",
     accentColor: "#8B5FBF",
   },
   {

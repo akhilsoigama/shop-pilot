@@ -57,7 +57,7 @@ function ImageCarousel({ images }) {
     return (
         <div className="relative w-full">
             {/* Main Image */}
-            <div className="relative aspect-square rounded-2xl overflow-hidden bg-gray-50 dark:bg-gray-900">
+            <div className="relative aspect-square rounded-2xl overflow-hidden ">
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={currentIndex}
@@ -86,7 +86,7 @@ function ImageCarousel({ images }) {
                                 e.stopPropagation()
                                 prevImage()
                             }}
-                            className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 dark:bg-gray-900/80 p-2 rounded-full shadow-lg hover:scale-110 transition-transform backdrop-blur-sm"
+                            className="absolute left-2 top-1/2 -translate-y-1/2  p-2 rounded-full shadow-lg hover:scale-110 transition-transform backdrop-blur-sm"
                         >
                             <ChevronLeft className="w-5 h-5 text-gray-700 dark:text-gray-300" />
                         </button>
@@ -95,22 +95,20 @@ function ImageCarousel({ images }) {
                                 e.stopPropagation()
                                 nextImage()
                             }}
-                            className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 dark:bg-gray-900/80 p-2 rounded-full shadow-lg hover:scale-110 transition-transform backdrop-blur-sm"
+                            className="absolute right-2 top-1/2 -translate-y-1/2  p-2 rounded-full shadow-lg hover:scale-110 transition-transform backdrop-blur-sm"
                         >
                             <ChevronRight className="w-5 h-5 text-gray-700 dark:text-gray-300" />
                         </button>
                     </>
                 )}
 
-                {/* Image Counter */}
                 {images.length > 1 && (
-                    <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-black/50 text-white px-2 py-1 rounded-full text-xs backdrop-blur-sm">
+                    <div className="absolute bottom-2 left-1/2 -translate-x-1/2  text-white px-2 py-1 rounded-full text-xs backdrop-blur-sm">
                         {currentIndex + 1} / {images.length}
                     </div>
                 )}
             </div>
 
-            {/* Thumbnails */}
             {images.length > 1 && (
                 <div className="flex gap-2 mt-4 overflow-x-auto py-2">
                     {images.map((img, index) => (
@@ -273,7 +271,7 @@ export default function ProductDetailPage({ product }) {
 
     if (!product) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+            <div className="min-h-screen flex items-center justify-center ">
                 <Card className="p-8 text-center">
                     <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
                     <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
@@ -292,12 +290,12 @@ export default function ProductDetailPage({ product }) {
     }
 
     return (
-        <div className="min-h-screen bg-white dark:bg-gray-950">
+        <div className="min-h-screen  ">
             {/* Navigation */}
             <motion.div
                 initial={{ y: -20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                className="bg-white/95 dark:bg-gray-950/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800 z-50"
+                className="backdrop-blur-sm border-b border-gray-200 dark:border-gray-800 z-50"
             >
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
                     <div className="flex items-center justify-between">
@@ -341,12 +339,10 @@ export default function ProductDetailPage({ product }) {
             {/* Main Content */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-                    {/* Image Gallery */}
                     <div className="space-y-4">
                         <ImageCarousel images={product.productImage} />
                     </div>
 
-                    {/* Product Info */}
                     <div className="space-y-6">
                         <motion.div
                             initial={{ opacity: 0, x: 20 }}
@@ -440,7 +436,7 @@ export default function ProductDetailPage({ product }) {
                                 initial={{ opacity: 0, x: 20 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ delay: 0.3 }}
-                                className="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-800"
+                                className="space-y-4 pt-4 border-t border-gray-200"
                             >
                                 {product.variants[0].specifications.map((spec, index) => (
                                     <div key={index} className="space-y-3">
@@ -596,7 +592,7 @@ export default function ProductDetailPage({ product }) {
                 </div>
 
                 {/* Product Details Tabs */}
-                <Tabs defaultValue="description" className="w-full mt-5 dark:bg-gray-950">
+                <Tabs defaultValue="description" className="w-full mt-5 ">
                     <TabsList className="w-full overflow-x-auto dark:bg-gray-900 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden justify-start">
                         {['description', 'specifications', 'reviews', 'shipping'].map((tab) => (
                             <TabsTrigger
@@ -693,7 +689,7 @@ export default function ProductDetailPage({ product }) {
 
 export function ProductDetailSkeleton() {
     return (
-        <div className="min-h-screen bg-white dark:bg-gray-950">
+        <div className="min-h-screen ">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
                     {/* Image Skeleton */}
