@@ -8,6 +8,8 @@ import Navbar from "@/components/navbar-section/Navbar";
 import { Divider } from "@mui/material";
 import HeaderSection from "@/components/header-section/HeaderSeaction";
 import { WishlistProvider } from "@/context/wishlistContext";
+import AnimatedBackground from "@/components/animated-background/AnimatedBackground";
+import { FloatingParticles } from "@/components/wishlist/WishList";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -23,6 +25,11 @@ export default function RootLayout({ children }) {
       <html lang="en" suppressHydrationWarning>
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans`}>
           <CustomThemeProvider>
+             <div className="fixed inset-0 -z-10 overflow-hidden">
+                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-full blur-3xl animate-pulse dark:from-purple-500/10 dark:to-pink-500/10"></div>
+                <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-full blur-3xl animate-pulse delay-1000 dark:from-blue-500/10 dark:to-cyan-500/10"></div>
+                <FloatingParticles />
+            </div>
             <CartProvider>
               <WishlistProvider>
                 <header className="w-full sticky top-0 z-20">
