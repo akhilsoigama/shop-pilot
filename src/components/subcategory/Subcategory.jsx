@@ -16,8 +16,6 @@ import LikeButton from "../like-count/LikeCount";
 
 export default function Subcategory({
   products,
-  isLoading,
-  isError,
   searchQuery,
   setSearchQuery,
   activeFilters,
@@ -25,9 +23,6 @@ export default function Subcategory({
   minPrice,
   maxPrice,
   decodedSubcategory,
-  onViewProduct,
-  hoveredProduct,
-  setHoveredProduct,
   onClearAll,
   category,
   subcategory,
@@ -38,7 +33,6 @@ export default function Subcategory({
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage, setProductsPerPage] = useState(12);
   const [isScrolled, setIsScrolled] = useState(false);
-  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
 
   const noProductsFound = products && products.length === 0 &&
     (searchQuery.trim() !== '' || Object.keys(activeFilters).length > 0 ||
@@ -46,7 +40,6 @@ export default function Subcategory({
 
   const decodedCategory = decodeURIComponent(category);
 
-  // Scroll detection for header styling
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
@@ -81,7 +74,6 @@ export default function Subcategory({
     return sorted;
   }, [products, sortBy]);
 
-  // Pagination logic
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
   const currentProducts = sortedProducts.slice(indexOfFirstProduct, indexOfLastProduct);
@@ -180,12 +172,12 @@ export default function Subcategory({
     <motion.section
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="bg-gradient-to-br from-slate-50 via-white to-indigo-50/30 dark:from-gray-900 dark:via-gray-950 dark:to-indigo-950/20 min-h-screen flex-1"
+      className="bg-gradient-to-br  min-h-screen flex-1"
     >
       <div className="fixed inset-0 -z-10 overflow-hidden">
-        <div className="absolute -top-40 -right-32 w-80 h-80 bg-purple-300/10 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/3 -left-32 w-96 h-96 bg-blue-300/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 left-1/3 w-80 h-80 bg-pink-300/10 rounded-full blur-3xl"></div>
+        <div className="absolute -top-40 -right-32 w-80 h-80  rounded-full blur-3xl"></div>
+        <div className="absolute top-1/3 -left-32 w-96 h-96 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-1/3 w-80 h-80  rounded-full blur-3xl"></div>
       </div>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-3 py-6 lg:py-5">
@@ -212,12 +204,12 @@ export default function Subcategory({
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.1 }}
-          className="mb-8 lg:mb-12 text-center relative py-6 lg:py-8 rounded-2xl bg-gradient-to-r from-blue-50/70 to-purple-50/70 dark:from-gray-900/50 dark:to-gray-800/50 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/30 overflow-hidden"
+          className="mb-8 lg:mb-12 text-center relative py-6 lg:py-8 rounded-2xl  backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/30 overflow-hidden"
         >
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute -top-20 -left-20 w-40 h-40 bg-primary/5 rounded-full blur-xl animate-pulse"></div>
-            <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-purple-500/5 rounded-full blur-xl animate-pulse delay-1000"></div>
-            <div className="absolute top-1/2 left-1/4 w-24 h-24 bg-blue-400/10 rounded-full blur-lg animate-pulse delay-500"></div>
+            <div className="absolute -bottom-20 -right-20 w-40 h-40  rounded-full blur-xl animate-pulse delay-1000"></div>
+            <div className="absolute top-1/2 left-1/4 w-24 h-24  rounded-full blur-lg animate-pulse delay-500"></div>
           </div>
 
           <motion.div
@@ -279,7 +271,7 @@ export default function Subcategory({
                 whileFocus={{ scale: 1.01 }}
                 type="text"
                 placeholder={`Search ${decodedSubcategory.toLowerCase()}...`}
-                className="block w-full pl-10 lg:pl-12 pr-3 lg:pr-4 py-3 lg:py-3 border-0 rounded-2xl bg-white dark:bg-gray-800 shadow-sm text-sm lg:text-base text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-primary/50 focus:outline-none transition-all duration-300"
+                className="block w-full pl-10 lg:pl-12 pr-3 lg:pr-4 py-3 lg:py-3 border-0 rounded-2xl bg-white dark:bg-[#04091d] shadow-sm text-sm lg:text-base text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-primary/50 focus:outline-none transition-all duration-300"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -287,13 +279,13 @@ export default function Subcategory({
 
             <div className="flex flex-wrap gap-2 lg:gap-3 justify-end items-center">
               <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-[160px] lg:w-[180px] h-11 lg:h-12 rounded-2xl bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-xs lg:text-sm shadow-sm">
+                <SelectTrigger className="w-[160px] lg:w-[180px] h-11 lg:h-12 rounded-2xl bg-white dark:bg-[#04091d] border-gray-200 dark:border-gray-700 text-xs lg:text-sm shadow-sm">
                   <div className="flex items-center">
                     <SortAsc className="h-3 w-3 lg:h-4 lg:w-4 mr-1 lg:mr-2" />
                     <SelectValue placeholder="Sort by" />
                   </div>
                 </SelectTrigger>
-                <SelectContent className={"bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 rounded-2xl shadow-xl"}>
+                <SelectContent className={"bg-white dark:bg-[#04091d] border-gray-200 dark:border-gray-700 rounded-2xl shadow-xl"}>
                   <SelectItem value="recommended">Recommended</SelectItem>
                   <SelectItem value="newest">Newest First</SelectItem>
                   <SelectItem value="price-low">Price: Low to High</SelectItem>
@@ -303,7 +295,7 @@ export default function Subcategory({
               </Select>
 
               <Tabs value={viewMode} onValueChange={setViewMode} className="w-auto hidden sm:block">
-                <TabsList className="grid w-full grid-cols-2 h-11 lg:h-12 p-1 bg-gray-100 dark:bg-gray-800 rounded-2xl shadow-inner">
+                <TabsList className="grid w-full grid-cols-2 h-11 lg:h-12 p-1 bg-gray-100 dark:bg-[#04091d] rounded-2xl shadow-inner">
                   <TabsTrigger value="grid" className="rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-sm dark:data-[state=active]:bg-gray-900 p-2 transition-all">
                     <Grid className="h-4 w-4 lg:h-4 lg:w-4" />
                   </TabsTrigger>
@@ -358,16 +350,15 @@ export default function Subcategory({
               Showing {indexOfFirstProduct + 1}-{Math.min(indexOfLastProduct, sortedProducts.length)} of {sortedProducts.length} products
             </p>
 
-            {/* Products per page selector */}
             <div className="flex items-center gap-3">
               <span className="text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">
                 Show:
               </span>
               <Select value={productsPerPage.toString()} onValueChange={handleProductsPerPageChange}>
-                <SelectTrigger className="w-[80px] h-9 rounded-xl bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-xs shadow-sm">
+                <SelectTrigger className="w-[80px] h-9 rounded-xl bg-white dark:bg-[#04091d] border-gray-200 dark:border-gray-700 text-xs shadow-sm">
                   <SelectValue placeholder="12" />
                 </SelectTrigger>
-                <SelectContent className={"bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 rounded-xl shadow-xl"}>
+                <SelectContent className={"bg-white dark:bg-[#04091d] border-gray-200 dark:border-gray-700 rounded-xl shadow-xl"}>
                   <SelectItem value="12">12</SelectItem>
                   <SelectItem value="24">24</SelectItem>
                   <SelectItem value="36">36</SelectItem>
@@ -429,7 +420,7 @@ export default function Subcategory({
                   className="relative"
                 >
                   <Card className={cn(
-                    "relative rounded-2xl overflow-hidden flex bg-white dark:bg-gray-900 border border-gray-200/30 dark:border-gray-800/50 shadow-md hover:shadow-2xl transition-all duration-500 group backdrop-blur-sm bg-opacity-90",
+                    "relative rounded-2xl overflow-hidden flex  border border-gray-200/30 dark:border-gray-800/50 shadow-md hover:shadow-2xl transition-all duration-500 group backdrop-blur-sm bg-opacity-90",
                     viewMode === 'list' && "flex-col sm:flex-row h-auto sm:h-72"
                   )}>
                     {/* Product image container */}
