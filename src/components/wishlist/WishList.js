@@ -112,7 +112,7 @@ export default function WishlistPage() {
                             </motion.div>
                             <h3 className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white mb-2 sm:mb-3">Your wishlist is empty</h3>
                             <p className="text-gray-500 dark:text-gray-400 max-w-md mx-auto mb-6 sm:mb-8 text-sm sm:text-base">
-                                  Discover amazing products and add them to your wishlist. They&apos;ll appear here!
+                                Discover amazing products and add them to your wishlist. They&apos;ll appear here!
                             </p>
                             <Button asChild size="lg" className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
                                 <Link href="/">
@@ -162,13 +162,18 @@ export default function WishlistPage() {
                                                 <Button
                                                     variant="ghost"
                                                     size="icon"
-                                                    className="rounded-full bg-[#0a071e]/80 dark:bg-white backdrop-blur-sm h-8 w-8 sm:h-9 sm:w-9 hover:bg-red-500 hover:text-white transition-all duration-200 shadow-md"
-                                                    onClick={() => {
-                                                        removeFromWishlist(product._id);
-                                                        toast.success("Removed from wishlist", {
-                                                            icon: <Trash2 className="w-4 h-4" />,
-                                                        });
+                                                    className="rounded-full bg-[#0a071e]/80 backdrop-blur-sm h-8 w-8 sm:h-9 sm:w-9 hover:bg-red-500 hover:text-white transition-all duration-200 shadow-md"
+                                                    onClick={async () => {
+                                                        try {
+                                                            await removeFromWishlist(product._id, { syncServer: true });
+                                                            toast.success("Removed from wishlist", {
+                                                                icon: <Trash2 className="w-4 h-4" />,
+                                                            });
+                                                        } catch (error) {
+                                                            toast.error("Failed to remove from wishlist");
+                                                        }
                                                     }}
+
                                                 >
                                                     <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
                                                 </Button>

@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useWishlist } from "@/context/wishlistContext";
 import { toast } from "sonner";
+import LikeButton from "../like-count/LikeCount";
 
 export default function Subcategory({
   products,
@@ -29,7 +30,8 @@ export default function Subcategory({
   setHoveredProduct,
   onClearAll,
   category,
-  subcategory
+  subcategory,
+  user 
 }) {
   const [viewMode, setViewMode] = useState('grid');
   const [sortBy, setSortBy] = useState('recommended');
@@ -546,8 +548,8 @@ export default function Subcategory({
                               </Button>
                             </motion.div>
                           </Link>
-                          <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-                            <Button
+                          {/* <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}> */}
+                            {/* <Button
                               size="icon"
                               variant="outline"
                               className="rounded-xl border-gray-300 dark:border-gray-700 h-11 w-11"
@@ -575,8 +577,9 @@ export default function Subcategory({
                                       : "text-gray-400 group-hover:text-red-500"
                                 )}
                               />
-                            </Button>
-                          </motion.div>
+                            </Button> */}
+                             <LikeButton productId={product._id} userId={user?.id}  productData={product}  />
+                          {/* </motion.div> */}
                         </div>
                       </div>
                     </CardContent>
