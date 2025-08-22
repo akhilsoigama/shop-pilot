@@ -16,7 +16,6 @@ import {
     XCircle,
     ShoppingCart,
     Star,
-    Heart,
     ArrowLeft,
     Share2,
     Truck,
@@ -153,15 +152,6 @@ export default function ProductDetailPage({ product }) {
     const { addToCart, isInitialized } = useCart()
     const [isShareModalOpen, setIsShareModalOpen] = useState(false)
 
-    const handleToggleWishlist = () => {
-        if (isFavorite) {
-            removeFromWishlist(product._id);
-            toast.success("Removed from wishlist");
-        } else {
-            addToWishlist(product);
-            toast.success("Added to wishlist");
-        }
-    };
 
     const handleCheckout = async () => {
         try {
@@ -323,34 +313,7 @@ export default function ProductDetailPage({ product }) {
                         </Button>
 
                         <div className="flex items-center gap-2">
-                            {/* <TooltipProvider>
-                                <Tooltip>
-                                    <TooltipTrigger asChild>
-                                        <Button
-                                            variant="ghost"
-                                            size="icon"
-                                            onClick={handleToggleWishlist}
-                                            className="relative"
-                                        >
-                                            <motion.div
-                                                whileHover={{ scale: 1.1 }}
-                                                whileTap={{ scale: 0.9 }}
-                                            >
-                                                <Heart
-                                                    className={`w-5 h-5 transition-colors ${isFavorite
-                                                        ? "fill-red-500 text-red-500"
-                                                        : "text-gray-400 hover:text-red-500"
-                                                        }`}
-                                                />
-                                            </motion.div>
-                                        </Button>
-                                    </TooltipTrigger>
-                                    <TooltipContent>
-                                        <p>{isFavorite ? "Remove from wishlist" : "Add to wishlist"}</p>
-                                    </TooltipContent>
-                                </Tooltip>
-                            </TooltipProvider> */}
-                          <LikeButton productId={product._id} userId={user?.id}  />
+                            <LikeButton productId={product._id} userId={user?.id} productData={product} />
                             <TooltipProvider>
                                 <Tooltip>
                                     <TooltipTrigger asChild>
