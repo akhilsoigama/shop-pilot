@@ -42,6 +42,16 @@ const ProductSchema = new mongoose.Schema({
   variants: [variantSchema],
   stripeProductId: { type: String },
   stripePriceId: { type: String },
+  likes: {
+    type: Number,
+    default: 0
+  },
+  likedBy: [
+    {
+      type: String, 
+      ref: "User"
+    }
+  ]
 }, { timestamps: true });
 
 function arrayLimit(val) {

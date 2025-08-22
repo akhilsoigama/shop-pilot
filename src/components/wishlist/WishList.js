@@ -337,7 +337,7 @@ export default function WishlistPage() {
                                     layout
                                     className="group relative"
                                 >
-                                    <Card className="overflow-hidden border-0 rounded-2xl transition-all duration-500 bg-white/80 dark:bg-[#1a152f]/80 backdrop-blur-sm hover:bg-white/90 dark:hover:bg-[#2a1f45]/90 border border-purple-300 dark:border-purple-500/20 hover:border-purple-500/40 shadow-xl hover:shadow-2xl shadow-purple-500/10">
+                                    <Card className="overflow-hidden border-0 rounded-2xl transition-all duration-500 bg-white/80 dark:bg-[#1a152f]/80 backdrop-blur-sm hover:bg-white/90 dark:hover:bg-[#2a1f45]/90  border-purple-300 dark:border-purple-500/20 hover:border-purple-500/40 shadow-xl hover:shadow-2xl shadow-purple-500/10">
                                         <div className="aspect-square relative overflow-hidden flex items-center justify-center bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 p-4">
                                             {/* Shimmer effect */}
                                             <ShimmerEffect />
@@ -350,7 +350,7 @@ export default function WishlistPage() {
                                                     className="object-contain p-3 group-hover:scale-110 transition-transform duration-500"
                                                     sizes="(max-width: 640px) 280px, (max-width: 768px) 200px, (max-width: 1024px) 220px, 200px"
                                                     onError={(e) => {
-                                                        e.target.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzMzMyIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkeT0iLjM1ZW0iIGZpbGw9IiM4ODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMjAiPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg==";
+                                                        e.target.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzMzMyIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkeT0iLjM1ZW0iIGZpbGw9IiM4ODgiIHRleHQtYW5jaG9y=";
                                                     }}
                                                 />
                                             </div>
@@ -368,11 +368,15 @@ export default function WishlistPage() {
                                                         variant="ghost"
                                                         size="icon"
                                                         className="rounded-full bg-red-500/90 backdrop-blur-sm h-9 w-9 hover:bg-red-600 text-white shadow-md"
-                                                        onClick={() => {
-                                                            removeFromWishlist(product._id);
-                                                            toast.success("Removed from wishlist", {
-                                                                icon: <Trash2 className="w-4 h-4" />,
-                                                            });
+                                                        onClick={async () => {
+                                                            try {
+                                                                await removeFromWishlist(product._id, { syncServer: true });
+                                                                toast.success("Removed from wishlist", {
+                                                                    icon: <Trash2 className="w-4 h-4" />,
+                                                                });
+                                                            } catch (error) {
+                                                                toast.error("Failed to remove from wishlist");
+                                                            }
                                                         }}
                                                     >
                                                         <Trash2 className="w-4 h-4" />
