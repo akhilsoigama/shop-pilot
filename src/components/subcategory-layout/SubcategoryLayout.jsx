@@ -6,6 +6,7 @@ import { Subcategories } from "@/lib/category";
 import { useCart } from "@/context/cartContext";
 import Subcategory from "../subcategory/Subcategory";
 import FilterSidebar from "../filter-sidebar/FilterSidebar";
+import { useUser } from "@clerk/nextjs";
 
 const normalizeColorValue = (value) => {
   if (!value || typeof value !== 'string') return value;
@@ -13,11 +14,12 @@ const normalizeColorValue = (value) => {
 };
 
 export default function SubcategoryLayout() {
+  const { user } = useUser()
   const { category, subcategory } = useParams();
   const decodedCategory = decodeURIComponent(category);
   const decodedSubcategory = decodeURIComponent(subcategory);
   const { addToCart } = useCart();
-  
+
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [hoveredProduct, setHoveredProduct] = useState(null);
@@ -105,7 +107,7 @@ export default function SubcategoryLayout() {
   };
 
   return (
-      <div className="flex flex-col md:flex-row gap-0 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-950">
+    <div className="flex flex-col md:flex-row gap-0 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-950">
       <FilterSidebar
         subcategory={currentSubcategory}
         products={products}
@@ -117,7 +119,7 @@ export default function SubcategoryLayout() {
         maxPrice={maxPrice}
         onClearAll={clearAllFilters}
       />
-      
+
       <Subcategory
         products={filteredProducts}
         isLoading={isLoading}
@@ -134,6 +136,7 @@ export default function SubcategoryLayout() {
         onClearAll={clearAllFilters}
         category={category}
         subcategory={subcategory}
+        user={user}
         onAddToCart={addToCart}
       />
     </div>
