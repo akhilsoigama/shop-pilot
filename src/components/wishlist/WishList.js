@@ -14,7 +14,7 @@ import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
 // Floating particles background
-const FloatingParticles = () => {
+export const FloatingParticles = () => {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       {[...Array(25)].map((_, i) => (
@@ -128,11 +128,11 @@ export default function WishlistPage() {
 
     if (!isInitialized || !isClient || isLoading) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50 dark:from-[#0a071e] dark:via-[#1a152f] dark:to-[#2a1f45]">
+            <div className="min-h-screen ">
                 <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 py-8 sm:py-12">
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-5">
                         {Array.from({ length: 10 }).map((_, index) => (
-                            <Card key={index} className="overflow-hidden border-0 shadow-lg rounded-xl bg-white/80 backdrop-blur-sm dark:bg-[#1a152f]/60">
+                            <Card key={index} className="overflow-hidden border-0 shadow-lg rounded-xl bg-white/80 backdrop-blur-sm ">
                                 <Skeleton className="h-48 w-full rounded-none bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30" />
                                 <CardContent className="p-3 sm:p-4">
                                     <Skeleton className="h-5 w-4/5 mb-2 bg-purple-200 dark:bg-purple-800/30" />
@@ -151,7 +151,7 @@ export default function WishlistPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50 dark:from-[#0a071e] dark:via-[#1a152f] dark:to-[#2a1f45] pb-12 sm:pb-16 relative overflow-hidden">
+        <div className="min-h-screen  pb-12 sm:pb-16 relative overflow-hidden">
             {/* Animated background */}
             <div className="fixed inset-0 -z-10 overflow-hidden">
                 <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-full blur-3xl animate-pulse dark:from-purple-500/10 dark:to-pink-500/10"></div>

@@ -52,7 +52,7 @@ export default function MiddleSection() {
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
     >
-      <Box className="py-16 px-4 dark:bg-gray-950 bg-gray-50 md:px-20">
+      <Box className="py-16 px-4  md:px-20">
         <motion.h2
           className="text-3xl md:text-4xl font-bold text-center mb-12 dark:text-white text-gray-900"
           initial={{ opacity: 0, y: 20 }}

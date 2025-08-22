@@ -52,7 +52,7 @@ export default function CategorySection() {
       variants={sectionVariants}
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
-      className={`w-full dark:text-white py-16 px-4 sm:px-6 lg:px-8 ${poppins.className}`}
+      className={`w-full dark: py-16 px-4 sm:px-6 lg:px-8 ${poppins.className}`}
     >
       <Typography
         variant="h4"
@@ -122,39 +122,39 @@ export default function CategorySection() {
           initial={{ opacity: 0, y: 80 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
-          <Carousel className="w-full cursor-grab">
+          <Carousel className="w-full  cursor-grab">
             <CarouselContent>
               {filteredProducts.map((item, i) => (
-                <CarouselItem key={i} className="md:basis-1/2 lg:basis-1/4">
-                  <Box className="rounded-2xl overflow-hidden border dark:border-neutral-800 bg-[#1f1f1f] flex flex-col shadow-md shadow-gray-700/25  hover:shadow-lg transition-shadow duration-300">
-                    <Box className="relative w-full pt-[125%] overflow-hidden">
+                <CarouselItem key={i} className="sm:basis-1/2 md:basic-1/3 lg:basis-1/4">
+                  <Box className="rounded-2xl h-[400px] overflow-hidden border dark:border-neutral-800  flex flex-col shadow-md shadow-gray-700/25  hover:shadow-lg transition-shadow duration-300">
+                    <Box className=" w-full overflow-hidden">
                       <Box
                         component="img"
                         src={item.productImage[0]}
                         alt={item.productName}
-                        className="absolute top-0 left-0 w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                        className="w-full  transition-transform duration-500 hover:scale-105"
                       />
                       {!item.inStock && (
-                        <Box className="absolute top-2 left-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">
+                        <Box className="absolute top-2 left-2 bg-red-600  text-xs font-bold px-2 py-1 rounded">
                           Out of Stock
                         </Box>
                       )}
                       {Date.now() - new Date(item.createdAt).getTime() <
                         7 * 24 * 60 * 60 * 1000 && (
-                          <Box className="absolute top-2 right-2 bg-green-600 text-white text-xs font-bold px-2 py-1 rounded">
+                          <Box className="absolute top-2 right-2 bg-green-600  text-xs font-bold px-2 py-1 rounded">
                             Sale
                           </Box>
                         )}
                     </Box>
                     <Box className="p-4 flex flex-col gap-1">
-                      <Typography className="font-semibold text-white text-base line-clamp-1">
+                      <Typography className="font-semibold  text-base line-clamp-1">
                         {item.productName}
                       </Typography>
                       <Typography className="text-gray-400 text-sm">
-                        Brand: <span className="text-white">{item.brand}</span>
+                        Brand: <span className="">{item.brand}</span>
                       </Typography>
                       <Box className="flex items-center gap-2 mt-1">
-                        <Typography className="text-white font-bold text-lg">
+                        <Typography className=" font-bold text-lg">
                           ₹{item.discountPrice ?? item.price}
                         </Typography>
                         {item.discount > 0 && (
