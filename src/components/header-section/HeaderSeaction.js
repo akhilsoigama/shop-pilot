@@ -102,7 +102,7 @@ const HeaderSection = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-
+  const wishlist = JSON.parse(localStorage.getItem('wishlist'))
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -252,7 +252,21 @@ const HeaderSection = () => {
                         }
                       }}
                     >
-                      Wishlist
+                      <Badge
+                        badgeContent={wishlist.length || 0}
+                        color="error"
+                        sx={{
+                          '& .MuiBadge-badge': {
+                            right: -1,
+                            top: -1,
+                            border: `2px solid ${theme.palette.background.paper}`,
+                            padding: '0 1px',
+                            fontWeight: 600
+                          }
+                        }}
+                      >
+                        Wishlist
+                      </Badge>
                     </NavButton>
                   </Link>
                 </>
