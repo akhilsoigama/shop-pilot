@@ -11,9 +11,7 @@ import { toast } from 'sonner';
 import { useWishlist } from '@/context/wishlistContext';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { cn } from '@/lib/utils';
 
-// Floating particles background
 export const FloatingParticles = () => {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -57,7 +55,6 @@ export const FloatingParticles = () => {
   )
 }
 
-// Container animations
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -68,7 +65,6 @@ const containerVariants = {
   }
 }
 
-// Item animations
 const itemVariants = {
   hidden: { 
     y: 30,
@@ -98,7 +94,6 @@ const itemVariants = {
   }
 }
 
-// Shimmer effect
 const ShimmerEffect = () => {
   return (
     <motion.div 
@@ -121,7 +116,6 @@ export default function WishlistPage() {
         return () => clearTimeout(timer);
     }, []);
 
-    // Calculate total savings
     const totalSavings = wishlist.reduce((total, product) => {
         return total + (product.price - (product.discountPrice || product.price));
     }, 0);
@@ -132,7 +126,7 @@ export default function WishlistPage() {
                 <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 py-8 sm:py-12">
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-5">
                         {Array.from({ length: 10 }).map((_, index) => (
-                            <Card key={index} className="overflow-hidden border-0 shadow-lg rounded-xl bg-white/80 backdrop-blur-sm ">
+                            <Card key={index} className="overflow-hidden border-0 shadow-lg rounded-xl bg-white/80 dark:bg-purple-800/30 backdrop-blur-sm ">
                                 <Skeleton className="h-48 w-full rounded-none bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30" />
                                 <CardContent className="p-3 sm:p-4">
                                     <Skeleton className="h-5 w-4/5 mb-2 bg-purple-200 dark:bg-purple-800/30" />
@@ -152,7 +146,6 @@ export default function WishlistPage() {
 
     return (
         <div className="min-h-screen  pb-12 sm:pb-16 relative overflow-hidden">
-            {/* Animated background */}
             <div className="fixed inset-0 -z-10 overflow-hidden">
                 <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-full blur-3xl animate-pulse dark:from-purple-500/10 dark:to-pink-500/10"></div>
                 <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-full blur-3xl animate-pulse delay-1000 dark:from-blue-500/10 dark:to-cyan-500/10"></div>
@@ -160,14 +153,12 @@ export default function WishlistPage() {
             </div>
 
             <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 py-8 sm:py-12 relative z-10">
-                {/* Premium Header */}
                 <motion.div
                     initial={{ opacity: 0, y: -30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.7, type: "spring" }}
                     className="flex flex-col items-center mb-8 sm:mb-12 text-center relative"
                 >
-                    {/* Animated crown icon */}
                     <motion.div
                         className="inline-flex items-center justify-center p-3 bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 rounded-2xl mb-4 shadow-2xl"
                         animate={{ 
@@ -190,7 +181,6 @@ export default function WishlistPage() {
                         Your curated collection of favorite products
                     </p>
 
-                    {/* Decorative elements */}
                     <motion.div 
                         className="absolute -top-4 -left-4 opacity-30"
                         animate={{ rotate: 360 }}
@@ -207,7 +197,6 @@ export default function WishlistPage() {
                     </motion.div>
                 </motion.div>
 
-                {/* Stats section */}
                 {wishlist.length > 0 && (
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -358,7 +347,6 @@ export default function WishlistPage() {
                                             {/* Gradient overlay */}
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 dark:from-black/50"></div>
 
-                                            {/* Action buttons */}
                                             <div className="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300">
                                                 <motion.div
                                                     whileHover={{ scale: 1.1 }}
@@ -384,7 +372,6 @@ export default function WishlistPage() {
                                                 </motion.div>
                                             </div>
 
-                                            {/* Discount badge */}
                                             {product.discount > 0 && (
                                                 <motion.div 
                                                     className="absolute top-3 left-3"
@@ -396,7 +383,6 @@ export default function WishlistPage() {
                                                 </motion.div>
                                             )}
 
-                                            {/* Premium badge for high discounts */}
                                             {product.discount > 30 && (
                                                 <motion.div 
                                                     className="absolute bottom-3 left-3"
@@ -434,7 +420,6 @@ export default function WishlistPage() {
                                                     )}
                                                 </div>
 
-                                                {/* Rating */}
                                                 <div className="flex items-center bg-purple-100 dark:bg-purple-900/40 px-2 py-1 rounded-full">
                                                     <Star className="w-3 h-3 text-yellow-500 dark:text-yellow-400 fill-current" />
                                                     <span className="text-xs font-medium text-gray-800 dark:text-white ml-1">4.5</span>
@@ -447,7 +432,7 @@ export default function WishlistPage() {
                                                     asChild
                                                 >
                                                     <Link
-                                                        href={`/categories/${encodeURIComponent(product.category)}/${encodeURIComponent(product.subcategory)}/${product._id}`}
+                                                        href={`/categories/${encodeURIComponent(product.category)}/${encodeURIComponent(product.subCategory)}/${product._id}`}
                                                     >
                                                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700"></div>
                                                         <Eye className="w-4 h-4 mr-2" />
@@ -463,7 +448,6 @@ export default function WishlistPage() {
                     )}
                 </AnimatePresence>
 
-                {/* Recommendations section when items exist */}
                 {wishlist.length > 0 && (
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
@@ -490,7 +474,6 @@ export default function WishlistPage() {
                 )}
             </div>
 
-            {/* Floating action buttons */}
             <motion.div 
                 className="fixed bottom-6 right-6 z-50 flex flex-col gap-3"
                 initial={{ opacity: 0, y: 50 }}

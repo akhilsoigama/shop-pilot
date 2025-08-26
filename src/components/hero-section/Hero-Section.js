@@ -10,6 +10,9 @@ import BlurText from "../react-bits/blur-text/Blur-text";
 import ShinyText from "../react-bits/shiny-text/Shiny-Text";
 import DecryptedText from "../react-bits/decrypted-text/Decrypted-Text";
 import { InteractiveHoverButton } from "@/components/magicui/interactive-hover-button";
+import { useRouter } from "next/navigation";
+import { useProducts } from "@/hooks/useProduct";
+import { useUsers } from "@/hooks/User";
 
 const poppins = Poppins({
   weight: ["400", "500", "600", "700"],
@@ -23,7 +26,6 @@ const watchImages = [
   "/images/watch.png",
 ];
 
-// Feature items data
 const features = [
   { id: 1, text: "Free Shipping", icon: "🚚" },
   { id: 2, text: "Secure Payment", icon: "🔒" },
@@ -33,7 +35,15 @@ const features = [
 export default function HeroSection() {
   const [currentWatch, setCurrentWatch] = useState(0);
   const [animationKey, setAnimationKey] = useState(0);
-
+  const [product, setProducts]=useState();
+  const router = useRouter()
+  const {products}=useProducts()
+  // const {data: users}=useUsers()
+  // console.log(users)
+  useEffect(()=>{
+    setProducts(products);
+  },[])
+  console.log(product)
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentWatch((prev) => {
@@ -107,12 +117,12 @@ export default function HeroSection() {
           ))}
         </motion.div>
 
-        {/* CTA Buttons */}
         <motion.div 
           className="flex flex-col sm:flex-row gap-3 w-full max-w-md "
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
+          onClick={()=>router.push('/categories')}
         >
           <Box className="w-full sm:w-auto">
             <InteractiveHoverButton className="text-black dark:text-white bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 dark:from-blue-600 dark:to-purple-700 dark:hover:from-blue-700 dark:hover:to-purple-800 w-full py-2.5 text-base font-medium">
@@ -122,6 +132,7 @@ export default function HeroSection() {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            onClick={()=>router.push('/wishlist')}
             className="px-5 py-2.5 border-2 border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 font-medium hover:border-blue-500 dark:hover:border-blue-400 transition-colors w-full sm:w-auto"
           >
             Explore Collections
@@ -136,7 +147,7 @@ export default function HeroSection() {
           transition={{ delay: 0.8 }}
         >
           {[
-            { value: "10K+", label: "Products" },
+            { value: 0, label: "Products" },
             { value: "2M+", label: "Customers" },
             { value: "15+", label: "Years" },
           ].map((stat, index) => (
