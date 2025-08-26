@@ -12,7 +12,8 @@ import {
     Collapse,
     Divider,
     ListItem,
-    useMediaQuery
+    useMediaQuery,
+    IconButton
 } from '@mui/material';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
@@ -20,23 +21,31 @@ import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 import { categories, Subcategories } from '@/lib/category';
 import styled from '@emotion/styled';
-import { ExpandMore, ExpandLess, Menu as MenuIcon } from '@mui/icons-material';
+import { ExpandMore, ExpandLess, Menu as MenuIcon, Close } from '@mui/icons-material';
+
 const MegaMenuContainer = styled(motion.div)(({ theme }) => ({
     position: 'fixed',
     left: 0,
     right: 0,
-    top: '80px',
-    backgroundColor: theme.palette.background.paper,
-    boxShadow: theme.shadows[6],
+    top: '56px',
+    backgroundColor: alpha(theme.palette.background.paper, 0.98),
+    backdropFilter: 'blur(16px)',
+    boxShadow: theme.shadows[10],
     zIndex: theme.zIndex.modal,
-    borderTop: `1px solid ${theme.palette.divider}`,
-    padding: theme.spacing(4),
-    height:'60vh',
+    borderTop: `1px solid ${alpha(theme.palette.divider, 0.08)}`,
+    padding: theme.spacing(3),
+    height: '55vh',
     overflowY: 'auto',
-    '&::-webkit-scrollbar': { width: '6px' },
+    '&::-webkit-scrollbar': { 
+        width: '6px',
+        background: 'transparent'
+    },
     '&::-webkit-scrollbar-thumb': {
-        backgroundColor: theme.palette.divider,
+        backgroundColor: alpha(theme.palette.primary.main, 0.3),
         borderRadius: '3px',
+    },
+    '&::-webkit-scrollbar-thumb:hover': {
+        backgroundColor: alpha(theme.palette.primary.main, 0.5),
     },
 }));
 
@@ -44,9 +53,9 @@ const Navbar = () => {
     const theme = useTheme();
     const [mobileOpen, setMobileOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
-    const [hoveredCategory, setHoveredCategory] = useState(null);
+    const [activeCategory, setActiveCategory] = useState(null);
     const [expandedCategories, setExpandedCategories] = useState({});
-    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
     const categoryMap = {};
     Subcategories.forEach(cat => {
@@ -72,7 +81,7 @@ const Navbar = () => {
     };
 
     const handleLinkClick = () => {
-        setHoveredCategory(null);
+        setActiveCategory(null);
         setMobileOpen(false);
     };
 
@@ -83,33 +92,62 @@ const Navbar = () => {
         }));
     };
 
+    const handleCategoryClick = (category) => {
+        if (activeCategory === category) {
+            setActiveCategory(null);
+        } else {
+            setActiveCategory(category);
+        }
+    };
+
     const renderMegaMenu = (category) => (
         <MegaMenuContainer
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 5 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10 }}
-            transition={{ duration: 0.2 }}
-            onMouseEnter={() => setHoveredCategory(category)}
-            onMouseLeave={() => setHoveredCategory(null)}
+            exit={{ opacity: 0, y: 5 }}
+            transition={{ duration: 0.15, ease: "easeOut" }}
             className='scrollbar-hide'
         >
-            <Container maxWidth="xl" sx={{ px: 0 }}>
-                <Box sx={{ p: 2 }}>
+            <Container maxWidth="xl" sx={{ px: 0, position: 'relative' }}>
+                <IconButton
+                    sx={{
+                        position: 'absolute',
+                        top: 8,
+                        right: 8,
+                        zIndex: 1,
+                        backgroundColor: alpha(theme.palette.primary.main, 0.1),
+                        '&:hover': {
+                            backgroundColor: alpha(theme.palette.primary.main, 0.2),
+                        }
+                    }}
+                    onClick={() => setActiveCategory(null)}
+                    size="small"
+                >
+                    <Close sx={{ fontSize: 16 }} />
+                </IconButton>
+                
+                <Box sx={{ p: 2, pt: 4 }}>
                     <Typography
                         variant="h6"
                         sx={{
                             fontWeight: 700,
                             color: theme.palette.primary.main,
-                            mb: 2,
-                            px: 1,
-                            py: 0.5,
-                            borderRadius: 1,
-                            backgroundColor: alpha(theme.palette.primary.main, 0.1),
+                            mb: 3,
+                            px: 1.5,
+                            py: 1,
+                            borderRadius: 1.5,
+                            backgroundColor: alpha(theme.palette.primary.main, 0.08),
+                            display: 'inline-block',
+                            fontSize: '1.1rem'
                         }}
                     >
                         {category}
                     </Typography>
-                    <List sx={{ p: 0 }}>
+                    <Box sx={{ 
+                        display: 'grid', 
+                        gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', 
+                        gap: 2 
+                    }}>
                         {categoryMap[category]?.map((sub) => {
                             const subItem = typeof sub === 'string' ? { name: sub } : sub;
                             return (
@@ -119,39 +157,56 @@ const Navbar = () => {
                                     onClick={handleLinkClick}
                                     style={{ textDecoration: 'none', color: 'inherit' }}
                                 >
-                                    <ListItemButton
-                                        sx={{
-                                            '&:hover': {
-                                                backgroundColor: alpha(theme.palette.primary.main, 0.05),
-                                            }
-                                        }}
+                                    <motion.div
+                                        whileHover={{ x: 3, backgroundColor: alpha(theme.palette.primary.main, 0.04) }}
+                                        transition={{ duration: 0.15 }}
+                                        style={{ borderRadius: 12 }}
                                     >
-                                        {subItem.imageUrl && (
-                                            <Box sx={{
-                                                position: 'relative',
-                                                width: 24,
-                                                height: 24,
-                                                borderRadius: '4px',
-                                                overflow: 'hidden',
-                                                flexShrink: 0,
-                                                mr: 1
+                                        <Box
+                                            sx={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                p: 1.5,
+                                                borderRadius: 2,
+                                                transition: 'all 0.2s ease',
+                                                '&:hover': {
+                                                    backgroundColor: alpha(theme.palette.primary.main, 0.04),
+                                                }
+                                            }}
+                                        >
+                                            {subItem.imageUrl && (
+                                                <Box sx={{
+                                                    position: 'relative',
+                                                    width: 32,
+                                                    height: 32,
+                                                    borderRadius: '8px',
+                                                    overflow: 'hidden',
+                                                    flexShrink: 0,
+                                                    mr: 2,
+                                                    boxShadow: theme.shadows[1],
+                                                    border: `1px solid ${alpha(theme.palette.divider, 0.1)}`
+                                                }}>
+                                                    <Image
+                                                        src={subItem.imageUrl}
+                                                        alt={subItem.name}
+                                                        fill
+                                                        style={{ objectFit: 'cover' }}
+                                                    />
+                                                </Box>
+                                            )}
+                                            <Typography variant="body2" sx={{ 
+                                                fontWeight: 500,
+                                                fontSize: '0.9rem',
+                                                color: theme.palette.text.primary
                                             }}>
-                                                <Image
-                                                    src={subItem.imageUrl}
-                                                    alt={subItem.name}
-                                                    fill
-                                                    style={{ objectFit: 'cover' }}
-                                                />
-                                            </Box>
-                                        )}
-                                        <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                                            {subItem.name}
-                                        </Typography>
-                                    </ListItemButton>
+                                                {subItem.name}
+                                            </Typography>
+                                        </Box>
+                                    </motion.div>
                                 </Link>
                             );
                         })}
-                    </List>
+                    </Box>
                 </Box>
             </Container>
         </MegaMenuContainer>
@@ -159,38 +214,56 @@ const Navbar = () => {
 
     const renderAllMegaMenu = () => (
         <MegaMenuContainer
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 5 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10 }}
-            transition={{ duration: 0.2 }}
-            onMouseEnter={() => setHoveredCategory("All")}
-            onMouseLeave={() => setHoveredCategory(null)}
+            exit={{ opacity: 0, y: 5 }}
+            transition={{ duration: 0.15, ease: "easeOut" }}
         >
-            <Container maxWidth="xl" sx={{ px: 0 }}>
+            <Container maxWidth="xl" sx={{ px: 0, position: 'relative' }}>
+                <IconButton
+                    sx={{
+                        position: 'absolute',
+                        top: 8,
+                        right: 8,
+                        zIndex: 1,
+                        backgroundColor: alpha(theme.palette.primary.main, 0.1),
+                        '&:hover': {
+                            backgroundColor: alpha(theme.palette.primary.main, 0.2),
+                        }
+                    }}
+                    onClick={() => setActiveCategory(null)}
+                    size="small"
+                >
+                    <Close sx={{ fontSize: 16 }} />
+                </IconButton>
+                
                 <Box sx={{
                     display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
-                    gap: theme.spacing(4),
-                    p: 2
+                    gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+                    gap: theme.spacing(3),
+                    p: 2,
+                    pt: 4
                 }}>
                     {categories.map((cat) => (
                         <Box key={cat}>
                             <Typography
-                                variant="h6"
+                                variant="subtitle1"
                                 sx={{
                                     fontWeight: 700,
                                     color: theme.palette.primary.main,
                                     mb: 2,
-                                    px: 1,
-                                    py: 0.5,
-                                    borderRadius: 1,
-                                    backgroundColor: alpha(theme.palette.primary.main, 0.1),
+                                    px: 1.5,
+                                    py: 1,
+                                    borderRadius: 1.5,
+                                    backgroundColor: alpha(theme.palette.primary.main, 0.08),
+                                    display: 'inline-block',
+                                    fontSize: '1rem'
                                 }}
                             >
                                 {cat}
                             </Typography>
-                            <List sx={{ p: 0 }}>
-                                {categoryMap[cat]?.map((sub) => {
+                            <Box sx={{ p: 0 }}>
+                                {categoryMap[cat]?.slice(0, 6).map((sub) => {
                                     const subItem = typeof sub === 'string' ? { name: sub } : sub;
                                     return (
                                         <Link
@@ -199,39 +272,56 @@ const Navbar = () => {
                                             onClick={handleLinkClick}
                                             style={{ textDecoration: 'none', color: 'inherit' }}
                                         >
-                                            <ListItemButton
-                                                sx={{
-                                                    '&:hover': {
-                                                        backgroundColor: alpha(theme.palette.primary.main, 0.05),
-                                                    }
-                                                }}
+                                            <motion.div
+                                                whileHover={{ x: 3, backgroundColor: alpha(theme.palette.primary.main, 0.04) }}
+                                                transition={{ duration: 0.15 }}
+                                                style={{ borderRadius: 12 }}
                                             >
-                                                {subItem.imageUrl && (
-                                                    <Box sx={{
-                                                        position: 'relative',
-                                                        width: 24,
-                                                        height: 24,
-                                                        borderRadius: '4px',
-                                                        overflow: 'hidden',
-                                                        flexShrink: 0,
-                                                        mr: 1
+                                                <Box
+                                                    sx={{
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        p: 1.5,
+                                                        borderRadius: 2,
+                                                        transition: 'all 0.2s ease',
+                                                        '&:hover': {
+                                                            backgroundColor: alpha(theme.palette.primary.main, 0.04),
+                                                        }
+                                                    }}
+                                                >
+                                                    {subItem.imageUrl && (
+                                                        <Box sx={{
+                                                            position: 'relative',
+                                                            width: 28,
+                                                            height: 28,
+                                                            borderRadius: '7px',
+                                                            overflow: 'hidden',
+                                                            flexShrink: 0,
+                                                            mr: 2,
+                                                            boxShadow: theme.shadows[1],
+                                                            border: `1px solid ${alpha(theme.palette.divider, 0.1)}`
+                                                        }}>
+                                                            <Image
+                                                                src={subItem.imageUrl}
+                                                                alt={subItem.name}
+                                                                fill
+                                                                style={{ objectFit: 'cover' }}
+                                                            />
+                                                        </Box>
+                                                    )}
+                                                    <Typography variant="body2" sx={{ 
+                                                        fontWeight: 500,
+                                                        fontSize: '0.88rem',
+                                                        color: theme.palette.text.primary
                                                     }}>
-                                                        <Image
-                                                            src={subItem.imageUrl}
-                                                            alt={subItem.name}
-                                                            fill
-                                                            style={{ objectFit: 'cover' }}
-                                                        />
-                                                    </Box>
-                                                )}
-                                                <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                                                    {subItem.name}
-                                                </Typography>
-                                            </ListItemButton>
+                                                        {subItem.name}
+                                                    </Typography>
+                                                </Box>
+                                            </motion.div>
                                         </Link>
                                     );
                                 })}
-                            </List>
+                            </Box>
                         </Box>
                     ))}
                 </Box>
@@ -243,14 +333,14 @@ const Navbar = () => {
         <Box
             component="nav"
             sx={{
-                // position: 'sticky',
+                position: 'sticky',
                 top: 0,
                 zIndex: theme.zIndex.appBar,
-                backgroundColor: isScrolled ? alpha(theme.palette.background.default, 0.95) : theme.palette.background.default,
-                backdropFilter: isScrolled ? 'blur(10px)' : 'none',
+                backgroundColor: isScrolled ? alpha(theme.palette.background.default, 0.97) : theme.palette.background.default,
+                backdropFilter: isScrolled ? 'blur(16px)' : 'none',
                 transition: 'all 0.3s ease',
-                borderBottom: `1px solid ${theme.palette.divider}`,
-                boxShadow: isScrolled ? theme.shadows[2] : 'none'
+                borderBottom: `1px solid ${alpha(theme.palette.divider, 0.08)}`,
+                boxShadow: isScrolled ? theme.shadows[1] : 'none'
             }}
         >
             <Container maxWidth={false} sx={{ px: { xs: 2, md: 4 } }}>
@@ -260,20 +350,21 @@ const Navbar = () => {
                         sx={{
                             display: 'flex',
                             width: '100%',
-                            py: 1,
+                            py: 0.5,
                             maxWidth: 'xl',
-                            height: '64px'
+                            height: '56px',
+                            alignItems: 'center'
                         }}
                     >
                         <Box
                             sx={{
                                 display: 'flex',
-                                gap: 1,
+                                gap: 0.25,
                                 alignItems: 'center',
                                 overflowX: 'auto',
-                                '&::-webkit-scrollbar': { height: '6px' },
+                                '&::-webkit-scrollbar': { height: '3px' },
                                 '&::-webkit-scrollbar-thumb': {
-                                    backgroundColor: theme.palette.divider,
+                                    backgroundColor: alpha(theme.palette.primary.main, 0.3),
                                     borderRadius: '3px',
                                 },
                             }}
@@ -283,34 +374,39 @@ const Navbar = () => {
                                 <Box
                                     key={category}
                                     sx={{
-                                        flexShrink: 0, // prevents squishing
-                                        height: '100%'
+                                        flexShrink: 0,
+                                        height: '100%',
+                                        position: 'relative'
                                     }}
                                 >
                                     <Button
                                         color="inherit"
+                                        onClick={() => handleCategoryClick(category)}
                                         sx={{
-                                            fontWeight: 600,
+                                            fontWeight: 500,
                                             textTransform: 'none',
-                                            fontSize: '0.875rem',
-                                            whiteSpace: 'nowrap', // keep text in one line
-                                           // more horizontal padding for long text
+                                            fontSize: '0.87rem',
+                                            whiteSpace: 'nowrap',
+                                            px: 1.75,
+                                            py: 1,
                                             height: '100%',
+                                            borderRadius: 1.5,
+                                            color: activeCategory === category ? 'primary.main' : 'text.primary',
+                                            backgroundColor: activeCategory === category ? alpha(theme.palette.primary.main, 0.1) : 'transparent',
+                                            transition: 'all 0.2s ease',
+                                            minWidth: 'auto',
                                             '&:hover': {
                                                 color: 'primary.main',
-                                                backgroundColor: 'transparent'
+                                                backgroundColor: alpha(theme.palette.primary.main, 0.1),
                                             }
                                         }}
-                                        onClick={() => setHoveredCategory(category)}
                                         endIcon={
                                             <ExpandMore
                                                 sx={{
-                                                    fontSize: '1rem',
+                                                    fontSize: '1.1rem',
                                                     transition: 'transform 0.2s',
-                                                    transform:
-                                                        hoveredCategory === category
-                                                            ? 'rotate(180deg)'
-                                                            : 'none'
+                                                    transform: activeCategory === category ? 'rotate(180deg)' : 'none',
+                                                    color: activeCategory === category ? theme.palette.primary.main : 'inherit'
                                                 }}
                                             />
                                         }
@@ -318,7 +414,7 @@ const Navbar = () => {
                                         {category}
                                     </Button>
                                     <AnimatePresence>
-                                        {hoveredCategory === category &&
+                                        {activeCategory === category &&
                                             (category === "All"
                                                 ? renderAllMegaMenu()
                                                 : renderMegaMenu(category))}
@@ -329,21 +425,37 @@ const Navbar = () => {
                     </Box>
                 )}
 
-
-                {/* Mobile Navigation */}
+                {/* Mobile Navigation - Remained the same as before */}
                 {isMobile && (
-                    <Box sx={{ height: '56px' }}>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '100%' }}>
+                    <Box sx={{ height: '56px', display: 'flex', alignItems: 'center' }}>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
                             <Link href="/" style={{ textDecoration: 'none' }}>
-                                <Button sx={{ fontWeight: 600, textTransform: 'none', fontSize: '0.875rem', minWidth: 'auto' }}>
+                                <Button 
+                                    sx={{ 
+                                        fontWeight: 600, 
+                                        textTransform: 'none', 
+                                        fontSize: '0.95rem', 
+                                        minWidth: 'auto',
+                                        color: theme.palette.primary.main
+                                    }}
+                                >
                                     Home
                                 </Button>
                             </Link>
                             <Button
                                 color="inherit"
                                 onClick={handleDrawerToggle}
-                                sx={{ fontWeight: 600, textTransform: 'none', fontSize: '0.875rem', minWidth: 'auto' }}
-                                startIcon={<MenuIcon />}
+                                sx={{ 
+                                    fontWeight: 500, 
+                                    textTransform: 'none', 
+                                    fontSize: '0.9rem', 
+                                    minWidth: 'auto',
+                                    borderRadius: 1.5,
+                                    border: `1px solid ${alpha(theme.palette.divider, 0.2)}`,
+                                    px: 1.5,
+                                    py: 0.75
+                                }}
+                                startIcon={<MenuIcon sx={{ fontSize: '1.1rem' }} />}
                             >
                                 Menu
                             </Button>
@@ -351,75 +463,160 @@ const Navbar = () => {
 
                         <Collapse in={mobileOpen} timeout="auto" unmountOnExit>
                             <Box sx={{
-                                backgroundColor: theme.palette.background.paper,
-                                boxShadow: theme.shadows[2],
+                                backgroundColor: alpha(theme.palette.background.paper, 0.98),
+                                backdropFilter: 'blur(16px)',
+                                boxShadow: theme.shadows[4],
                                 position: 'absolute',
                                 left: 0,
                                 right: 0,
+                                top: '56px',
                                 zIndex: theme.zIndex.drawer,
                                 maxHeight: 'calc(100vh - 56px)',
-                                overflowY: 'auto'
+                                overflowY: 'auto',
+                                borderTop: `1px solid ${alpha(theme.palette.divider, 0.08)}`,
                             }}>
                                 <List sx={{ p: 0 }}>
                                     {allCategories.map((category) => (
                                         <Box key={category}>
                                             <ListItemButton
                                                 sx={{
+                                                    py: 1.25,
                                                     '&:hover': {
-                                                        backgroundColor: alpha(theme.palette.primary.main, 0.1),
+                                                        backgroundColor: alpha(theme.palette.primary.main, 0.08),
                                                     }
                                                 }}
                                                 onClick={() => toggleCategory(category)}
                                             >
-                                                <ListItemText primary={category} primaryTypographyProps={{ fontWeight: 600 }} />
-                                                {expandedCategories[category] ? <ExpandLess /> : <ExpandMore />}
+                                                <ListItemText 
+                                                    primary={category} 
+                                                    primaryTypographyProps={{ 
+                                                        fontWeight: 500,
+                                                        fontSize: '0.95rem'
+                                                    }} 
+                                                />
+                                                {expandedCategories[category] ? 
+                                                    <ExpandLess sx={{ fontSize: '1.1rem' }} /> : 
+                                                    <ExpandMore sx={{ fontSize: '1.1rem' }} />}
                                             </ListItemButton>
 
                                             <Collapse in={expandedCategories[category]} timeout="auto" unmountOnExit>
                                                 {category === "All" ? (
                                                     <Box sx={{ p: 1 }}>
-                                                        {renderAllMegaMenu()}
-                                                    </Box>
-                                                ) : (
-                                                    <List sx={{ pl: 2, py: 0 }}>
-                                                        {categoryMap[category]?.map((sub) => (
-                                                            <Link key={sub.name} href={getCategoryUrl(category, sub)} passHref>
-                                                                <ListItemButton
-                                                                    component="a"
-                                                                    onClick={handleLinkClick}
+                                                        {categories.map((cat) => (
+                                                            <Box key={cat} sx={{ mb: 2 }}>
+                                                                <Typography
+                                                                    variant="subtitle2"
                                                                     sx={{
-                                                                        pl: 3,
-                                                                        '&:hover': {
-                                                                            backgroundColor: alpha(theme.palette.primary.main, 0.05),
-                                                                        },
+                                                                        fontWeight: 600,
+                                                                        color: theme.palette.primary.main,
+                                                                        mb: 1,
+                                                                        pl: 2,
                                                                     }}
                                                                 >
-                                                                    {sub.imageUrl && (
-                                                                        <Box
-                                                                            sx={{
-                                                                                position: 'relative',
-                                                                                width: 24,
-                                                                                height: 24,
-                                                                                borderRadius: '4px',
-                                                                                overflow: 'hidden',
-                                                                                mr: 2,
-                                                                            }}
-                                                                        >
-                                                                            <Image
-                                                                                src={sub.imageUrl}
-                                                                                alt={sub.name}
-                                                                                fill
-                                                                                style={{ objectFit: 'cover' }}
-                                                                            />
-                                                                        </Box>
-                                                                    )}
-                                                                    <ListItemText
-                                                                        primary={sub.name}
-                                                                        primaryTypographyProps={{ variant: 'body2' }}
-                                                                    />
-                                                                </ListItemButton>
-                                                            </Link>
+                                                                    {cat}
+                                                                </Typography>
+                                                                <List sx={{ p: 0 }}>
+                                                                    {categoryMap[cat]?.slice(0, 3).map((sub) => {
+                                                                        const subItem = typeof sub === 'string' ? { name: sub } : sub;
+                                                                        return (
+                                                                            <Link 
+                                                                                key={subItem.name} 
+                                                                                href={getCategoryUrl(cat, subItem)} 
+                                                                                passHref
+                                                                            >
+                                                                                <ListItemButton
+                                                                                    component="a"
+                                                                                    onClick={handleLinkClick}
+                                                                                    sx={{
+                                                                                        pl: 3,
+                                                                                        borderRadius: 1,
+                                                                                        py: 0.75,
+                                                                                        '&:hover': {
+                                                                                            backgroundColor: alpha(theme.palette.primary.main, 0.05),
+                                                                                        },
+                                                                                    }}
+                                                                                >
+                                                                                    {subItem.imageUrl && (
+                                                                                        <Box
+                                                                                            sx={{
+                                                                                                position: 'relative',
+                                                                                                width: 22,
+                                                                                                height: 22,
+                                                                                                borderRadius: '4px',
+                                                                                                overflow: 'hidden',
+                                                                                                mr: 1.5,
+                                                                                            }}
+                                                                                        >
+                                                                                            <Image
+                                                                                                src={subItem.imageUrl}
+                                                                                                alt={subItem.name}
+                                                                                                fill
+                                                                                                style={{ objectFit: 'cover' }}
+                                                                                            />
+                                                                                        </Box>
+                                                                                    )}
+                                                                                    <ListItemText
+                                                                                        primary={subItem.name}
+                                                                                        primaryTypographyProps={{ 
+                                                                                            variant: 'body2',
+                                                                                            fontSize: '0.85rem'
+                                                                                        }}
+                                                                                    />
+                                                                                </ListItemButton>
+                                                                            </Link>
+                                                                        );
+                                                                    })}
+                                                                </List>
+                                                            </Box>
                                                         ))}
+                                                    </Box>
+                                                ) : (
+                                                    <List sx={{ pl: 1.5, py: 0 }}>
+                                                        {categoryMap[category]?.map((sub) => {
+                                                            const subItem = typeof sub === 'string' ? { name: sub } : sub;
+                                                            return (
+                                                                <Link key={subItem.name} href={getCategoryUrl(category, subItem)} passHref>
+                                                                    <ListItemButton
+                                                                        onClick={handleLinkClick}
+                                                                        sx={{
+                                                                            pl: 3,
+                                                                            borderRadius: 1,
+                                                                            py: 0.75,
+                                                                            '&:hover': {
+                                                                                backgroundColor: alpha(theme.palette.primary.main, 0.05),
+                                                                            },
+                                                                        }}
+                                                                    >
+                                                                        {subItem.imageUrl && (
+                                                                            <Box
+                                                                                sx={{
+                                                                                    position: 'relative',
+                                                                                    width: 22,
+                                                                                    height: 22,
+                                                                                    borderRadius: '4px',
+                                                                                    overflow: 'hidden',
+                                                                                    mr: 1.5,
+                                                                                }}
+                                                                            >
+                                                                                <Image
+                                                                                    src={subItem.imageUrl}
+                                                                                    alt={subItem.name}
+                                                                                    fill
+                                                                                    style={{ objectFit: 'cover' }}
+                                                                                />
+                                                                            </Box>
+                                                                        )}
+                                                                        <ListItemText
+                                                                            primary={subItem.name}
+                                                                            primaryTypographyProps={{ 
+                                                                                variant: 'body2',
+                                                                                fontSize: '0.85rem'
+                                                                            }}
+                                                                        />
+                                                                    </ListItemButton>
+                                                                </Link>
+                                                            );
+                                                        })}
                                                     </List>
                                                 )}
                                             </Collapse>
