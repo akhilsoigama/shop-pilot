@@ -2,6 +2,17 @@ import { getAuth } from "@clerk/nextjs/server";
 import fetchClerkUser from "@/utils/FetchClerkUser";
 import { User } from "@/model/User";
 import { dbConnect } from "@/lib/db";
+import { NextResponse } from "next/server";
+
+export const GET = async()=>{
+  await dbConnect();
+  const user = await User.findOne();
+      if (!user) {
+          return NextResponse.json({ error: "user not found" }, { status: 404 });
+      }
+  
+      return NextResponse.json(user);
+}
 
 export const POST = async (req) => {
   const { userId } = getAuth(req);

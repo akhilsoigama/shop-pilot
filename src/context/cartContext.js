@@ -29,6 +29,7 @@ export function CartProvider({ children }) {
   }, [cart, isInitialized])
 
   const addToCart = (product) => {
+    toast.success("Product added to cart");
     setCart(prevCart => {
       const existingItemIndex = prevCart.findIndex(item =>
         item._id === product._id &&
@@ -58,7 +59,6 @@ export function CartProvider({ children }) {
         finalPrice: product.finalPrice
       };
 
-      toast.success("Product added to cart");
       return [...prevCart, newItem];
     });
   };
