@@ -1,16 +1,25 @@
 import axios from "axios";
-import useSWRMutation from "swr/mutation";
+import useSWR from "swr";
 
-const postUser = async (url, { arg: token }) => {
-  const res = await axios.post("/api/users", {}, {
+// GET users
+const getUsers = async (url) => {
+  const res = await axios.get(url);
+  return res.data;
+};
+
+export function useUsers() {
+  return useSWR("/api/users", getUsers);
+}
+
+// POST user (sync)
+export const postUser = async (url, token) => {
+  const res = await axios.post(url, {}, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
-
   return res.data;
 };
 
-export function useSyncUser() {
-  return useSWRMutation("/users", postUser);
-}
+
+
