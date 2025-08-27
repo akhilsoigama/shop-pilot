@@ -47,7 +47,8 @@
     "stripe": "^18.3.0",
     "swr": "^2.3.4",
     "tailwind-merge": "^3.3.1",
-    "vaul": "^1.1.2"
+    "vaul": "^1.1.2",
+    "vercel": "^46.0.4"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
