@@ -15,13 +15,15 @@ const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"]
 
 export const metadata = {
   title: "ShopPilot - Your Ultimate Shopping Destination",
-  description: "Discover amazing products at great prices with ShopPilot. Your one-stop e-commerce destination for electronics, fashion, home goods and more.",
-  keywords: "ecommerce, shopping, online store, electronics, fashion, home goods, deals",
+  description:
+    "Discover amazing products at great prices with ShopPilot. Your one-stop e-commerce destination for electronics, fashion, home goods and more.",
+  keywords:
+    "ecommerce, shopping, online store, electronics, fashion, home goods, deals",
   authors: [{ name: "ShopPilot Team" }],
   icons: {
-    icon: "/favicon.ico",
-    apple: "/apple-touch-icon.png",
-    shortcut: "/favicon-16x16.png",
+    icon: "https://shop-pilot-xi.vercel.app/favicon.ico",
+    apple: "https://shop-pilot-xi.vercel.app/apple-touch-icon.png",
+    shortcut: "https://shop-pilot-xi.vercel.app/favicon-16x16.png",
   },
   openGraph: {
     title: "ShopPilot - Your Ultimate Shopping Destination",
@@ -39,18 +41,15 @@ export const metadata = {
     locale: "en_US",
     type: "website",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "ShopPilot - Your Ultimate Shopping Destination",
+    description: "Discover amazing products at great prices with ShopPilot.",
+    images: ["https://shop-pilot-xi.vercel.app/android-chrome-512x512.png"],
+  },
   robots: {
     index: true,
     follow: true,
-    nocache: false,
-    googleBot: {
-      index: true,
-      follow: true,
-      noimageindex: false,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
   },
 };
 
