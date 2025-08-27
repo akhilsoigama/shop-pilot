@@ -27,10 +27,10 @@ export const metadata = {
     title: "ShopPilot - Your Ultimate Shopping Destination",
     description: "Discover amazing products at great prices with ShopPilot.",
     url: "https://shop-pilot-xi.vercel.app",
-    siteName: "Akhil Soigama",
+    siteName: "ShopPilot",
     images: [
       {
-        url: "/android-chrome-512x512.png",
+        url: "https://shop-pilot-xi.vercel.app/android-chrome-512x512.png",
         width: 512,
         height: 512,
         alt: "ShopPilot Logo",
