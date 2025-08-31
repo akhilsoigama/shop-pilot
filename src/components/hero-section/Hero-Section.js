@@ -2,7 +2,7 @@
 
 import { Box } from "@mui/material";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Poppins } from "next/font/google";
 import { AnimatePresence, motion } from "framer-motion";
 import { containerVariants } from "../motion/Motion";
@@ -35,15 +35,29 @@ const features = [
 export default function HeroSection() {
   const [currentWatch, setCurrentWatch] = useState(0);
   const [animationKey, setAnimationKey] = useState(0);
-  const [product, setProducts]=useState();
+  const [product, setProducts] = useState([]);
+  const { data: users, error, isLoading, mutate } = useUsers();
+
   const router = useRouter()
-  const {products}=useProducts()
-  // const {data: users}=useUsers()
-  // console.log(users)
-  useEffect(()=>{
-    setProducts(products);
-  },[])
-  console.log(product)
+  const {products: productData} = useProducts()
+  
+  // Memoize product data
+  const memoizedProducts = useMemo(() => productData || [], [productData]);
+  
+  // Memoize users data
+  const memoizedUsers = useMemo(() => {
+    if (isLoading) return [];
+    if (error) {
+      console.error("Error fetching users:", error);
+      return [];
+    }
+    return Array.isArray(users) ? users : [];
+  }, [users, isLoading, error]);
+  
+  useEffect(() => {
+    setProducts(memoizedProducts);
+  }, [memoizedProducts])
+  
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentWatch((prev) => {
@@ -54,6 +68,18 @@ export default function HeroSection() {
     }, 3000);
     return () => clearInterval(interval);
   }, []);
+
+  // Memoize stats data to prevent recalculations on every render
+  const statsData = useMemo(() => [
+    { value: product?.length || 0, label: "Products" },
+    { value: memoizedUsers.length, label: "Customers" },
+    { value: "1+", label: "Years" },
+  ], [product, memoizedUsers]);
+
+  // Handle loading and error states for users
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <motion.div
@@ -146,11 +172,7 @@ export default function HeroSection() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8 }}
         >
-          {[
-            { value: 0, label: "Products" },
-            { value: "2M+", label: "Customers" },
-            { value: "15+", label: "Years" },
-          ].map((stat, index) => (
+          {statsData.map((stat, index) => (
             <motion.div 
               key={index}
               className="text-center p-2 rounded-lg bg-gray-50 dark:bg-gray-800/30"
@@ -163,14 +185,12 @@ export default function HeroSection() {
         </motion.div>
       </motion.div>
 
-      {/* Right Content - Watch Image */}
       <motion.div 
         className="relative w-full md:w-1/2 flex justify-center items-center"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.2 }}
       >
-        {/* Background decorative elements */}
         <motion.div 
           className="absolute -z-10 w-72 h-72 rounded-full bg-blue-100 dark:bg-blue-900/20 blur-3xl"
           animate={{ 

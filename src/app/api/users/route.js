@@ -4,14 +4,14 @@ import { User } from "@/model/User";
 import { dbConnect } from "@/lib/db";
 import { NextResponse } from "next/server";
 
-export const GET = async()=>{
+export const GET = async() => {
   await dbConnect();
-  const user = await User.findOne();
-      if (!user) {
-          return NextResponse.json({ error: "user not found" }, { status: 404 });
-      }
-  
-      return NextResponse.json(user);
+  try {
+    const users = await User.find({});
+    return NextResponse.json(users);
+  } catch (error) {
+    return NextResponse.json({ error: "Failed to fetch users" }, { status: 500 });
+  }
 }
 
 export const POST = async (req) => {

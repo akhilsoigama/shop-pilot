@@ -2,16 +2,14 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import Image from "next/image";
-import { Heart, Search, X, Star, Zap, SortAsc, Grid, List, ChevronLeft, ChevronRight, Trash2, Sparkles, Filter, Eye } from "lucide-react";
+import { Search, X, Star, Zap, SortAsc, Grid, List, ChevronLeft, ChevronRight, Trash2, Sparkles, Filter, Eye } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useState, useMemo, useEffect } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useWishlist } from "@/context/wishlistContext";
-import { toast } from "sonner";
 import LikeButton from "../like-count/LikeCount";
 
 export default function Subcategory({
