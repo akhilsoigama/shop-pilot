@@ -4,12 +4,12 @@ import { motion } from 'framer-motion';
 import {
   AppBar, Toolbar, Button, IconButton, Drawer, List,
   ListItem, ListItemText, Box, Container, Typography,
-  Badge, InputBase, useTheme, Avatar,
+  Badge, useTheme, Avatar,
   useMediaQuery
 } from '@mui/material';
 import { alpha, styled } from '@mui/material/styles';
 import {
-  Menu, Close, ShoppingCart, Search,
+  Menu, Close, ShoppingCart,
   Favorite
 } from '@mui/icons-material';
 import { UserButton, useUser } from '@clerk/nextjs';
@@ -20,60 +20,7 @@ import CartDrawer from '@/components/cartDrawer/cartDrawer';
 import SettingsDropdown from '../setting/Setting';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import OrderIcon from '../order-icon/OrderIcon';
-
-const SearchContainer = styled('div')(({ theme }) => ({
-  position: 'relative',
-  borderRadius: 20,
-  backgroundColor: alpha(
-    theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black,
-    0.05
-  ),
-  '&:hover': {
-    backgroundColor: alpha(
-      theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black,
-      0.08
-    ),
-  },
-  marginRight: theme.spacing(2),
-  marginLeft: 0,
-  width: '100%',
-  transition: theme.transitions.create(['width', 'background-color'], {
-    duration: theme.transitions.duration.standard,
-  }),
-  [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(3),
-    width: 'auto',
-  },
-}));
-
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  color: theme.palette.mode === 'dark' ?
-    alpha(theme.palette.common.white, 0.7) :
-    alpha(theme.palette.common.black, 0.5),
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, 0),
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: '20ch',
-      '&:focus': {
-        width: '30ch',
-      },
-    },
-  },
-}));
+import MainSearch from '../main-search/MainSearch';
 
 const NavButton = styled(Button)(({ theme }) => ({
   textTransform: 'none',
@@ -215,15 +162,7 @@ const HeaderSection = () => {
                   maxWidth: 600
                 }}
               >
-                <SearchContainer>
-                  <SearchIconWrapper>
-                    <Search />
-                  </SearchIconWrapper>
-                  <StyledInputBase className='truncate'
-                    placeholder="Search  products"
-                    inputProps={{ 'aria-label': 'search' }}
-                  />
-                </SearchContainer>
+                <MainSearch />
               </motion.div>
             )}
 
@@ -440,15 +379,7 @@ const HeaderSection = () => {
             backgroundColor: alpha(theme.palette.background.default, 0.8),
             backdropFilter: 'blur(10px)',
           }}>
-            <SearchContainer>
-              <SearchIconWrapper>
-                <Search />
-              </SearchIconWrapper>
-              <StyledInputBase
-                placeholder="Search products..."
-                inputProps={{ 'aria-label': 'search' }}
-              />
-            </SearchContainer>
+            <MainSearch />
           </Box>
 
           <Box sx={{
