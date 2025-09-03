@@ -7,6 +7,7 @@ import { useCart } from "@/context/cartContext";
 import Subcategory from "../subcategory/Subcategory";
 import FilterSidebar from "../filter-sidebar/FilterSidebar";
 import { useUser } from "@clerk/nextjs";
+import SubcategorySkeleton from "../skeleton/skeleton";
 
 const normalizeColorValue = (value) => {
   if (!value || typeof value !== 'string') return value;
@@ -98,8 +99,29 @@ export default function SubcategoryLayout() {
     setPriceRange([minPrice, maxPrice]);
   };
 
+  if (isLoading) {
+    return <SubcategorySkeleton />;
+  }
+
+  if (isError) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center p-8">
+          <h2 className="text-2xl font-bold text-red-600 mb-4">Error Loading Products</h2>
+          <p className="text-gray-600 mb-6">Please try refreshing the page.</p>
+          <button 
+            onClick={() => window.location.reload()}
+            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Refresh Page
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex flex-col md:flex-row gap-0 ">
+    <div className="flex flex-col md:flex-row gap-0">
       <FilterSidebar
         subcategory={currentSubcategory}
         products={products}

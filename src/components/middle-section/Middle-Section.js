@@ -78,7 +78,7 @@ export default function MiddleSection() {
                 <MotionCard
                   title="Leather Watch Collection"
                   description="Premium craftsmanship for timeless elegance"
-                  image="/images/watch4.jpg"
+                  image="/images/watch4.webp"
                   imageHeight={200}
                   className="hover:shadow-xl"
                 />
@@ -87,7 +87,7 @@ export default function MiddleSection() {
                 <MotionCard
                   title="New Tote Bags Collection"
                   description="Functional fashion for everyday carry"
-                  image="/images/goggles.jpg"
+                  image="/images/goggles.webp"
                   imageHeight={200}
                   className="hover:shadow-xl"
                 />
@@ -100,7 +100,7 @@ export default function MiddleSection() {
             <MotionCard
               title="Stylish Summer Looks"
               description="Lightweight fabrics for warm weather comfort"
-              image="/images/shoes.jpg"
+              image="/images/shoes.webp"
               imageHeight={415}
               className="hover:shadow-xl"
             />
