@@ -16,7 +16,7 @@ import { useCallback, useEffect, useState } from "react";
 const banners = [
   {
     id: 1,
-    img: "/images/banners/banner1.png",
+    img: "/images/banners/banner1.webp",
     title: "Your Cozy Era",
     subtitle: "Get peak comfy-chic with new winter essentials.",
     cta: "Shop Now",
@@ -24,7 +24,7 @@ const banners = [
   },
   {
     id: 2,
-    img: "/images/banners/banner2.png",
+    img: "/images/banners/banner2.webp",
     title: "Summer Vibes",
     subtitle: "Fresh styles for warm days ahead.",
     cta: "Explore Collection",
@@ -32,7 +32,7 @@ const banners = [
   },
   {
     id: 3,
-    img: "/images/banners/banner3.jpg",
+    img: "/images/banners/banner3.webp",
     title: "Urban Elegance",
     subtitle: "City-inspired looks for modern living.",
     cta: "Discover More",

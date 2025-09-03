@@ -4,13 +4,14 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { Search, X, Star, Zap, SortAsc, Grid, List, ChevronLeft, ChevronRight, Trash2, Sparkles, Filter, Eye } from "lucide-react";
+import { Search, X, Star, Zap, SortAsc, Grid, List, ChevronLeft, ChevronRight, Sparkles, Filter, Eye } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useState, useMemo, useEffect } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import LikeButton from "../like-count/LikeCount";
+import ProductCardSkeleton from "../skeleton/productSkeleton";
 
 export default function Subcategory({
   products,
@@ -24,7 +25,8 @@ export default function Subcategory({
   onClearAll,
   category,
   subcategory,
-  user 
+  user,
+  isLoading
 }) {
   const [viewMode, setViewMode] = useState('grid');
   const [sortBy, setSortBy] = useState('recommended');
@@ -166,16 +168,30 @@ export default function Subcategory({
     }
   };
 
+  if (isLoading) {
+    return (
+      <section className="bg-gradient-to-br min-h-screen flex-1">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-3 py-6 lg:py-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 lg:gap-6">
+            {Array.from({ length: 8 }).map((_, index) => (
+              <ProductCardSkeleton key={index} viewMode={viewMode} />
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <motion.section
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="bg-gradient-to-br  min-h-screen flex-1"
+      className="bg-gradient-to-br min-h-screen flex-1"
     >
       <div className="fixed inset-0 -z-10 overflow-hidden">
-        <div className="absolute -top-40 -right-32 w-80 h-80  rounded-full blur-3xl"></div>
+        <div className="absolute -top-40 -right-32 w-80 h-80 rounded-full blur-3xl"></div>
         <div className="absolute top-1/3 -left-32 w-96 h-96 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 left-1/3 w-80 h-80  rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-1/3 w-80 h-80 rounded-full blur-3xl"></div>
       </div>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-3 py-6 lg:py-5">
@@ -198,16 +214,17 @@ export default function Subcategory({
           </span>
         </motion.div>
 
+        {/* Header Section */}
         <motion.div
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.1 }}
-          className="mb-8 lg:mb-12 text-center relative py-6 lg:py-8 rounded-2xl  backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/30 overflow-hidden"
+          className="mb-8 lg:mb-12 text-center relative py-6 lg:py-8 rounded-2xl backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/30 overflow-hidden"
         >
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute -top-20 -left-20 w-40 h-40 bg-primary/5 rounded-full blur-xl animate-pulse"></div>
-            <div className="absolute -bottom-20 -right-20 w-40 h-40  rounded-full blur-xl animate-pulse delay-1000"></div>
-            <div className="absolute top-1/2 left-1/4 w-24 h-24  rounded-full blur-lg animate-pulse delay-500"></div>
+            <div className="absolute -bottom-20 -right-20 w-40 h-40 rounded-full blur-xl animate-pulse delay-1000"></div>
+            <div className="absolute top-1/2 left-1/4 w-24 h-24 rounded-full blur-lg animate-pulse delay-500"></div>
           </div>
 
           <motion.div
@@ -244,21 +261,14 @@ export default function Subcategory({
           <p className="text-lg lg:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto px-4 relative z-10 font-medium">
             Discover our premium collection of <span className="text-primary font-semibold">{decodedSubcategory.toLowerCase()}</span> products
           </p>
-
-          {/* Decorative elements */}
-          <div className="absolute bottom-0 left-0 w-full flex justify-center">
-            <div className="h-1 bg-gradient-to-r from-transparent via-primary/50 to-transparent w-3/4 opacity-60"></div>
-          </div>
         </motion.div>
 
-        {/* Sticky Search and Controls */}
+        {/* Search and Controls */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className={cn(
-            "mb-6 lg:mb-8 transition-all duration-300",
-          )}
+          className={cn("mb-6 lg:mb-8 transition-all duration-300")}
         >
           <div className="flex flex-col lg:flex-row gap-3 lg:gap-4 justify-between items-stretch">
             <div className="relative flex-1 max-w-2xl">
@@ -305,6 +315,7 @@ export default function Subcategory({
             </div>
           </div>
 
+          {/* No products found message */}
           {noProductsFound && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
@@ -337,6 +348,7 @@ export default function Subcategory({
           )}
         </motion.div>
 
+        {/* Products Count and Pagination Controls */}
         {sortedProducts && sortedProducts.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -418,7 +430,7 @@ export default function Subcategory({
                   className="relative"
                 >
                   <Card className={cn(
-                    "relative rounded-2xl overflow-hidden flex  border border-gray-200/30 dark:border-gray-800/50 shadow-md hover:shadow-2xl transition-all duration-500 group backdrop-blur-sm bg-opacity-90",
+                    "relative rounded-2xl overflow-hidden flex border border-gray-200/30 dark:border-gray-800/50 shadow-md hover:shadow-2xl transition-all duration-500 group backdrop-blur-sm bg-opacity-90",
                     viewMode === 'list' && "flex-col sm:flex-row h-auto sm:h-72"
                   )}>
                     {/* Product image container */}
@@ -456,7 +468,6 @@ export default function Subcategory({
                         </motion.div>
                       )}
 
-
                       {/* Gradient overlay */}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
@@ -468,7 +479,7 @@ export default function Subcategory({
                         whileHover="animate"
                       />
 
-                      {/* Discount badge - top left corner */}
+                      {/* Discount badge */}
                       {product.discount > 0 && (
                         <motion.div
                           className="absolute top-2 left-[-5px] z-10"
@@ -537,38 +548,7 @@ export default function Subcategory({
                               </Button>
                             </motion.div>
                           </Link>
-                          {/* <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}> */}
-                            {/* <Button
-                              size="icon"
-                              variant="outline"
-                              className="rounded-xl border-gray-300 dark:border-gray-700 h-11 w-11"
-                              onClick={() => {
-                                if (isInWishlist(product._id)) {
-                                  removeFromWishlist(product._id);
-                                  toast.success("Removed from wishlist", {
-                                    icon: <Trash2 className="w-4 h-4" />,
-                                  });
-                                } else {
-                                  addToWishlist(product);
-                                  toast.success("Added to wishlist", {
-                                    icon: <Heart className="w-4 h-4" fill="currentColor" />,
-                                  });
-                                }
-                              }}
-                            >
-                              <Heart
-                                className={cn(
-                                  "w-5 h-5 transition-all duration-300",
-                                  isInWishlist(product._id)
-                                    ? "text-red-500 fill-red-500 scale-110"
-                                    : hoveredProduct === product._id
-                                      ? "text-red-500"
-                                      : "text-gray-400 group-hover:text-red-500"
-                                )}
-                              />
-                            </Button> */}
-                             <LikeButton productId={product._id} userId={user?.id}  productData={product}  />
-                          {/* </motion.div> */}
+                          <LikeButton productId={product._id} userId={user?.id} productData={product} />
                         </div>
                       </div>
                     </CardContent>
@@ -588,6 +568,7 @@ export default function Subcategory({
           ) : null}
         </div>
 
+        {/* Pagination */}
         {sortedProducts && sortedProducts.length > 0 && totalPages > 1 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
