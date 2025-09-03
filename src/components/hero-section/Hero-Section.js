@@ -21,9 +21,9 @@ const poppins = Poppins({
 });
 
 const watchImages = [
-  "/images/watch 1.png",
-  "/images/watch 2.png",
-  "/images/watch.png",
+  "/images/watch 1.webp",
+  "/images/watch 2.webp",
+  "/images/watch.webp",
 ];
 
 const features = [
@@ -32,6 +32,46 @@ const features = [
   { id: 3, text: "30-Day Returns", icon: "↩️" },
 ];
 
+const HeroSkeleton = () => {
+  return (
+    <div className={`dark:text-white h-full overflow-hidden flex flex-col-reverse md:flex-row items-center justify-between p-4 ${poppins.className}`}>
+      <div className="flex flex-col h-full justify-center w-full md:w-1/2 text-center md:text-left items-center md:items-start">
+        <div className="h-5 w-48 bg-gray-200 dark:bg-gray-700 rounded mb-4 animate-pulse"></div>
+        
+        <div className="h-10 w-full max-w-md bg-gray-200 dark:bg-gray-700 rounded mb-4 animate-pulse"></div>
+        
+        <div className="w-full my-3 max-w-xl px-2 md:px-0">
+          <div className="h-20 w-full bg-gray-200 dark:bg-gray-700 rounded mb-6 animate-pulse"></div>
+        </div>
+
+        <div className="flex flex-wrap gap-3 mt-2 justify-center md:justify-start mb-2">
+          {features.map((feature) => (
+            <div
+              key={feature.id}
+              className="h-8 w-28 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"
+            ></div>
+          ))}
+        </div>
+
+        <div className="flex flex-col sm:flex-row gap-3 w-full max-w-md mb-6">
+          <div className="h-12 w-full bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse"></div>
+          <div className="h-12 w-full bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse"></div>
+        </div>
+
+        <div className="grid grid-cols-3 gap-4 mt-4 w-full max-w-md">
+          {[1, 2, 3].map((item) => (
+            <div key={item} className="h-16 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse"></div>
+          ))}
+        </div>
+      </div>
+
+      <div className="relative w-full md:w-1/2 flex justify-center items-center">
+        <div className="w-72 h-72 bg-gray-200 dark:bg-gray-700 rounded-xl animate-pulse"></div>
+      </div>
+    </div>
+  );
+};
+
 export default function HeroSection() {
   const [currentWatch, setCurrentWatch] = useState(0);
   const [animationKey, setAnimationKey] = useState(0);
@@ -39,12 +79,10 @@ export default function HeroSection() {
   const { data: users, error, isLoading, mutate } = useUsers();
 
   const router = useRouter()
-  const {products: productData} = useProducts()
+  const {products: productData, isLoading: productsLoading} = useProducts()
   
-  // Memoize product data
   const memoizedProducts = useMemo(() => productData || [], [productData]);
   
-  // Memoize users data
   const memoizedUsers = useMemo(() => {
     if (isLoading) return [];
     if (error) {
@@ -69,16 +107,33 @@ export default function HeroSection() {
     return () => clearInterval(interval);
   }, []);
 
-  // Memoize stats data to prevent recalculations on every render
   const statsData = useMemo(() => [
     { value: product?.length || 0, label: "Products" },
     { value: memoizedUsers.length, label: "Customers" },
     { value: "1+", label: "Years" },
   ], [product, memoizedUsers]);
 
-  // Handle loading and error states for users
-  if (isLoading) {
-    return <div>Loading...</div>;
+  if (isLoading || productsLoading) {
+    return <HeroSkeleton />;
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <h2 className="text-xl font-semibold text-red-600">Error Loading Content</h2>
+          <p className="text-gray-600 dark:text-gray-400 mt-2">
+            Please try refreshing the page.
+          </p>
+          <button 
+            onClick={() => window.location.reload()}
+            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+          >
+            Refresh Page
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -88,18 +143,17 @@ export default function HeroSection() {
       variants={containerVariants}
       className={`dark:text-white h-full overflow-hidden flex flex-col-reverse md:flex-row items-center justify-between p-4 ${poppins.className}`}
     >
-      {/* Left Content */}
       <motion.div
         initial={{ x: -100, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="flex flex-col h-full justify-center  w-full md:w-1/2 text-center md:text-left items-center md:items-start"
+        className="flex flex-col h-full justify-center w-full md:w-1/2 text-center md:text-left items-center md:items-start"
       >
         <ShinyText
           text="Experience fashion like never before"
           disabled={false}
           speed={3}
-          className="text-sm md:text-base text-blue-500 dark:text-blue-400  font-medium"
+          className="text-sm md:text-base text-blue-500 dark:text-blue-400 font-medium"
         />
         
         <BlurText
@@ -107,7 +161,7 @@ export default function HeroSection() {
           delay={50}
           animateBy="words"
           direction="top"
-          className="text-3xl my-3 sm:text-4xl md:text-5xl font-bold leading-tight md:leading-[1.2] mb-3 "
+          className="text-3xl my-3 sm:text-4xl md:text-5xl font-bold leading-tight md:leading-[1.2] mb-3"
         />
         
         <div className="w-full my-3 max-w-xl px-2 md:px-0">
@@ -117,13 +171,12 @@ export default function HeroSection() {
             maxIterations={20}
             animateOn="view"
             characters="ABCDEFGHIJKLMNOPQRSTUVWXYZ1234!?"
-            className="revealed text-base sm:text-lg  mb-6 leading-relaxed"
+            className="revealed text-base sm:text-lg mb-6 leading-relaxed"
             parentClassName="all-letters"
             encryptedClassName="encrypted"
           />
         </div>
 
-        {/* Feature badges */}
         <motion.div 
           className="flex flex-wrap gap-3 mt-2 justify-center md:justify-start mb-2"
           initial={{ opacity: 0, y: 20 }}
@@ -144,7 +197,7 @@ export default function HeroSection() {
         </motion.div>
 
         <motion.div 
-          className="flex flex-col sm:flex-row gap-3 w-full max-w-md "
+          className="flex flex-col sm:flex-row gap-3 w-full max-w-md"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
@@ -165,7 +218,6 @@ export default function HeroSection() {
           </motion.button>
         </motion.div>
 
-        {/* Stats */}
         <motion.div 
           className="grid grid-cols-3 gap-4 mt-4 w-full max-w-md"
           initial={{ opacity: 0 }}
@@ -205,7 +257,7 @@ export default function HeroSection() {
         />
         
         <motion.div 
-          className="absolute -z-10 w-60 h-60 rounded-full bg-purple-100 dark:bg-purple-900/20 blur-3xl  right-8"
+          className="absolute -z-10 w-60 h-60 rounded-full bg-purple-100 dark:bg-purple-900/20 blur-3xl right-8"
           animate={{ 
             scale: [1, 1.2, 1],
             opacity: [0.2, 0.4, 0.2],

@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Poppins } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { CustomThemeProvider } from "@/hooks/DarkmodeProvider";
@@ -12,6 +12,14 @@ import { FloatingParticles } from "@/components/wishlist/WishList";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
+
+// Add Poppins font configuration
+const poppins = Poppins({
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  subsets: ["latin"],
+  variable: "--font-poppins",
+  display: "swap",
+});
 
 export const metadata = {
   title: "ShopPilot - Your Ultimate Shopping Destination",
@@ -53,12 +61,13 @@ export const metadata = {
   },
 };
 
-
 export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
-        <body className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans`}>
+        <body 
+          className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} antialiased font-sans`}
+        >
           <CustomThemeProvider>
             <div className="fixed inset-0 -z-10 overflow-hidden">
               <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-full blur-3xl animate-pulse dark:from-purple-500/10 dark:to-pink-500/10"></div>

@@ -23,7 +23,7 @@ export const Subcategories = [
         name: 'Electronics',
         subcategories: [
             {
-                name: 'Smartphones & Mobiles', imageUrl: '/subcategory/electronics/mobile-phones.png',
+                name: 'Smartphones & Mobiles', imageUrl: '/subcategory/electronics/mobile-phones.webp',
                 fields: [
                     { name: 'RAM', type: 'dropdown', options: ['4GB', '6GB', '8GB', '12GB'] },
                     { name: 'Storage', type: 'dropdown', options: ['64GB', '128GB', '256GB', '512GB', '1TB'] },
@@ -38,7 +38,7 @@ export const Subcategories = [
             },
             {
                 name: 'Laptops',
-                imageUrl: '/subcategory/electronics/laptops.png',
+                imageUrl: '/subcategory/electronics/laptops.webp',
                 fields: [
                     { name: 'Processor', type: 'dropdown', options: ['Intel i3', 'Intel i5', 'Intel i7', 'Intel i9', 'Ryzen 5', 'Ryzen 7'] },
                     { name: 'RAM', type: 'dropdown', options: ['8GB', '16GB', '32GB'] },
@@ -52,7 +52,7 @@ export const Subcategories = [
             },
             {
                 name: 'Tablets',
-                imageUrl: '/subcategory/electronics/tablets.png',
+                imageUrl: '/subcategory/electronics/tablets.webp',
                 fields: [
                     { name: 'Screen Size', type: 'text', unit: 'inches' },
                     { name: 'Storage', type: 'dropdown', options: ['32GB', '64GB', '128GB', '256GB'] },
@@ -65,7 +65,7 @@ export const Subcategories = [
             },
             {
                 name: 'Refrigerators',
-                imageUrl: '/subcategory/electronics/refrigerator.png',
+                imageUrl: '/subcategory/electronics/refrigerator.webp',
                 fields: [
                     { name: 'Capacity', type: 'text', unit: 'Litres' },
                     { name: 'Color', type: 'text' },
@@ -76,7 +76,7 @@ export const Subcategories = [
             },
             {
                 name: 'Headphones',
-                imageUrl: '/subcategory/electronics/headphones.png',
+                imageUrl: '/subcategory/electronics/headphones.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['In-Ear', 'On-Ear', 'Over-Ear'] },
                     { name: 'Color', type: 'text' },
@@ -87,7 +87,7 @@ export const Subcategories = [
             },
             {
                 name: 'Cameras',
-                imageUrl: '/subcategory/electronics/cameras.png',
+                imageUrl: '/subcategory/electronics/cameras.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['DSLR', 'Mirrorless', 'Point & Shoot', 'Action Camera'] },
                     { name: 'Resolution', type: 'text', unit: 'MP' },
@@ -99,7 +99,7 @@ export const Subcategories = [
             },
             {
                 name: 'Smart Watches',
-                imageUrl: '/subcategory/electronics/smart-watches.png',
+                imageUrl: '/subcategory/electronics/smart-watches.webp',
                 fields: [
                     { name: 'Dial Shape', type: 'dropdown', options: ['Round', 'Square', 'Rectangular'] },
                     { name: 'Color', type: 'text' },
@@ -110,7 +110,7 @@ export const Subcategories = [
             },
             {
                 name: 'Gaming Consoles',
-                imageUrl: '/subcategory/electronics/gaming-consoles.png',
+                imageUrl: '/subcategory/electronics/gaming-consoles.webp',
                 fields: [
                     { name: 'Model', type: 'text' },
                     { name: 'Color', type: 'text' },
@@ -120,7 +120,7 @@ export const Subcategories = [
             },
             {
                 name: 'Televisions',
-                imageUrl: '/subcategory/electronics/televisions.png',
+                imageUrl: '/subcategory/electronics/televisions.webp',
                 fields: [
                     { name: 'Screen Size', type: 'text', unit: 'inches' },
                     { name: 'Color', type: 'text' },
@@ -131,7 +131,7 @@ export const Subcategories = [
             },
             {
                 name: 'Printers',
-                imageUrl: '/subcategory/electronics/printers.png',
+                imageUrl: '/subcategory/electronics/printers.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Inkjet', 'Laser', 'Dot Matrix'] },
                     { name: 'Color', type: 'text' },
@@ -141,7 +141,7 @@ export const Subcategories = [
             },
             {
                 name: 'Monitors',
-                imageUrl: '/subcategory/electronics/monitors.png',
+                imageUrl: '/subcategory/electronics/monitors.webp',
                 fields: [
                     { name: 'Screen Size', type: 'text', unit: 'inches' },
                     { name: 'Color', type: 'text' },
@@ -152,7 +152,7 @@ export const Subcategories = [
             },
             {
                 name: 'Storage Devices',
-                imageUrl: '/subcategory/electronics/storage.png',
+                imageUrl: '/subcategory/electronics/storage.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['HDD', 'SSD', 'Pen Drive', 'Memory Card'] },
                     { name: 'Color', type: 'text' },
@@ -162,7 +162,7 @@ export const Subcategories = [
             },
             {
                 name: 'Fitness Bands',
-                imageUrl: '/subcategory/electronics/fitness.png',
+                imageUrl: '/subcategory/electronics/fitness.webp',
                 fields: [
                     { name: 'Display', type: 'dropdown', options: ['AMOLED', 'LCD'] },
                     { name: 'Color', type: 'text' },
@@ -173,7 +173,7 @@ export const Subcategories = [
             },
             {
                 name: 'Washing Machines',
-                imageUrl: '/subcategory/electronics/washing.png',
+                imageUrl: '/subcategory/electronics/washing.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Front Load', 'Top Load', 'Semi Automatic'] },
                     { name: 'Color', type: 'text' },
@@ -184,7 +184,7 @@ export const Subcategories = [
             },
             {
                 name: 'Air Conditioners',
-                imageUrl: '/subcategory/electronics/ac.png',
+                imageUrl: '/subcategory/electronics/ac.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Split', 'Window', 'Portable'] },
                     { name: 'Color', type: 'text' },
@@ -195,7 +195,7 @@ export const Subcategories = [
             },
             {
                 name: 'Audio Systems',
-                imageUrl: '/subcategory/electronics/audio.png',
+                imageUrl: '/subcategory/electronics/audio.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Home Theater', 'Soundbar', 'Bluetooth Speaker'] },
                     { name: 'Color', type: 'text' },
@@ -205,7 +205,7 @@ export const Subcategories = [
             },
             {
                 name: 'Accessories',
-                imageUrl: '/subcategory/electronics/accessories.png',
+                imageUrl: '/subcategory/electronics/accessories.webp',
                 fields: [
                     {
                         name: 'Type',
@@ -312,7 +312,7 @@ export const Subcategories = [
         subcategories: [
             {
                 name: "Men's Clothing",
-                imageUrl: '/subcategory/fashion/mens-clothing.png',
+                imageUrl: '/subcategory/fashion/mens-clothing.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Shirt', 'T-Shirt', 'Jeans', 'Trousers', 'Jacket', 'Kurta'] },
                     { name: 'Size', type: 'dropdown', options: ['S', 'M', 'L', 'XL', 'XXL'] },
@@ -325,7 +325,7 @@ export const Subcategories = [
             },
             {
                 name: "Women's Clothing",
-                imageUrl: '/subcategory/fashion/womens-clothing.png',
+                imageUrl: '/subcategory/fashion/womens-clothing.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Top', 'Dress', 'Saree', 'Kurti', 'Jeans', 'Leggings'] },
                     { name: 'Size', type: 'dropdown', options: ['XS', 'S', 'M', 'L', 'XL', 'XXL'] },
@@ -338,7 +338,7 @@ export const Subcategories = [
             },
             {
                 name: "Kid's Clothing",
-                imageUrl: '/subcategory/fashion/kids-clothing.png',
+                imageUrl: '/subcategory/fashion/kids-clothing.webp',
                 fields: [
                     { name: 'Age Group', type: 'dropdown', options: ['0-1 Years', '1-3 Years', '4-6 Years', '7-9 Years', '10-12 Years'] },
                     { name: 'Gender', type: 'dropdown', options: ['Boys', 'Girls'] },
@@ -351,7 +351,7 @@ export const Subcategories = [
             },
             {
                 name: 'Bags & Luggage',
-                imageUrl: '/subcategory/fashion/bags.png',
+                imageUrl: '/subcategory/fashion/bags.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Backpack', 'Trolley Bag', 'Handbag', 'Laptop Bag', 'Duffel Bag'] },
                     { name: 'Material', type: 'text' },
@@ -362,7 +362,7 @@ export const Subcategories = [
             },
             {
                 name: 'Traditional Watches',
-                imageUrl: '/subcategory/fashion/watches.png',
+                imageUrl: '/subcategory/fashion/watches.webp',
                 fields: [
                     { name: 'Dial Shape', type: 'dropdown', options: ['Round', 'Square', 'Rectangular'] },
                     { name: 'Strap Material', type: 'text' },
@@ -373,7 +373,7 @@ export const Subcategories = [
             },
             {
                 name: 'Sunglasses',
-                imageUrl: '/subcategory/fashion/sunglasses.png',
+                imageUrl: '/subcategory/fashion/sunglasses.webp',
                 fields: [
                     { name: 'Frame Shape', type: 'dropdown', options: ['Round', 'Square', 'Aviator', 'Wayfarer', 'Cat Eye'] },
                     { name: 'Lens Color', type: 'text' },
@@ -385,7 +385,7 @@ export const Subcategories = [
             },
             {
                 name: 'Fashion Accessories',
-                imageUrl: '/subcategory/fashion/accessories.png',
+                imageUrl: '/subcategory/fashion/accessories.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Necklace', 'Bracelet', 'Ring', 'Earrings', 'Anklet'] },
                     { name: 'Material', type: 'text' },
@@ -395,7 +395,7 @@ export const Subcategories = [
             },
             {
                 name: 'Belts & Wallets',
-                imageUrl: '/subcategory/fashion/belts.png',
+                imageUrl: '/subcategory/fashion/belts.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Belt', 'Wallet'] },
                     { name: 'Material', type: 'text' },
@@ -406,7 +406,7 @@ export const Subcategories = [
             },
             {
                 name: 'Scarves & Shawls',
-                imageUrl: '/subcategory/fashion/scarves.png',
+                imageUrl: '/subcategory/fashion/scarves.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Scarf', 'Shawl', 'Stole', 'Dupatta'] },
                     { name: 'Material', type: 'text' },
@@ -417,7 +417,7 @@ export const Subcategories = [
             },
             {
                 name: 'Hats & Caps',
-                imageUrl: '/subcategory/fashion/hats.png',
+                imageUrl: '/subcategory/fashion/hats.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Cap', 'Hat', 'Beanie', 'Fedora'] },
                     { name: 'Material', type: 'text' },
@@ -433,7 +433,7 @@ export const Subcategories = [
         subcategories: [
             {
                 name: 'Living Room Furniture',
-                imageUrl: '/subcategory/home&kitchen/furniture.png',
+                imageUrl: '/subcategory/home&kitchen/furniture.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Sofa', 'Coffee Table', 'TV Unit', 'Recliner', 'Bookshelf'] },
                     { name: 'Material', type: 'text' },
@@ -445,7 +445,7 @@ export const Subcategories = [
             },
             {
                 name: 'Bedroom Furniture',
-                imageUrl: '/subcategory/home&kitchen/bedroom.png',
+                imageUrl: '/subcategory/home&kitchen/bedroom.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Bed', 'Wardrobe', 'Dressing Table', 'Nightstand', 'Mattress'] },
                     { name: 'Size', type: 'dropdown', options: ['Single', 'Double', 'Queen', 'King'] },
@@ -456,7 +456,7 @@ export const Subcategories = [
             },
             {
                 name: 'Kitchen & Dining Furniture',
-                imageUrl: '/subcategory/home&kitchen/kitchen.png',
+                imageUrl: '/subcategory/home&kitchen/kitchen.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Dining Table', 'Chairs', 'Kitchen Rack', 'Bar Stool'] },
                     { name: 'Seating Capacity', type: 'dropdown', options: ['2', '4', '6', '8'] },
@@ -467,7 +467,7 @@ export const Subcategories = [
             },
             {
                 name: 'Gardening & Outdoor',
-                imageUrl: '/subcategory/home&kitchen/garden.png',
+                imageUrl: '/subcategory/home&kitchen/garden.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Plant Pot', 'Garden Tool', 'Seeds', 'Outdoor Furniture'] },
                     { name: 'Material', type: 'text' },
@@ -478,7 +478,7 @@ export const Subcategories = [
             },
             {
                 name: 'Cookware & Bakeware',
-                imageUrl: '/subcategory/home&kitchen/cookware.png',
+                imageUrl: '/subcategory/home&kitchen/cookware.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Kadhai', 'Pan', 'Tawa', 'Casserole', 'Baking Tray'] },
                     { name: 'Material', type: 'dropdown', options: ['Non-stick', 'Stainless Steel', 'Aluminium', 'Cast Iron'] },
@@ -489,7 +489,7 @@ export const Subcategories = [
             },
             {
                 name: 'Kitchen Appliances',
-                imageUrl: '/subcategory/home&kitchen/appliances.png',
+                imageUrl: '/subcategory/home&kitchen/appliances.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Mixer Grinder', 'Microwave', 'Toaster', 'Juicer', 'Induction Cooktop'] },
                     { name: 'Power Consumption', type: 'text', unit: 'Watts' },
@@ -500,7 +500,7 @@ export const Subcategories = [
             },
             {
                 name: 'Lighting',
-                imageUrl: '/subcategory/home&kitchen/lighting.png',
+                imageUrl: '/subcategory/home&kitchen/lighting.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Ceiling Light', 'Lamp', 'LED Strip', 'Pendant Light'] },
                     { name: 'Wattage', type: 'text', unit: 'Watts' },
@@ -511,7 +511,7 @@ export const Subcategories = [
             },
             {
                 name: 'Storage & Organization',
-                imageUrl: '/subcategory/home&kitchen/storage.png',
+                imageUrl: '/subcategory/home&kitchen/storage.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Drawer', 'Storage Box', 'Shoe Rack', 'Wardrobe Organizer'] },
                     { name: 'Material', type: 'text' },
@@ -522,7 +522,7 @@ export const Subcategories = [
             },
             {
                 name: 'Bedding & Bath',
-                imageUrl: '/subcategory/home&kitchen/bedding.png',
+                imageUrl: '/subcategory/home&kitchen/bedding.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Bedsheet', 'Pillow', 'Comforter', 'Towel', 'Mattress Protector'] },
                     { name: 'Size', type: 'dropdown', options: ['Single', 'Double', 'Queen', 'King'] },
@@ -533,7 +533,7 @@ export const Subcategories = [
             },
             {
                 name: 'Home Decor',
-                imageUrl: '/subcategory/home&kitchen/decor.png',
+                imageUrl: '/subcategory/home&kitchen/decor.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Wall Art', 'Clock', 'Showpiece', 'Photo Frame', 'Artificial Plant'] },
                     { name: 'Material', type: 'text' },
@@ -544,7 +544,7 @@ export const Subcategories = [
             },
             {
                 name: 'Dining & Serveware',
-                imageUrl: '/subcategory/home&kitchen/dining.png',
+                imageUrl: '/subcategory/home&kitchen/dining.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Dinner Set', 'Plates', 'Bowls', 'Serving Tray', 'Cutlery Set', 'Glasses', 'Jug', 'Serving Spoon', 'Salad Bowl'] },
                     { name: 'Material', type: 'dropdown', options: ['Ceramic', 'Stainless Steel', 'Melamine', 'Glass', 'Bone China', 'Wood'] },
@@ -562,7 +562,7 @@ export const Subcategories = [
         subcategories: [
             {
                 name: 'Makeup',
-                imageUrl: '/subcategory/beauty/makeup.png',
+                imageUrl: '/subcategory/beauty/makeup.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Foundation', 'Lipstick', 'Mascara', 'Blush', 'Eyeshadow', 'Concealer'] },
                     { name: 'Shade', type: 'text' },
@@ -573,7 +573,7 @@ export const Subcategories = [
             },
             {
                 name: 'Skin Care',
-                imageUrl: '/subcategory/beauty/skincare.png',
+                imageUrl: '/subcategory/beauty/skincare.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Moisturizer', 'Sunscreen', 'Serum', 'Face Wash', 'Toner', 'Face Mask'] },
                     { name: 'Skin Type', type: 'dropdown', options: ['Dry', 'Oily', 'Combination', 'Sensitive', 'All Skin Types'] },
@@ -584,7 +584,7 @@ export const Subcategories = [
             },
             {
                 name: 'Hair Care',
-                imageUrl: '/subcategory/beauty/haircare.png',
+                imageUrl: '/subcategory/beauty/haircare.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Shampoo', 'Conditioner', 'Hair Oil', 'Hair Serum', 'Hair Mask'] },
                     { name: 'Hair Type', type: 'dropdown', options: ['Dry', 'Oily', 'Normal', 'Colored', 'Damaged'] },
@@ -595,7 +595,7 @@ export const Subcategories = [
             },
             {
                 name: 'Fragrances',
-                imageUrl: '/subcategory/beauty/fragrances.png',
+                imageUrl: '/subcategory/beauty/fragrances.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Perfume', 'Deodorant', 'Body Mist'] },
                     { name: 'Gender', type: 'dropdown', options: ['Men', 'Women', 'Unisex'] },
@@ -606,7 +606,7 @@ export const Subcategories = [
             },
             {
                 name: 'Grooming Tools',
-                imageUrl: '/subcategory/beauty/grooming.png',
+                imageUrl: '/subcategory/beauty/grooming.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Trimmer', 'Razor', 'Hair Dryer', 'Straightener', 'Epilator'] },
                     { name: 'Power Source', type: 'dropdown', options: ['Electric', 'Battery Operated', 'Manual'] },
@@ -617,7 +617,7 @@ export const Subcategories = [
             },
             {
                 name: 'Bath & Body',
-                imageUrl: '/subcategory/beauty/bath-body.png',
+                imageUrl: '/subcategory/beauty/bath-body.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Body Wash', 'Soap', 'Body Lotion', 'Body Scrub'] },
                     { name: 'Skin Type', type: 'dropdown', options: ['Dry', 'Oily', 'Normal', 'Sensitive', 'All Skin Types'] },
@@ -628,7 +628,7 @@ export const Subcategories = [
             },
             {
                 name: 'Oral Care',
-                imageUrl: '/subcategory/beauty/oral-care.png',
+                imageUrl: '/subcategory/beauty/oral-care.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Toothpaste', 'Toothbrush', 'Mouthwash', 'Floss'] },
                     { name: 'Pack Size', type: 'text' },
@@ -639,7 +639,7 @@ export const Subcategories = [
             },
             {
                 name: "Men's Grooming",
-                imageUrl: '/subcategory/beauty/mensgrooming.png',
+                imageUrl: '/subcategory/beauty/mensgrooming.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Beard Oil', 'Shaving Foam', 'After Shave', 'Beard Trimmer'] },
                     { name: 'Fragrance', type: 'text' },
@@ -655,7 +655,7 @@ export const Subcategories = [
         subcategories: [
             {
                 name: 'Supplements',
-                imageUrl: '/subcategory/health/supplements.png',
+                imageUrl: '/subcategory/health/supplements.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Protein', 'Vitamins', 'Minerals', 'Omega-3', 'Herbal'] },
                     { name: 'Form', type: 'dropdown', options: ['Tablet', 'Capsule', 'Powder', 'Liquid', 'Gummies'] },
@@ -666,7 +666,7 @@ export const Subcategories = [
             },
             {
                 name: 'Fitness Equipment',
-                imageUrl: '/subcategory/health/fitness.png',
+                imageUrl: '/subcategory/health/fitness.webp',
                 fields: [
                     { name: 'Equipment Type', type: 'dropdown', options: ['Dumbbells', 'Treadmills', 'Exercise Bikes', 'Resistance Bands', 'Home Gym'] },
                     { name: 'Weight', type: 'text', unit: 'kg' },
@@ -677,7 +677,7 @@ export const Subcategories = [
             },
             {
                 name: 'Personal Care',
-                imageUrl: '/subcategory/health/personal-care.png',
+                imageUrl: '/subcategory/health/personal-care.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Electric Trimmer', 'Hair Dryer', 'Epilator', 'Facial Cleanser'] },
                     { name: 'Usage', type: 'dropdown', options: ['Men', 'Women', 'Unisex'] },
@@ -687,7 +687,7 @@ export const Subcategories = [
             },
             {
                 name: 'Wellness Devices',
-                imageUrl: '/subcategory/health/devices.png',
+                imageUrl: '/subcategory/health/devices.webp',
                 fields: [
                     { name: 'Device Type', type: 'dropdown', options: ['Massager', 'Foot Spa', 'Aroma Diffuser', 'Heating Pad'] },
                     { name: 'Power Source', type: 'dropdown', options: ['Electric', 'Battery'] },
@@ -697,7 +697,7 @@ export const Subcategories = [
             },
             {
                 name: 'First Aid',
-                imageUrl: '/subcategory/health/first-aid.png',
+                imageUrl: '/subcategory/health/first-aid.webp',
                 fields: [
                     { name: 'Kit Type', type: 'dropdown', options: ['Basic', 'Comprehensive', 'Travel', 'Home Use'] },
                     { name: 'Number of Items', type: 'text' },
@@ -707,7 +707,7 @@ export const Subcategories = [
             },
             {
                 name: 'Health Monitors',
-                imageUrl: '/subcategory/health/monitors.png',
+                imageUrl: '/subcategory/health/monitors.webp',
                 fields: [
                     { name: 'Monitor Type', type: 'dropdown', options: ['Blood Pressure', 'Glucometer', 'Pulse Oximeter', 'Thermometer'] },
                     { name: 'Display Type', type: 'dropdown', options: ['Digital', 'Analog'] },
@@ -717,7 +717,7 @@ export const Subcategories = [
             },
             {
                 name: 'Yoga & Meditation',
-                imageUrl: '/subcategory/health/yoga.png',
+                imageUrl: '/subcategory/health/yoga.webp',
                 fields: [
                     { name: 'Product Type', type: 'dropdown', options: ['Yoga Mat', 'Meditation Cushion', 'Yoga Block', 'Strap'] },
                     { name: 'Material', type: 'text' },
@@ -728,7 +728,7 @@ export const Subcategories = [
             },
             {
                 name: 'Vitamins & Minerals',
-                imageUrl: '/subcategory/health/vitamins.png',
+                imageUrl: '/subcategory/health/vitamins.webp',
                 fields: [
                     { name: 'Vitamin Type', type: 'dropdown', options: ['Vitamin A', 'Vitamin B', 'Vitamin C', 'Vitamin D', 'Vitamin E', 'Multivitamin'] },
                     { name: 'Mineral Type', type: 'dropdown', options: ['Calcium', 'Iron', 'Magnesium', 'Zinc', 'Potassium', 'Selenium'] },
@@ -740,7 +740,7 @@ export const Subcategories = [
             },
             {
                 name: 'Herbal Products',
-                imageUrl: '/subcategory/health/herbal.png',
+                imageUrl: '/subcategory/health/herbal.webp',
                 fields: [
                     { name: 'Herb Type', type: 'dropdown', options: ['Ashwagandha', 'Tulsi', 'Amla', 'Giloy', 'Turmeric', 'Neem'] },
                     { name: 'Form', type: 'dropdown', options: ['Tablet', 'Powder', 'Juice', 'Capsule', 'Tea'] },
@@ -757,7 +757,7 @@ export const Subcategories = [
         subcategories: [
             {
                 name: 'Gym Equipment',
-                imageUrl: '/subcategory/sports/gym.png',
+                imageUrl: '/subcategory/sports/gym.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Dumbbell', 'Treadmill', 'Bench', 'Barbell', 'Resistance Band'] },
                     { name: 'Material', type: 'dropdown', options: ['Steel', 'Rubber', 'Plastic'] },
@@ -767,7 +767,7 @@ export const Subcategories = [
             },
             {
                 name: 'Sportswear',
-                imageUrl: '/subcategory/sports/sportswear.png',
+                imageUrl: '/subcategory/sports/sportswear.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['T-Shirt', 'Shorts', 'Tracksuit', 'Jacket'] },
                     { name: 'Size', type: 'dropdown', options: ['S', 'M', 'L', 'XL', 'XXL'] },
@@ -777,7 +777,7 @@ export const Subcategories = [
             },
             {
                 name: 'Camping Gear',
-                imageUrl: '/subcategory/sports/camping.png',
+                imageUrl: '/subcategory/sports/camping.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Tent', 'Sleeping Bag', 'Camping Stove', 'Lantern'] },
                     { name: 'Capacity', type: 'text', unit: 'persons' },
@@ -787,7 +787,7 @@ export const Subcategories = [
             },
             {
                 name: 'Cycling',
-                imageUrl: '/subcategory/sports/cycling.png',
+                imageUrl: '/subcategory/sports/cycling.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Mountain Bike', 'Road Bike', 'Hybrid', 'BMX'] },
                     { name: 'Frame Size', type: 'text', unit: 'inches' },
@@ -797,7 +797,7 @@ export const Subcategories = [
             },
             {
                 name: 'Team Sports',
-                imageUrl: '/subcategory/sports/team-sports.png',
+                imageUrl: '/subcategory/sports/team-sports.webp',
                 fields: [
                     { name: 'Sport Type', type: 'dropdown', options: ['Cricket', 'Football', 'Basketball', 'Hockey'] },
                     { name: 'Equipment Type', type: 'text' },
@@ -807,7 +807,7 @@ export const Subcategories = [
             },
             {
                 name: 'Water Sports',
-                imageUrl: '/subcategory/sports/water-sports.png',
+                imageUrl: '/subcategory/sports/water-sports.webp',
                 fields: [
                     { name: 'Activity Type', type: 'dropdown', options: ['Swimming', 'Surfing', 'Diving', 'Kayaking'] },
                     { name: 'Equipment Type', type: 'text' },
@@ -817,7 +817,7 @@ export const Subcategories = [
             },
             {
                 name: 'Hiking & Trekking',
-                imageUrl: '/subcategory/sports/hiking.png',
+                imageUrl: '/subcategory/sports/hiking.webp',
                 fields: [
                     { name: 'Gear Type', type: 'dropdown', options: ['Backpack', 'Trekking Pole', 'Boots', 'Tent'] },
                     { name: 'Material', type: 'text' },
@@ -832,7 +832,7 @@ export const Subcategories = [
         subcategories: [
             {
                 name: 'Car Accessories',
-                imageUrl: '/subcategory/automotive/car-accessories.png',
+                imageUrl: '/subcategory/automotive/car-accessories.webp',
                 fields: [
                     { name: 'Type', type: 'text' },
                     { name: 'Compatibility', type: 'text' },
@@ -841,7 +841,7 @@ export const Subcategories = [
             },
             {
                 name: 'Motorbike Accessories',
-                imageUrl: '/subcategory/automotive/bike-accessories.png',
+                imageUrl: '/subcategory/automotive/bike-accessories.webp',
                 fields: [
                     { name: 'Type', type: 'text' },
                     { name: 'Bike Model Compatibility', type: 'text' },
@@ -850,7 +850,7 @@ export const Subcategories = [
             },
             {
                 name: 'Oils & Fluids',
-                imageUrl: '/subcategory/automotive/oils.png',
+                imageUrl: '/subcategory/automotive/oils.webp',
                 fields: [
                     { name: 'Oil Type', type: 'dropdown', options: ['Engine Oil', 'Brake Oil', 'Coolant', 'Transmission Oil'] },
                     { name: 'Quantity', type: 'text' },
@@ -859,7 +859,7 @@ export const Subcategories = [
             },
             {
                 name: 'Tools & Equipment',
-                imageUrl: '/subcategory/automotive/tools.png',
+                imageUrl: '/subcategory/automotive/tools.webp',
                 fields: [
                     { name: 'Tool Type', type: 'text' },
                     { name: 'Material', type: 'text' },
@@ -868,7 +868,7 @@ export const Subcategories = [
             },
             {
                 name: 'Car Electronics',
-                imageUrl: '/subcategory/automotive/car-electronics.png',
+                imageUrl: '/subcategory/automotive/car-electronics.webp',
                 fields: [
                     { name: 'Device Type', type: 'text' },
                     { name: 'Compatibility', type: 'text' },
@@ -877,7 +877,7 @@ export const Subcategories = [
             },
             {
                 name: 'Car Care',
-                imageUrl: '/subcategory/automotive/car-care.png',
+                imageUrl: '/subcategory/automotive/car-care.webp',
                 fields: [
                     { name: 'Product Type', type: 'text' },
                     { name: 'Volume', type: 'text' },
@@ -886,7 +886,7 @@ export const Subcategories = [
             },
             {
                 name: 'Motorbike Gear',
-                imageUrl: '/subcategory/automotive/motorbike-gear.png',
+                imageUrl: '/subcategory/automotive/motorbike-gear.webp',
                 fields: [
                     { name: 'Gear Type', type: 'dropdown', options: ['Helmet', 'Gloves', 'Jacket', 'Boots', 'Pants'] },
                     { name: 'Size', type: 'text' },
@@ -895,7 +895,7 @@ export const Subcategories = [
             },
             {
                 name: 'Tires & Wheels',
-                imageUrl: '/subcategory/automotive/tires-wheels.png',
+                imageUrl: '/subcategory/automotive/tires-wheels.webp',
                 fields: [
                     { name: 'Tire Type', type: 'dropdown', options: ['Tubeless', 'Tube Type', 'Radial'] },
                     { name: 'Size', type: 'text' },
@@ -909,7 +909,7 @@ export const Subcategories = [
         subcategories: [
             {
                 name: 'Fiction',
-                imageUrl: '/subcategory/bo oks&stationery/fiction.png',
+                imageUrl: '/subcategory/bo oks&stationery/fiction.webp',
                 fields: [
                     { name: 'Author', type: 'text' },
                     { name: 'Language', type: 'text' },
@@ -919,7 +919,7 @@ export const Subcategories = [
             },
             {
                 name: 'Non-Fiction',
-                imageUrl: '/subcategory/books&stationery/non-fiction.png',
+                imageUrl: '/subcategory/books&stationery/non-fiction.webp',
                 fields: [
                     { name: 'Author', type: 'text' },
                     { name: 'Language', type: 'text' },
@@ -929,7 +929,7 @@ export const Subcategories = [
             },
             {
                 name: 'Educational',
-                imageUrl: '/subcategory/books&stationery/educational.png',
+                imageUrl: '/subcategory/books&stationery/educational.webp',
                 fields: [
                     { name: 'Subject', type: 'text' },
                     { name: 'Board/University', type: 'text' },
@@ -939,7 +939,7 @@ export const Subcategories = [
             },
             {
                 name: "Children's Books",
-                imageUrl: '/subcategory/books&stationery/children.png',
+                imageUrl: '/subcategory/books&stationery/children.webp',
                 fields: [
                     { name: 'Age Group', type: 'dropdown', options: ['0-3', '4-6', '7-9', '10-12'] },
                     { name: 'Language', type: 'text' },
@@ -948,7 +948,7 @@ export const Subcategories = [
             },
             {
                 name: 'Notebooks & Journals',
-                imageUrl: '/subcategory/books&stationery/notebooks.png',
+                imageUrl: '/subcategory/books&stationery/notebooks.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Ruled', 'Unruled', 'Grid', 'Dotted'] },
                     { name: 'Pages', type: 'text' },
@@ -958,7 +958,7 @@ export const Subcategories = [
             },
             {
                 name: 'Art Supplies',
-                imageUrl: '/subcategory/books&stationery/art.png',
+                imageUrl: '/subcategory/books&stationery/art.webp',
                 fields: [
                     { name: 'Product Type', type: 'text' },
                     { name: 'Color Set', type: 'text' },
@@ -968,7 +968,7 @@ export const Subcategories = [
             },
             {
                 name: 'Office Stationery',
-                imageUrl: '/subcategory/books&stationery/office-stationery.png',
+                imageUrl: '/subcategory/books&stationery/office-stationery.webp',
                 fields: [
                     { name: 'Item Type', type: 'text' },
                     { name: 'Size', type: 'text' },
@@ -978,7 +978,7 @@ export const Subcategories = [
             },
             {
                 name: 'Pens & Writing',
-                imageUrl: '/subcategory/books&stationery/stationery.png',
+                imageUrl: '/subcategory/books&stationery/stationery.webp',
                 fields: [
                     { name: 'Pen Type', type: 'dropdown', options: ['Ballpoint', 'Gel', 'Fountain', 'Marker', 'Highlighter'] },
                     { name: 'Ink Color', type: 'text' },
@@ -988,7 +988,7 @@ export const Subcategories = [
             },
             {
                 name: 'Calendars & Planners',
-                imageUrl: '/subcategory/books&stationery/calendars.png',
+                imageUrl: '/subcategory/books&stationery/calendars.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Wall Calendar', 'Desk Calendar', 'Planner'] },
                     { name: 'Year', type: 'text' },
@@ -1003,7 +1003,7 @@ export const Subcategories = [
         subcategories: [
             {
                 name: 'Action Figures',
-                imageUrl: '/subcategory/toys/action-figures.png',
+                imageUrl: '/subcategory/toys/action-figures.webp',
                 fields: [
                     { name: 'Character', type: 'text' },
                     { name: 'Material', type: 'text' },
@@ -1013,7 +1013,7 @@ export const Subcategories = [
             },
             {
                 name: 'Educational Toys',
-                imageUrl: '/subcategory/toys/educational.png',
+                imageUrl: '/subcategory/toys/educational.webp',
                 fields: [
                     { name: 'Skill Focus', type: 'dropdown', options: ['STEM', 'Language', 'Math', 'Creativity'] },
                     { name: 'Material', type: 'text' },
@@ -1022,7 +1022,7 @@ export const Subcategories = [
             },
             {
                 name: 'Board Games',
-                imageUrl: '/subcategory/toys/board-games.png',
+                imageUrl: '/subcategory/toys/board-games.webp',
                 fields: [
                     { name: 'Game Type', type: 'dropdown', options: ['Strategy', 'Family', 'Party', 'Card'] },
                     { name: 'Number of Players', type: 'text' },
@@ -1031,7 +1031,7 @@ export const Subcategories = [
             },
             {
                 name: 'Puzzles',
-                imageUrl: '/subcategory/toys/puzzles.png',
+                imageUrl: '/subcategory/toys/puzzles.webp',
                 fields: [
                     { name: 'Puzzle Type', type: 'dropdown', options: ['Jigsaw', '3D', 'Wooden'] },
                     { name: 'Piece Count', type: 'text' },
@@ -1040,7 +1040,7 @@ export const Subcategories = [
             },
             {
                 name: 'Remote Control Toys',
-                imageUrl: '/subcategory/toys/rc-toys.png',
+                imageUrl: '/subcategory/toys/rc-toys.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Car', 'Helicopter', 'Boat', 'Drone'] },
                     { name: 'Battery Type', type: 'text' },
@@ -1050,7 +1050,7 @@ export const Subcategories = [
             },
             {
                 name: 'Outdoor Play',
-                imageUrl: '/subcategory/toys/outdoor.png',
+                imageUrl: '/subcategory/toys/outdoor.webp',
                 fields: [
                     { name: 'Play Type', type: 'dropdown', options: ['Slides', 'Swings', 'Tents', 'Sports'] },
                     { name: 'Material', type: 'text' },
@@ -1060,7 +1060,7 @@ export const Subcategories = [
             },
             {
                 name: 'Dolls & Playsets',
-                imageUrl: '/subcategory/toys/dolls.png',
+                imageUrl: '/subcategory/toys/dolls.webp',
                 fields: [
                     { name: 'Doll Type', type: 'dropdown', options: ['Fashion', 'Baby', 'Character'] },
                     { name: 'Accessories Included', type: 'text' },
@@ -1075,7 +1075,7 @@ export const Subcategories = [
         subcategories: [
             {
                 name: 'Diapers & Wipes',
-                imageUrl: '/subcategory/baby/diapers.png',
+                imageUrl: '/subcategory/baby/diapers.webp',
                 fields: [
                     { name: 'Size', type: 'dropdown', options: ['Newborn', 'S', 'M', 'L', 'XL', 'XXL'] },
                     { name: 'Diaper Type', type: 'dropdown', options: ['Pant Style', 'Tape Style'] },
@@ -1085,7 +1085,7 @@ export const Subcategories = [
             },
             {
                 name: 'Feeding & Nursing',
-                imageUrl: '/subcategory/baby/feeding.png',
+                imageUrl: '/subcategory/baby/feeding.webp',
                 fields: [
                     { name: 'Product Type', type: 'dropdown', options: ['Bottle', 'Sipper', 'Breast Pump', 'Sterilizer'] },
                     { name: 'Material', type: 'dropdown', options: ['Plastic', 'Glass', 'Silicone'] },
@@ -1095,7 +1095,7 @@ export const Subcategories = [
             },
             {
                 name: 'Baby Gear',
-                imageUrl: '/subcategory/baby/gear.png',
+                imageUrl: '/subcategory/baby/gear.webp',
                 fields: [
                     { name: 'Product Type', type: 'dropdown', options: ['Stroller', 'Car Seat', 'Carrier', 'Walker'] },
                     { name: 'Age Range', type: 'text' },
@@ -1105,7 +1105,7 @@ export const Subcategories = [
             },
             {
                 name: 'Baby Clothing',
-                imageUrl: '/subcategory/baby/clothing.png',
+                imageUrl: '/subcategory/baby/clothing.webp',
                 fields: [
                     { name: 'Size', type: 'dropdown', options: ['0-3M', '3-6M', '6-9M', '9-12M', '12-18M', '18-24M'] },
                     { name: 'Material', type: 'dropdown', options: ['Cotton', 'Fleece', 'Wool'] },
@@ -1115,7 +1115,7 @@ export const Subcategories = [
             },
             {
                 name: 'Baby Toys',
-                imageUrl: '/subcategory/baby/toys.png',
+                imageUrl: '/subcategory/baby/toys.webp',
                 fields: [
                     { name: 'Toy Type', type: 'dropdown', options: ['Soft Toy', 'Rattle', 'Teether', 'Musical Toy'] },
                     { name: 'Age Group', type: 'text' },
@@ -1125,7 +1125,7 @@ export const Subcategories = [
             },
             {
                 name: 'Health & Safety',
-                imageUrl: '/subcategory/baby/health.png',
+                imageUrl: '/subcategory/baby/health.webp',
                 fields: [
                     { name: 'Product Type', type: 'dropdown', options: ['Thermometer', 'Nail Clipper', 'Medicine Dispenser', 'Safety Lock'] },
                     { name: 'Material', type: 'text' },
@@ -1135,7 +1135,7 @@ export const Subcategories = [
             },
             {
                 name: 'Baby Care',
-                imageUrl: '/subcategory/baby/baby-care.png',
+                imageUrl: '/subcategory/baby/baby-care.webp',
                 fields: [
                     { name: 'Product Type', type: 'dropdown', options: ['Shampoo', 'Lotion', 'Powder', 'Oil'] },
                     { name: 'Volume (ml)', type: 'text' },
@@ -1150,7 +1150,7 @@ export const Subcategories = [
         subcategories: [
             {
                 name: 'Snacks & Sweets',
-                imageUrl: '/subcategory/groceries/snacks.png',
+                imageUrl: '/subcategory/groceries/snacks.webp',
                 fields: [
                     { name: 'Type', type: 'text' },
                     { name: 'Weight', type: 'text' },
@@ -1159,7 +1159,7 @@ export const Subcategories = [
             },
             {
                 name: 'Beverages',
-                imageUrl: '/subcategory/groceries/beverages.png',
+                imageUrl: '/subcategory/groceries/beverages.webp',
                 fields: [
                     { name: 'Drink Type', type: 'dropdown', options: ['Juice', 'Soft Drink', 'Energy Drink', 'Tea', 'Coffee', 'Water'] },
                     { name: 'Volume', type: 'text' },
@@ -1168,7 +1168,7 @@ export const Subcategories = [
             },
             {
                 name: 'Staples',
-                imageUrl: '/subcategory/groceries/staples.png',
+                imageUrl: '/subcategory/groceries/staples.webp',
                 fields: [
                     { name: 'Product Type', type: 'dropdown', options: ['Rice', 'Pulses', 'Flour', 'Oil'] },
                     { name: 'Weight', type: 'text' },
@@ -1177,7 +1177,7 @@ export const Subcategories = [
             },
             {
                 name: 'Organic Foods',
-                imageUrl: '/subcategory/groceries/organic.png',
+                imageUrl: '/subcategory/groceries/organic.webp',
                 fields: [
                     { name: 'Product Type', type: 'text' },
                     { name: 'Certified Organic', type: 'dropdown', options: ['Yes', 'No'] },
@@ -1186,7 +1186,7 @@ export const Subcategories = [
             },
             {
                 name: 'Baking Essentials',
-                imageUrl: '/subcategory/groceries/baking.png',
+                imageUrl: '/subcategory/groceries/baking.webp',
                 fields: [
                     { name: 'Item Type', type: 'text' },
                     { name: 'Weight/Volume', type: 'text' },
@@ -1195,7 +1195,7 @@ export const Subcategories = [
             },
             {
                 name: 'Packaged Foods',
-                imageUrl: '/subcategory/groceries/packaged.png',
+                imageUrl: '/subcategory/groceries/packaged.webp',
                 fields: [
                     { name: 'Food Type', type: 'text' },
                     { name: 'Net Quantity', type: 'text' },
@@ -1204,7 +1204,7 @@ export const Subcategories = [
             },
             {
                 name: 'International Cuisine',
-                imageUrl: '/subcategory/groceries/cuisine.png',
+                imageUrl: '/subcategory/groceries/cuisine.webp',
                 fields: [
                     { name: 'Cuisine Type', type: 'dropdown', options: ['Italian', 'Chinese', 'Mexican', 'Thai', 'Japanese', 'Continental'] },
                     { name: 'Item Type', type: 'text' },
@@ -1213,7 +1213,7 @@ export const Subcategories = [
             },
             {
                 name: 'Bakery Items',
-                imageUrl: '/subcategory/groceries/bakery.png',
+                imageUrl: '/subcategory/groceries/bakery.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Bread', 'Cakes', 'Cookies', 'Pastries'] },
                     { name: 'Flavor', type: 'text' },
@@ -1222,7 +1222,7 @@ export const Subcategories = [
             },
             {
                 name: 'Dairy Products',
-                imageUrl: '/subcategory/groceries/dairy.png',
+                imageUrl: '/subcategory/groceries/dairy.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Milk', 'Cheese', 'Yogurt', 'Butter'] },
                     { name: 'Fat Content', type: 'text' },
@@ -1231,7 +1231,7 @@ export const Subcategories = [
             },
             {
                 name: 'Condiments & Sauces',
-                imageUrl: '/subcategory/groceries/condiments.png',
+                imageUrl: '/subcategory/groceries/condiments.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Ketchup', 'Mustard', 'Mayonnaise', 'Hot Sauce', 'Soy Sauce'] },
                     { name: 'Flavor', type: 'text' },
@@ -1246,7 +1246,7 @@ export const Subcategories = [
         subcategories: [
             {
                 name: 'Dog Food & Care',
-                imageUrl: '/subcategory/pets/dog-food.png',
+                imageUrl: '/subcategory/pets/dog-food.webp',
                 fields: [
                     { name: 'Food Type', type: 'dropdown', options: ['Dry', 'Wet', 'Treats', 'Grain-Free'] },
                     { name: 'Weight', type: 'text' },
@@ -1256,7 +1256,7 @@ export const Subcategories = [
             },
             {
                 name: 'Cat Food & Care',
-                imageUrl: '/subcategory/pets/cat-food.png',
+                imageUrl: '/subcategory/pets/cat-food.webp',
                 fields: [
                     { name: 'Food Type', type: 'dropdown', options: ['Dry', 'Wet', 'Treats'] },
                     { name: 'Weight', type: 'text' },
@@ -1265,7 +1265,7 @@ export const Subcategories = [
             },
             {
                 name: 'Pet Toys',
-                imageUrl: '/subcategory/pets/toys.png',
+                imageUrl: '/subcategory/pets/toys.webp',
                 fields: [
                     { name: 'Animal Type', type: 'dropdown', options: ['Dog', 'Cat', 'Bird', 'Small Pet'] },
                     { name: 'Toy Type', type: 'text' },
@@ -1274,7 +1274,7 @@ export const Subcategories = [
             },
             {
                 name: 'Health & Grooming',
-                imageUrl: '/subcategory/pets/grooming.png',
+                imageUrl: '/subcategory/pets/grooming.webp',
                 fields: [
                     { name: 'Product Type', type: 'dropdown', options: ['Shampoo', 'Conditioner', 'Supplements', 'Dental Care', 'Skin Care'] },
                     { name: 'Animal Type', type: 'dropdown', options: ['Dog', 'Cat', 'Other'] },
@@ -1283,7 +1283,7 @@ export const Subcategories = [
             },
             {
                 name: 'Pet Accessories',
-                imageUrl: '/subcategory/pets/accessories.png',
+                imageUrl: '/subcategory/pets/accessories.webp',
                 fields: [
                     { name: 'Accessory Type', type: 'dropdown', options: ['Collar', 'Leash', 'Harness', 'Clothing', 'Bedding'] },
                     { name: 'Size', type: 'text' },
@@ -1292,7 +1292,7 @@ export const Subcategories = [
             },
             {
                 name: 'Aquarium Supplies',
-                imageUrl: '/subcategory/pets/aquarium.png',
+                imageUrl: '/subcategory/pets/aquarium.webp',
                 fields: [
                     { name: 'Product Type', type: 'dropdown', options: ['Fish Food', 'Filters', 'Tanks', 'Heaters', 'Decorations'] },
                     { name: 'Volume/Size', type: 'text' },
@@ -1301,7 +1301,7 @@ export const Subcategories = [
             },
             {
                 name: 'Bird Supplies',
-                imageUrl: '/subcategory/pets/bird-supplies.png',
+                imageUrl: '/subcategory/pets/bird-supplies.webp',
                 fields: [
                     { name: 'Product Type', type: 'dropdown', options: ['Food', 'Cage', 'Toys', 'Perches', 'Nesting'] },
                     { name: 'Bird Type', type: 'dropdown', options: ['Parrot', 'Budgie', 'Canary', 'Finch', 'Cockatiel'] },
@@ -1316,7 +1316,7 @@ export const Subcategories = [
         subcategories: [
             {
                 name: 'Office Stationery',
-                imageUrl: '/subcategory/office/stationery.png',
+                imageUrl: '/subcategory/office/stationery.webp',
                 fields: [
                     { name: 'Product Type', type: 'dropdown', options: ['Pens', 'Notebooks', 'Markers', 'Staplers', 'Glue'] },
                     { name: 'Pack Size', type: 'text' }
@@ -1324,7 +1324,7 @@ export const Subcategories = [
             },
             {
                 name: 'Office Furniture',
-                imageUrl: '/subcategory/office/furniture.png',
+                imageUrl: '/subcategory/office/furniture.webp',
                 fields: [
                     { name: 'Furniture Type', type: 'dropdown', options: ['Chairs', 'Desks', 'Cabinets', 'Tables'] },
                     { name: 'Material', type: 'text' },
@@ -1334,7 +1334,7 @@ export const Subcategories = [
             },
             {
                 name: 'Filing Products',
-                imageUrl: '/subcategory/office/filing.png',
+                imageUrl: '/subcategory/office/filing.webp',
                 fields: [
                     { name: 'Product Type', type: 'dropdown', options: ['Files', 'Folders', 'Binders'] },
                     { name: 'Material', type: 'text' },
@@ -1343,7 +1343,7 @@ export const Subcategories = [
             },
             {
                 name: 'Organizers',
-                imageUrl: '/subcategory/office/organizers.png',
+                imageUrl: '/subcategory/office/organizers.webp',
                 fields: [
                     { name: 'Organizer Type', type: 'dropdown', options: ['Desk Organizer', 'Drawer Organizer', 'Cable Organizer'] },
                     { name: 'Material', type: 'text' },
@@ -1352,7 +1352,7 @@ export const Subcategories = [
             },
             {
                 name: 'Presentation Supplies',
-                imageUrl: '/subcategory/office/presentation.png',
+                imageUrl: '/subcategory/office/presentation.webp',
                 fields: [
                     { name: 'Product Type', type: 'dropdown', options: ['Whiteboards', 'Markers', 'Projectors', 'Flip Charts'] },
                     { name: 'Size/Dimensions', type: 'text' },
@@ -1366,7 +1366,7 @@ export const Subcategories = [
         subcategories: [
             {
                 name: 'Necklaces',
-                imageUrl: '/subcategory/jewelry/necklaces.png',
+                imageUrl: '/subcategory/jewelry/necklaces.webp',
                 fields: [
                     { name: 'Material', type: 'dropdown', options: ['Gold', 'Silver', 'Platinum', 'Artificial'] },
                     { name: 'Length', type: 'text', unit: 'inches' },
@@ -1376,7 +1376,7 @@ export const Subcategories = [
             },
             {
                 name: 'Earrings',
-                imageUrl: '/subcategory/jewelry/earrings.png',
+                imageUrl: '/subcategory/jewelry/earrings.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Studs', 'Hoops', 'Jhumkas', 'Drops'] },
                     { name: 'Material', type: 'dropdown', options: ['Gold', 'Silver', 'Platinum', 'Artificial'] },
@@ -1386,7 +1386,7 @@ export const Subcategories = [
             },
             {
                 name: 'Bracelets',
-                imageUrl: '/subcategory/jewelry/bracelets.png',
+                imageUrl: '/subcategory/jewelry/bracelets.webp',
                 fields: [
                     { name: 'Material', type: 'dropdown', options: ['Gold', 'Silver', 'Leather', 'Beads'] },
                     { name: 'Size', type: 'text', unit: 'cm' },
@@ -1396,7 +1396,7 @@ export const Subcategories = [
             },
             {
                 name: 'Rings',
-                imageUrl: '/subcategory/jewelry/rings.png',
+                imageUrl: '/subcategory/jewelry/rings.webp',
                 fields: [
                     { name: 'Material', type: 'dropdown', options: ['Gold', 'Silver', 'Platinum', 'Artificial'] },
                     { name: 'Size', type: 'text', unit: 'US Size' },
@@ -1406,7 +1406,7 @@ export const Subcategories = [
             },
             {
                 name: 'Hair Accessories',
-                imageUrl: '/subcategory/jewelry/hair.png',
+                imageUrl: '/subcategory/jewelry/hair.webp',
                 fields: [
                     { name: 'Type', type: 'dropdown', options: ['Clips', 'Bands', 'Headbands', 'Scrunchies'] },
                     { name: 'Material', type: 'dropdown', options: ['Plastic', 'Metal', 'Fabric'] },
@@ -1415,7 +1415,7 @@ export const Subcategories = [
             },
             {
                 name: 'Brooches & Pins',
-                imageUrl: '/subcategory/jewelry/brooches.png',
+                imageUrl: '/subcategory/jewelry/brooches.webp',
                 fields: [
                     { name: 'Design Type', type: 'dropdown', options: ['Floral', 'Animal', 'Geometric', 'Traditional'] },
                     { name: 'Material', type: 'dropdown', options: ['Metal', 'Alloy', 'Artificial'] },
@@ -1424,7 +1424,7 @@ export const Subcategories = [
             },
             {
                 name: 'Premium Watches',
-                imageUrl: '/subcategory/jewelry/premium-watch.png',
+                imageUrl: '/subcategory/jewelry/premium-watch.webp',
                 fields: [
                     { name: 'Watch Type', type: 'dropdown', options: ['Analog', 'Digital', 'Chronograph'] },
                     { name: 'Strap Material', type: 'dropdown', options: ['Leather', 'Stainless Steel', 'Silicone'] },
@@ -1439,7 +1439,7 @@ export const Subcategories = [
         subcategories: [
             {
                 name: "Men's Footwear",
-                imageUrl: '/subcategory/footwear/mens.png',
+                imageUrl: '/subcategory/footwear/mens.webp',
                 fields: [
                     { name: 'Size', type: 'dropdown', options: ['6', '7', '8', '9', '10', '11'] },
                     { name: 'Color', type: 'dropdown', options: ['Black', 'Brown', 'White', 'Blue', 'Grey'] },
@@ -1448,7 +1448,7 @@ export const Subcategories = [
             },
             {
                 name: "Women's Footwear",
-                imageUrl: '/subcategory/footwear/womens.png',
+                imageUrl: '/subcategory/footwear/womens.webp',
                 fields: [
                     { name: 'Size', type: 'dropdown', options: ['4', '5', '6', '7', '8', '9'] },
                     { name: 'Color', type: 'dropdown', options: ['Black', 'Red', 'Beige', 'Pink', 'Blue'] },
@@ -1457,7 +1457,7 @@ export const Subcategories = [
             },
             {
                 name: "Kids' Footwear",
-                imageUrl: '/subcategory/footwear/kids.png',
+                imageUrl: '/subcategory/footwear/kids.webp',
                 fields: [
                     { name: 'Size', type: 'dropdown', options: ['1', '2', '3', '4', '5'] },
                     { name: 'Color', type: 'dropdown', options: ['Blue', 'Pink', 'Green', 'Yellow'] },
@@ -1466,7 +1466,7 @@ export const Subcategories = [
             },
             {
                 name: 'Sports Shoes',
-                imageUrl: '/subcategory/footwear/sports.png',
+                imageUrl: '/subcategory/footwear/sports.webp',
                 fields: [
                     { name: 'Size', type: 'dropdown', options: ['6', '7', '8', '9', '10', '11'] },
                     { name: 'Color', type: 'dropdown', options: ['Black', 'Red', 'Blue', 'Grey'] },
@@ -1475,7 +1475,7 @@ export const Subcategories = [
             },
             {
                 name: 'Sandals & Flip Flops',
-                imageUrl: '/subcategory/footwear/sandals.png',
+                imageUrl: '/subcategory/footwear/sandals.webp',
                 fields: [
                     { name: 'Size', type: 'dropdown', options: ['6', '7', '8', '9', '10'] },
                     { name: 'Color', type: 'dropdown', options: ['Brown', 'Black', 'Blue'] },
@@ -1484,7 +1484,7 @@ export const Subcategories = [
             },
             {
                 name: 'Formal Shoes',
-                imageUrl: '/subcategory/footwear/formal-shoes.png',
+                imageUrl: '/subcategory/footwear/formal-shoes.webp',
                 fields: [
                     { name: 'Size', type: 'dropdown', options: ['6', '7', '8', '9', '10', '11'] },
                     { name: 'Color', type: 'dropdown', options: ['Black', 'Brown', 'Tan'] },
@@ -1498,7 +1498,7 @@ export const Subcategories = [
         subcategories: [
             {
                 name: 'Power Tools',
-                imageUrl: '/subcategory/tools&hardware/power.png',
+                imageUrl: '/subcategory/tools&hardware/power.webp',
                 fields: [
                     { name: 'Tool Type', type: 'dropdown', options: ['Drill Machine', 'Angle Grinder', 'Heat Gun', 'Jigsaw', 'Screwdriver'] },
                     { name: 'Power Source', type: 'dropdown', options: ['Corded', 'Cordless'] },
@@ -1509,7 +1509,7 @@ export const Subcategories = [
             },
             {
                 name: 'Hand Tools',
-                imageUrl: '/subcategory/tools&hardware/hand.png',
+                imageUrl: '/subcategory/tools&hardware/hand.webp',
                 fields: [
                     { name: 'Tool Type', type: 'dropdown', options: ['Hammer', 'Wrench', 'Screwdriver Set', 'Pliers', 'Measuring Tape'] },
                     { name: 'Material', type: 'text' },
@@ -1519,7 +1519,7 @@ export const Subcategories = [
             },
             {
                 name: 'Safety Equipment',
-                imageUrl: '/subcategory/tools&hardware/safety.png',
+                imageUrl: '/subcategory/tools&hardware/safety.webp',
                 fields: [
                     { name: 'Product Type', type: 'dropdown', options: ['Safety Helmet', 'Gloves', 'Safety Goggles', 'Safety Shoes', 'Ear Protection'] },
                     { name: 'Size', type: 'dropdown', options: ['S', 'M', 'L', 'XL'] },
@@ -1529,7 +1529,7 @@ export const Subcategories = [
             },
             {
                 name: 'Plumbing',
-                imageUrl: '/subcategory/tools&hardware/plumbing.png',
+                imageUrl: '/subcategory/tools&hardware/plumbing.webp',
                 fields: [
                     { name: 'Product Type', type: 'dropdown', options: ['Pipes', 'Fittings', 'Taps', 'Valves', 'Connectors'] },
                     { name: 'Material', type: 'dropdown', options: ['PVC', 'CPVC', 'Brass', 'Stainless Steel'] },
@@ -1539,7 +1539,7 @@ export const Subcategories = [
             },
             {
                 name: 'Electrical Supplies',
-                imageUrl: '/subcategory/tools&hardware/electrical.png',
+                imageUrl: '/subcategory/tools&hardware/electrical.webp',
                 fields: [
                     { name: 'Product Type', type: 'dropdown', options: ['Switches', 'Sockets', 'Wires', 'MCB', 'Extension Boards'] },
                     { name: 'Current Rating', type: 'text', unit: 'A' },
@@ -1549,7 +1549,7 @@ export const Subcategories = [
             },
             {
                 name: 'Building Materials',
-                imageUrl: '/subcategory/tools&hardware/building.png',
+                imageUrl: '/subcategory/tools&hardware/building.webp',
                 fields: [
                     { name: 'Material Type', type: 'dropdown', options: ['Cement', 'Bricks', 'Steel', 'Paint', 'Tiles'] },
                     { name: 'Grade/Specification', type: 'text' },
@@ -1567,52 +1567,52 @@ export const fashionCategories = [
     {
         name: "Men's Clothing",
         slug: "mens-clothing",
-        image: "/images/fashion/men-fashion.png",
+        image: "/images/fashion/men-fashion.webp",
     },
     {
         name: "Women's Clothing",
         slug: "womens-clothing",
-        image: "/images/fashion/women-fashion.png",
+        image: "/images/fashion/women-fashion.webp",
     },
     {
         name: "Kid's Clothing",
         slug: "kids-clothing",
-        image: "/images/fashion/kid-fashion.png",
+        image: "/images/fashion/kid-fashion.webp",
     },
     {
         name: "Shoes",
         slug: "shoes",
-        image: "/images/fashion/footware.png",
+        image: "/images/fashion/footware.webp",
     },
     {
         name: "Bags",
         slug: "bags",
-        image: "/images/fashion/bags.png",
+        image: "/images/fashion/bags.webp",
     },
     {
         name: "Jewellery",
         slug: "jewellery",
-        image: "/images/fashion/jewellery.png",
+        image: "/images/fashion/jewellery.webp",
     },
     {
         name: "Watches",
         slug: "watches",
-        image: "/images/fashion/watch-fashion.png",
+        image: "/images/fashion/watch-fashion.webp",
     },
     {
         name: "Beauty",
         slug: "beauty",
-        image: "/images/fashion/beauty.png",
+        image: "/images/fashion/beauty.webp",
     },
     {
         name: "Handbags",
         slug: "handbags",
-        image: "/images/fashion/handbags.png",
+        image: "/images/fashion/handbags.webp",
     },
     {
         name: "Sunglasses",
         slug: "sunglasses",
-        image: "/images/fashion/eyeware.png",
+        image: "/images/fashion/eyeware.webp",
     },
 ];
 
@@ -1644,24 +1644,24 @@ export const slugify = (str) => {
 
 // Category image 
 export const categoryImages = {
-    "Electronics": "/category/electronics.png",
-    "Fashion & Apparel": "/category/fashion.png",
-    "Home & Kitchen": "/category/home.png",
-    "Beauty & Personal Care": "/category/beauty.png",
-    "Health & Wellness": "/category/health.png",
-    "Sports & Outdoors": "/category/sports.png",
-    "Automotive": "/category/automotive.png",
-    "Books & Stationery": "/category/books.png",
-    "Toys & Games": "/category/toys.png",
-    "Baby Products": "/category/baby.png",
-    "Groceries & Gourmet": "/category/groceries.png",
-    "Pet Supplies": "/category/pets.png",
-    "Office Supplies": "/category/office.png",
-    "Jewelry & Accessories": "/category/jewelry.png",
-    "Footwear": "/category/footwear.png",
-    "Tools & Hardware": "/category/tools.png",
-    "Furniture & Decor": "/category/furniture.png",
-    "Mobile Phones & Accessories": "/category/mobile.png",
-    "Laptops & Computers": "/category/laptops.png",
-    "Watches & Wearables": "/category/watches.png",
+    "Electronics": "/category/electronics.webp",
+    "Fashion & Apparel": "/category/fashion.webp",
+    "Home & Kitchen": "/category/home.webp",
+    "Beauty & Personal Care": "/category/beauty.webp",
+    "Health & Wellness": "/category/health.webp",
+    "Sports & Outdoors": "/category/sports.webp",
+    "Automotive": "/category/automotive.webp",
+    "Books & Stationery": "/category/books.webp",
+    "Toys & Games": "/category/toys.webp",
+    "Baby Products": "/category/baby.webp",
+    "Groceries & Gourmet": "/category/groceries.webp",
+    "Pet Supplies": "/category/pets.webp",
+    "Office Supplies": "/category/office.webp",
+    "Jewelry & Accessories": "/category/jewelry.webp",
+    "Footwear": "/category/footwear.webp",
+    "Tools & Hardware": "/category/tools.webp",
+    "Furniture & Decor": "/category/furniture.webp",
+    "Mobile Phones & Accessories": "/category/mobile.webp",
+    "Laptops & Computers": "/category/laptops.webp",
+    "Watches & Wearables": "/category/watches.webp",
 }
