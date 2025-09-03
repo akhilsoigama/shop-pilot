@@ -10,14 +10,14 @@ const items = [
     title: "Modern Living",
     category: "Home & Living",
     description: "Elevate your space with our premium furniture collection",
-    image: "/images/Home-living.jpeg",
+    image: "/images/Home-living.webp",
     accentColor: "#8B5FBF",
   },
   {
     title: "Urban Fashion",
     category: "Clothing & Shoes",
     description: "Discover the latest trends in contemporary streetwear",
-    image: "/images/Clothing-Shoes.avif",
+    image: "/images/Clothing-Shoes.webp",
     accentColor: "#E94F64",
   },
   {
@@ -31,7 +31,7 @@ const items = [
     title: "Celebration Essentials",
     category: "Party Decors",
     description: "Everything you need for unforgettable celebrations",
-    image: "/images/PARTY-DECORS.jpg",
+    image: "/images/PARTY-DECORS.webp",
     accentColor: "#3A86FF",
   },
   {
