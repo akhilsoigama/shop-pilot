@@ -152,7 +152,6 @@ export default function PremiumCollectionSection() {
           >
             OUR COLLECTIONS
           </Typography>
-
           <Typography
             variant="subtitle1"
             component={motion.p}
@@ -223,7 +222,6 @@ export default function PremiumCollectionSection() {
 
 function CollectionCard({ item, variants }) {
   const theme = useTheme();
-
   return (
     <Box
       component={motion.div}
