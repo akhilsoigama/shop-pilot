@@ -34,9 +34,9 @@ export default function Subcategory({
   const [productsPerPage, setProductsPerPage] = useState(12);
   const [isScrolled, setIsScrolled] = useState(false);
 
-  const noProductsFound = products && products.length === 0 &&
-    (searchQuery.trim() !== '' || Object.keys(activeFilters).length > 0 ||
-      priceRange[0] !== minPrice || priceRange[1] !== maxPrice);
+  const noProductsFound = Array.isArray(products) && products?.length === 0 &&
+    ((searchQuery?.trim?.() || '') !== '' || Object.keys(activeFilters || {}).length > 0 ||
+      (Array.isArray(priceRange) && priceRange[0] !== minPrice) || (Array.isArray(priceRange) && priceRange[1] !== maxPrice));
 
   const decodedCategory = decodeURIComponent(category);
 
@@ -49,7 +49,7 @@ export default function Subcategory({
   }, []);
 
   const sortedProducts = useMemo(() => {
-    if (!products) return [];
+    if (!Array.isArray(products)) return [];
 
     let sorted = [...products];
 
@@ -76,8 +76,8 @@ export default function Subcategory({
 
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = sortedProducts.slice(indexOfFirstProduct, indexOfLastProduct);
-  const totalPages = Math.ceil(sortedProducts.length / productsPerPage);
+  const currentProducts = Array.isArray(sortedProducts) ? sortedProducts.slice(indexOfFirstProduct, indexOfLastProduct) : [];
+  const totalPages = Array.isArray(sortedProducts) ? Math.ceil((sortedProducts?.length || 0) / productsPerPage) : 0;
 
   // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
@@ -349,7 +349,7 @@ export default function Subcategory({
         </motion.div>
 
         {/* Products Count and Pagination Controls */}
-        {sortedProducts && sortedProducts.length > 0 && (
+        {Array.isArray(sortedProducts) && (sortedProducts?.length || 0) > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -357,7 +357,7 @@ export default function Subcategory({
             className="flex flex-col sm:flex-row justify-between items-center mb-4 lg:mb-6 gap-4"
           >
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              Showing {indexOfFirstProduct + 1}-{Math.min(indexOfLastProduct, sortedProducts.length)} of {sortedProducts.length} products
+              Showing {indexOfFirstProduct + 1}-{Math.min(indexOfLastProduct, sortedProducts?.length || 0)} of {sortedProducts?.length || 0} products
             </p>
 
             <div className="flex items-center gap-3">
@@ -410,7 +410,7 @@ export default function Subcategory({
 
         {/* Products Grid */}
         <div className="flex-1">
-          {currentProducts && currentProducts.length > 0 ? (
+          {Array.isArray(currentProducts) && (currentProducts?.length || 0) > 0 ? (
             <motion.div
               variants={containerVariants}
               initial="hidden"
@@ -569,7 +569,7 @@ export default function Subcategory({
         </div>
 
         {/* Pagination */}
-        {sortedProducts && sortedProducts.length > 0 && totalPages > 1 && (
+        {Array.isArray(sortedProducts) && (sortedProducts?.length || 0) > 0 && totalPages > 1 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

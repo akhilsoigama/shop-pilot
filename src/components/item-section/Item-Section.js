@@ -74,11 +74,11 @@ const itemVariants = {
 
 export default function PremiumCollectionSection() {
   const theme = useTheme();
-  
+
   return (
-    <Box 
+    <Box
       component="section"
-      sx={{ 
+      sx={{
         py: { xs: 8, md: 12 },
         px: { xs: 2, sm: 4 },
         position: 'relative',
@@ -99,14 +99,14 @@ export default function PremiumCollectionSection() {
         }
       }}
     >
-      <Box sx={{ 
-        maxWidth: 1600, 
-        mx: 'auto', 
+      <Box sx={{
+        maxWidth: 1600,
+        mx: 'auto',
         position: 'relative',
         px: { xs: 0, sm: 2 }
       }}>
         {/* Section Header */}
-        <Box sx={{ 
+        <Box sx={{
           textAlign: 'center',
           mb: { xs: 6, md: 10 },
           position: 'relative'
@@ -152,7 +152,6 @@ export default function PremiumCollectionSection() {
           >
             OUR COLLECTIONS
           </Typography>
-          
           <Typography
             variant="subtitle1"
             component={motion.p}
@@ -223,7 +222,6 @@ export default function PremiumCollectionSection() {
 
 function CollectionCard({ item, variants }) {
   const theme = useTheme();
-  
   return (
     <Box
       component={motion.div}
@@ -233,13 +231,13 @@ function CollectionCard({ item, variants }) {
         position: "relative",
         overflow: "hidden",
         borderRadius: "12px",
-        boxShadow: theme.palette.mode === 'dark' 
-          ? '0 6px 30px rgba(0,0,0,0.4)' 
+        boxShadow: theme.palette.mode === 'dark'
+          ? '0 6px 30px rgba(0,0,0,0.4)'
           : '0 6px 40px rgba(0,0,0,0.1)',
         transition: "all 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
         "&:hover": {
-          boxShadow: theme.palette.mode === 'dark' 
-            ? `0 12px 40px ${item.accentColor}40` 
+          boxShadow: theme.palette.mode === 'dark'
+            ? `0 12px 40px ${item.accentColor}40`
             : `0 12px 40px rgba(0,0,0,0.15)`,
           "& .collection-image": {
             transform: "scale(1.08)",
@@ -277,7 +275,7 @@ function CollectionCard({ item, variants }) {
           alt={item.title}
           fill
           className="collection-image"
-          style={{ 
+          style={{
             objectFit: "cover",
             transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
             filter: "grayscale(20%) contrast(110%) brightness(0.85)"
@@ -286,8 +284,8 @@ function CollectionCard({ item, variants }) {
           priority={false}
           loading="lazy"
         />
-        
-        <Box 
+
+        <Box
           className="collection-overlay"
           sx={{
             position: "absolute",
